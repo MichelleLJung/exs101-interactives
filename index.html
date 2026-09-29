@@ -131,6 +131,12 @@
       font-size: 0.95rem;
     }
 
+    .presets { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:0 0 22px; }
+    .preset { border:2px solid var(--blue); background:#fff; color:var(--blue-dark); padding:10px 8px; font:inherit; font-size:.88rem; font-weight:700; cursor:pointer; }
+    .preset:hover, .preset:focus-visible, .preset.active { background:var(--blue); color:#fff; }
+    .preset:focus-visible { outline:3px solid #f59e0b; outline-offset:2px; }
+    .example-note { margin:-10px 0 18px; color:#475569; font-size:.84rem; }
+
     .control-group {
       margin-bottom: 26px;
     }
@@ -631,9 +637,16 @@
         <h2 id="controls-title">Change the Variables</h2>
 
         <p class="helper">
-          Move either slider and watch what changes.
+          Choose an illustrative example or move either slider yourself.
         </p>
 
+        <div class="presets" aria-label="Illustrative cardiac output examples">
+          <button class="preset active" type="button" data-hr="70" data-sv="70" data-name="Typical Rest">Typical Rest</button>
+          <button class="preset" type="button" data-hr="55" data-sv="100" data-name="Endurance Athlete at Rest">Endurance Athlete at Rest</button>
+          <button class="preset" type="button" data-hr="200" data-sv="100" data-name="Max Exercise Example">Max Exercise Example</button>
+          <button class="preset" type="button" data-hr="200" data-sv="175" data-name="Highly Trained Endurance Athlete at Max">Highly Trained Athlete at Max</button>
+        </div>
+        <p class="example-note">Illustrative examples for comparison — not expected values for every person.</p>
 
         <div class="control-group">
 
@@ -689,7 +702,7 @@
             id="svSlider"
             type="range"
             min="40"
-            max="150"
+            max="200"
             step="1"
             value="70"
             aria-describedby="svDefinition"
@@ -697,7 +710,7 @@
 
           <div class="range-labels" aria-hidden="true">
             <span>40 mL/beat</span>
-            <span>150 mL/beat</span>
+            <span>200 mL/beat</span>
           </div>
 
           <p class="definition" id="svDefinition">
@@ -835,6 +848,17 @@
     </section>
 
 
+    <section class="meaning" aria-labelledby="context-title">
+      <h2 id="context-title">Put the Number in Context</h2>
+      <p id="comparisonText">This resting example is about 5 L/min. Use the examples above to compare rest and maximal exercise.</p>
+    </section>
+
+    <section class="relationship" aria-labelledby="why-title">
+      <h2 id="why-title" style="margin:0 0 6px;color:var(--blue-dark);font-size:1.1rem;">Why does cardiac output increase during exercise?</h2>
+      <p>Working muscles have greater metabolic demands. Increasing cardiac output helps deliver more oxygen and nutrients and helps transport metabolic byproducts away from active tissues.</p>
+      <p>After exercise stops, heart rate and cardiac output move back toward resting levels during recovery.</p>
+    </section>
+
     <section
       class="relationship"
       aria-label="Cardiac output relationship"
@@ -852,6 +876,12 @@
         so the heart can pump more blood each minute.
       </p>
 
+    </section>
+
+    <section class="relationship" aria-labelledby="model-title">
+      <h2 id="model-title" style="margin:0 0 6px;color:var(--blue-dark);font-size:1.1rem;">About This Model</h2>
+      <p>This explorer lets you change heart rate and stroke volume independently to see how each affects cardiac output. It does not predict an individual's cardiovascular response to exercise.</p>
+      <p>Actual values vary among people and situations. Highly trained endurance athletes often have a lower resting heart rate and a larger stroke volume, while resting cardiac output can remain in a similar range.</p>
     </section>
 
 
@@ -909,6 +939,10 @@
     const screenReaderUpdate =
       document.getElementById("screenReaderUpdate");
 
+    const comparisonText = document.getElementById("comparisonText");
+    const presetButtons = Array.from(document.querySelectorAll(".preset"));
+    let activeExample = "Typical Rest";
+
 
     function updateExplorer() {
 
@@ -960,6 +994,15 @@
         `the heart pumps approximately ${cardiacOutputL.toFixed(1)} ` +
         `liters of blood each minute.`;
 
+      const context = {
+        "Typical Rest": "This illustrative resting example is about 5 L/min. It gives you a baseline for comparison.",
+        "Endurance Athlete at Rest": "Notice the lower heart rate and larger stroke volume. A trained endurance athlete can pump more blood with each beat while resting cardiac output remains in roughly the same range.",
+        "Max Exercise Example": "At maximal exercise, cardiac output can rise dramatically. Here, 200 beats/min × 100 mL/beat produces 20.0 L/min.",
+        "Highly Trained Endurance Athlete at Max": "Heart rate is the same as the other maximal example, but the much larger stroke volume raises cardiac output to 35.0 L/min.",
+        "Custom": "Custom mode: you are changing heart rate and stroke volume independently to explore the equation. This combination is not an individual prediction."
+      };
+      comparisonText.textContent = context[activeExample];
+
 
       /* Visual caption */
 
@@ -989,7 +1032,7 @@
 
       /*
         STROKE VOLUME:
-        Map 40–150 mL/beat to a clearly visible pulse size.
+        Map the available stroke-volume range to a clearly visible pulse size.
       */
 
       const minSV =
@@ -1044,15 +1087,39 @@
     }
 
 
-    hrSlider.addEventListener(
-      "input",
-      updateExplorer
-    );
+    function enterCustomMode() {
+      activeExample = "Custom";
+      presetButtons.forEach(button => {
+        button.classList.remove("active");
+        button.setAttribute("aria-pressed", "false");
+      });
+    }
 
-    svSlider.addEventListener(
-      "input",
-      updateExplorer
-    );
+    presetButtons.forEach(button => {
+      button.setAttribute("aria-pressed", button.classList.contains("active") ? "true" : "false");
+      button.addEventListener("click", () => {
+        hrSlider.value = button.dataset.hr;
+        svSlider.value = button.dataset.sv;
+        activeExample = button.dataset.name;
+        presetButtons.forEach(item => {
+          const selected = item === button;
+          item.classList.toggle("active", selected);
+          item.setAttribute("aria-pressed", selected ? "true" : "false");
+        });
+        updateExplorer();
+        announceResult();
+      });
+    });
+
+    hrSlider.addEventListener("input", () => {
+      enterCustomMode();
+      updateExplorer();
+    });
+
+    svSlider.addEventListener("input", () => {
+      enterCustomMode();
+      updateExplorer();
+    });
 
     hrSlider.addEventListener(
       "change",
