@@ -16,9 +16,9 @@
       --muted: #64748b;
       --border: #cbd5e1;
       --light: #f8fafc;
-      --heart: #c2413b;
-      --heart-dark: #8f2f2b;
+      --heart: #c9413b;
       --blood: #b91c1c;
+      --blood-light: #ef8c87;
       --white: #ffffff;
     }
 
@@ -41,7 +41,7 @@
     }
 
     .intro {
-      margin-bottom: 22px;
+      margin-bottom: 20px;
     }
 
     .eyebrow {
@@ -106,7 +106,7 @@
 
     .main-grid {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(280px, 0.8fr);
+      grid-template-columns: minmax(0, 0.95fr) minmax(330px, 1.05fr);
       gap: 20px;
       align-items: stretch;
     }
@@ -190,23 +190,38 @@
       flex-direction: column;
     }
 
-    .heart-stage {
-      flex: 1;
-      min-height: 260px;
+    .pump-stage {
+      position: relative;
+      min-height: 290px;
+      margin-top: 8px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--light);
+    }
+
+    .pump-diagram {
+      position: absolute;
+      top: 24px;
+      right: 18px;
+      bottom: 50px;
+      left: 18px;
+      display: grid;
+      grid-template-columns: 110px minmax(110px, 1fr) 100px;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .heart-area {
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      position: relative;
-      overflow: hidden;
-      margin-top: 8px;
-      background: var(--light);
-      border: 1px solid var(--border);
+      z-index: 2;
     }
 
     .heart-wrap {
-      position: relative;
-      width: 180px;
-      height: 180px;
+      width: 100px;
+      height: 100px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -214,11 +229,11 @@
 
     .heart {
       position: relative;
-      width: 105px;
-      height: 95px;
-      transform: rotate(-45deg);
+      width: 58px;
+      height: 53px;
       background: var(--heart);
-      border-radius: 10px 0 16px 0;
+      transform: rotate(-45deg);
+      border-radius: 7px 0 9px 0;
       animation-name: heartbeat;
       animation-duration: var(--beat-duration, 0.86s);
       animation-iteration-count: infinite;
@@ -230,61 +245,214 @@
     .heart::after {
       content: "";
       position: absolute;
-      width: 105px;
-      height: 95px;
+      width: 58px;
+      height: 53px;
       background: var(--heart);
       border-radius: 50%;
     }
 
     .heart::before {
-      top: -52px;
+      top: -29px;
       left: 0;
     }
 
     .heart::after {
       top: 0;
-      left: 52px;
+      left: 29px;
     }
 
     @keyframes heartbeat {
       0%, 100% {
         transform: rotate(-45deg) scale(1);
       }
+
       10% {
-        transform: rotate(-45deg) scale(var(--heart-scale, 1.08));
+        transform: rotate(-45deg) scale(1.08);
       }
+
       20% {
         transform: rotate(-45deg) scale(1);
       }
+
       30% {
-        transform: rotate(-45deg) scale(calc(1 + (var(--heart-scale-num, 0.08) * 0.45)));
+        transform: rotate(-45deg) scale(1.04);
       }
+
       42% {
         transform: rotate(-45deg) scale(1);
       }
     }
 
-    .beat-label {
+    .heart-caption,
+    .body-caption {
+      margin-top: 13px;
+      color: #475569;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .vessel {
+      position: relative;
+      height: 54px;
+      overflow: hidden;
+      border-top: 4px solid #94a3b8;
+      border-bottom: 4px solid #94a3b8;
+      background: #ffffff;
+    }
+
+    .flow-line {
       position: absolute;
-      bottom: 12px;
-      left: 12px;
+      top: 50%;
+      right: 0;
+      left: 0;
+      height: 2px;
+      background: #dbe3ea;
+      transform: translateY(-50%);
+    }
+
+    .blood-pulse {
+      position: absolute;
+      top: 50%;
+      left: -60px;
+      width: var(--pulse-size, 28px);
+      height: var(--pulse-size, 28px);
+      border: 3px solid #7f1d1d;
+      border-radius: 50%;
+      background: var(--blood);
+      transform: translateY(-50%);
+      animation-name: pumpBlood;
+      animation-duration: var(--beat-duration, 0.86s);
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;
+    }
+
+    .blood-pulse::after {
+      content: "";
+      position: absolute;
+      top: 18%;
+      left: 20%;
+      width: 30%;
+      height: 25%;
+      border-radius: 50%;
+      background: var(--blood-light);
+      opacity: 0.65;
+    }
+
+    @keyframes pumpBlood {
+      0% {
+        left: -60px;
+        opacity: 0;
+      }
+
+      8% {
+        opacity: 1;
+      }
+
+      88% {
+        opacity: 1;
+      }
+
+      100% {
+        left: calc(100% + 15px);
+        opacity: 0;
+      }
+    }
+
+    .body-target {
+      width: 74px;
+      height: 104px;
+      position: relative;
+      margin: 0 auto;
+    }
+
+    .body-head {
+      position: absolute;
+      top: 0;
+      left: 25px;
+      width: 24px;
+      height: 24px;
+      border: 3px solid var(--blue-dark);
+      border-radius: 50%;
+      background: #ffffff;
+    }
+
+    .body-torso {
+      position: absolute;
+      top: 29px;
+      left: 17px;
+      width: 40px;
+      height: 46px;
+      border: 3px solid var(--blue-dark);
+      border-radius: 16px 16px 9px 9px;
+      background: var(--blue-light);
+    }
+
+    .body-leg-left,
+    .body-leg-right {
+      position: absolute;
+      top: 72px;
+      width: 3px;
+      height: 32px;
+      background: var(--blue-dark);
+      transform-origin: top;
+    }
+
+    .body-leg-left {
+      left: 29px;
+      transform: rotate(12deg);
+    }
+
+    .body-leg-right {
+      left: 44px;
+      transform: rotate(-12deg);
+    }
+
+    .flow-key {
+      position: absolute;
       right: 12px;
+      bottom: 10px;
+      left: 12px;
       text-align: center;
       color: #475569;
-      font-size: 0.88rem;
+      font-size: 0.85rem;
       font-weight: 700;
+    }
+
+    .concept-strip {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .concept {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      background: #ffffff;
+    }
+
+    .concept strong {
+      display: block;
+      margin-bottom: 2px;
+      color: var(--blue-dark);
+    }
+
+    .concept span {
+      color: #475569;
+      font-size: 0.9rem;
     }
 
     .output {
       margin-top: 20px;
       border: 3px solid var(--blue);
       background: var(--blue-light);
-      padding: 20px;
+      padding: 18px 20px;
       text-align: center;
     }
 
     .output-label {
-      margin: 0 0 4px 0;
+      margin: 0 0 2px 0;
       color: var(--blue-dark);
       font-weight: 700;
     }
@@ -292,7 +460,7 @@
     .output-number {
       margin: 0;
       color: var(--navy);
-      font-size: clamp(2.2rem, 7vw, 3.6rem);
+      font-size: clamp(2.1rem, 7vw, 3.4rem);
       line-height: 1.05;
       font-weight: 700;
     }
@@ -303,12 +471,12 @@
     }
 
     .calculation {
-      margin: 10px 0 0 0;
+      margin: 8px 0 0 0;
       font-size: 0.95rem;
     }
 
     .meaning {
-      margin-top: 20px;
+      margin-top: 18px;
       padding: 16px 18px;
       border-left: 6px solid var(--blue);
       background: var(--blue-light);
@@ -325,8 +493,8 @@
     }
 
     .relationship {
-      margin-top: 18px;
-      padding: 16px 18px;
+      margin-top: 16px;
+      padding: 14px 16px;
       border: 2px solid var(--border);
       background: var(--light);
     }
@@ -336,7 +504,7 @@
     }
 
     .relationship p + p {
-      margin-top: 8px;
+      margin-top: 7px;
     }
 
     .sr-only {
@@ -352,12 +520,18 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .heart {
+      .heart,
+      .blood-pulse {
         animation: none;
+      }
+
+      .blood-pulse {
+        left: 50%;
+        opacity: 1;
       }
     }
 
-    @media (max-width: 720px) {
+    @media (max-width: 760px) {
       body {
         padding: 14px;
       }
@@ -374,9 +548,25 @@
       .main-grid {
         grid-template-columns: 1fr;
       }
+    }
 
-      .heart-stage {
-        min-height: 220px;
+    @media (max-width: 480px) {
+      .pump-diagram {
+        grid-template-columns: 82px minmax(70px, 1fr) 72px;
+        right: 8px;
+        left: 8px;
+      }
+
+      .heart-wrap {
+        width: 78px;
+      }
+
+      .body-target {
+        transform: scale(0.82);
+      }
+
+      .concept-strip {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -387,15 +577,17 @@
   <main class="explorer">
 
     <section class="intro" aria-labelledby="page-title">
+
       <p class="eyebrow">EXS101 Interactive Reference</p>
 
       <h1 id="page-title">Cardiac Output Explorer</h1>
 
       <p>
         Cardiac output is the amount of blood the heart pumps each minute.
-        Change heart rate and stroke volume below to see how each contributes
+        Change heart rate and stroke volume to see how each contributes
         to cardiac output.
       </p>
+
     </section>
 
 
@@ -439,18 +631,22 @@
         <h2 id="controls-title">Change the Variables</h2>
 
         <p class="helper">
-          Move either slider and watch what happens to cardiac output.
+          Move either slider and watch what changes.
         </p>
 
 
         <div class="control-group">
 
           <div class="control-header">
-            <label for="hrSlider">Heart Rate (HR)</label>
+
+            <label for="hrSlider">
+              Heart Rate (HR)
+            </label>
 
             <span class="control-number">
               <span id="hrValue">70</span> bpm
             </span>
+
           </div>
 
           <input
@@ -478,11 +674,15 @@
         <div class="control-group">
 
           <div class="control-header">
-            <label for="svSlider">Stroke Volume (SV)</label>
+
+            <label for="svSlider">
+              Stroke Volume (SV)
+            </label>
 
             <span class="control-number">
               <span id="svValue">70</span> mL/beat
             </span>
+
           </div>
 
           <input
@@ -511,25 +711,89 @@
 
       <section class="visual-panel" aria-labelledby="visual-title">
 
-        <h2 id="visual-title">Watch the Heart Respond</h2>
+        <h2 id="visual-title">See the Difference</h2>
 
         <p class="helper">
-          Heart rate changes how frequently the heart beats. Stroke volume changes
-          the amount represented by each beat.
+          Heart rate changes <strong>how often</strong> blood is pumped.
+          Stroke volume changes <strong>how much</strong> is pumped each time.
         </p>
 
+
         <div
-          class="heart-stage"
+          class="pump-stage"
           role="img"
-          aria-label="Animated heart model. Faster heart rates produce faster beating. Greater stroke volumes produce a larger pulse."
+          aria-label="Animated model showing the heart pumping pulses of blood toward the body. Heart rate controls pulse frequency and stroke volume controls pulse size."
         >
 
-          <div class="heart-wrap">
-            <div class="heart" id="heart" aria-hidden="true"></div>
+          <div class="pump-diagram">
+
+            <div class="heart-area">
+
+              <div class="heart-wrap">
+                <div
+                  class="heart"
+                  id="heart"
+                  aria-hidden="true"
+                ></div>
+              </div>
+
+              <div class="heart-caption">
+                HEART
+              </div>
+
+            </div>
+
+
+            <div class="vessel" aria-hidden="true">
+
+              <div class="flow-line"></div>
+
+              <div
+                class="blood-pulse"
+                id="bloodPulse"
+              ></div>
+
+            </div>
+
+
+            <div>
+
+              <div
+                class="body-target"
+                aria-hidden="true"
+              >
+                <div class="body-head"></div>
+                <div class="body-torso"></div>
+                <div class="body-leg-left"></div>
+                <div class="body-leg-right"></div>
+              </div>
+
+              <div class="body-caption">
+                BODY
+              </div>
+
+            </div>
+
           </div>
 
-          <div class="beat-label" id="beatLabel">
-            70 beats/min • 70 mL/beat
+
+          <div class="flow-key" id="flowKey">
+            70 beats/min • 70 mL pumped each beat
+          </div>
+
+        </div>
+
+
+        <div class="concept-strip">
+
+          <div class="concept">
+            <strong>Heart Rate = How Often</strong>
+            <span>Higher HR → blood pulses occur more frequently.</span>
+          </div>
+
+          <div class="concept">
+            <strong>Stroke Volume = How Much</strong>
+            <span>Higher SV → each blood pulse becomes larger.</span>
           </div>
 
         </div>
@@ -559,7 +823,9 @@
 
     <section class="meaning" aria-labelledby="meaning-title">
 
-      <h2 id="meaning-title">What does that number mean?</h2>
+      <h2 id="meaning-title">
+        What does that number mean?
+      </h2>
 
       <p id="meaningText">
         At 70 beats per minute and 70 mL per beat, the heart pumps approximately
@@ -569,16 +835,21 @@
     </section>
 
 
-    <section class="relationship" aria-label="Cardiac output relationship">
+    <section
+      class="relationship"
+      aria-label="Cardiac output relationship"
+    >
 
       <p>
-        <strong>Cardiac Output = Heart Rate × Stroke Volume</strong>
+        <strong>
+          Cardiac Output = Heart Rate × Stroke Volume
+        </strong>
       </p>
 
       <p>
-        During dynamic exercise, heart rate and stroke volume typically increase
-        from rest. Together, these changes increase cardiac output so the heart
-        can pump more blood each minute.
+        During dynamic exercise, heart rate and stroke volume typically
+        increase from rest. Together, these changes increase cardiac output
+        so the heart can pump more blood each minute.
       </p>
 
     </section>
@@ -595,22 +866,45 @@
 
 
   <script>
-    const hrSlider = document.getElementById("hrSlider");
-    const svSlider = document.getElementById("svSlider");
 
-    const hrValue = document.getElementById("hrValue");
-    const svValue = document.getElementById("svValue");
+    const hrSlider =
+      document.getElementById("hrSlider");
 
-    const equationHR = document.getElementById("equationHR");
-    const equationSV = document.getElementById("equationSV");
-    const equationCO = document.getElementById("equationCO");
+    const svSlider =
+      document.getElementById("svSlider");
 
-    const coValue = document.getElementById("coValue");
-    const calculation = document.getElementById("calculation");
-    const meaningText = document.getElementById("meaningText");
+    const hrValue =
+      document.getElementById("hrValue");
 
-    const heart = document.getElementById("heart");
-    const beatLabel = document.getElementById("beatLabel");
+    const svValue =
+      document.getElementById("svValue");
+
+    const equationHR =
+      document.getElementById("equationHR");
+
+    const equationSV =
+      document.getElementById("equationSV");
+
+    const equationCO =
+      document.getElementById("equationCO");
+
+    const coValue =
+      document.getElementById("coValue");
+
+    const calculation =
+      document.getElementById("calculation");
+
+    const meaningText =
+      document.getElementById("meaningText");
+
+    const heart =
+      document.getElementById("heart");
+
+    const bloodPulse =
+      document.getElementById("bloodPulse");
+
+    const flowKey =
+      document.getElementById("flowKey");
 
     const screenReaderUpdate =
       document.getElementById("screenReaderUpdate");
@@ -618,68 +912,105 @@
 
     function updateExplorer() {
 
-      const hr = Number(hrSlider.value);
-      const sv = Number(svSlider.value);
+      const hr =
+        Number(hrSlider.value);
 
-      const cardiacOutputML = hr * sv;
-      const cardiacOutputL = cardiacOutputML / 1000;
+      const sv =
+        Number(svSlider.value);
+
+      const cardiacOutputML =
+        hr * sv;
+
+      const cardiacOutputL =
+        cardiacOutputML / 1000;
 
 
-      /* Update visible values */
+      /* Update numbers */
 
-      hrValue.textContent = hr;
-      svValue.textContent = sv;
+      hrValue.textContent =
+        hr;
 
-      equationHR.textContent = hr;
-      equationSV.textContent = sv;
-      equationCO.textContent = cardiacOutputL.toFixed(1);
+      svValue.textContent =
+        sv;
 
-      coValue.textContent = cardiacOutputL.toFixed(1);
+      equationHR.textContent =
+        hr;
+
+      equationSV.textContent =
+        sv;
+
+      equationCO.textContent =
+        cardiacOutputL.toFixed(1);
+
+      coValue.textContent =
+        cardiacOutputL.toFixed(1);
+
+
+      /* Calculation */
 
       calculation.textContent =
         `${hr} beats/min × ${sv} mL/beat = ` +
         `${cardiacOutputML.toLocaleString()} mL/min`;
+
+
+      /* Plain-language interpretation */
 
       meaningText.textContent =
         `At ${hr} beats per minute and ${sv} mL per beat, ` +
         `the heart pumps approximately ${cardiacOutputL.toFixed(1)} ` +
         `liters of blood each minute.`;
 
-      beatLabel.textContent =
-        `${hr} beats/min • ${sv} mL/beat`;
+
+      /* Visual caption */
+
+      flowKey.textContent =
+        `${hr} beats/min • ${sv} mL pumped each beat`;
 
 
-      /* Heart rate controls animation speed */
+      /*
+        HEART RATE:
+        Convert beats/minute into seconds/beat.
+        This controls both the heart and blood-pulse frequency.
+      */
 
-      const secondsPerBeat = 60 / hr;
+      const secondsPerBeat =
+        60 / hr;
 
       heart.style.setProperty(
         "--beat-duration",
         `${secondsPerBeat}s`
       );
 
+      bloodPulse.style.setProperty(
+        "--beat-duration",
+        `${secondsPerBeat}s`
+      );
 
-      /* Stroke volume controls pulse size */
+
+      /*
+        STROKE VOLUME:
+        Map 40–150 mL/beat to a clearly visible pulse size.
+      */
+
+      const minSV =
+        Number(svSlider.min);
+
+      const maxSV =
+        Number(svSlider.max);
 
       const normalizedSV =
-        (sv - Number(svSlider.min)) /
-        (Number(svSlider.max) - Number(svSlider.min));
+        (sv - minSV) / (maxSV - minSV);
 
-      const pulseAmount =
-        0.045 + (normalizedSV * 0.10);
+      const pulseSize =
+        18 + (normalizedSV * 28);
 
-      heart.style.setProperty(
-        "--heart-scale",
-        (1 + pulseAmount).toFixed(3)
-      );
-
-      heart.style.setProperty(
-        "--heart-scale-num",
-        pulseAmount.toFixed(3)
+      bloodPulse.style.setProperty(
+        "--pulse-size",
+        `${pulseSize.toFixed(1)}px`
       );
 
 
-      /* Update slider accessibility */
+      /* Accessibility */
 
       hrSlider.setAttribute(
         "aria-valuetext",
@@ -696,8 +1027,11 @@
 
     function announceResult() {
 
-      const hr = Number(hrSlider.value);
-      const sv = Number(svSlider.value);
+      const hr =
+        Number(hrSlider.value);
+
+      const sv =
+        Number(svSlider.value);
 
       const cardiacOutput =
         ((hr * sv) / 1000).toFixed(1);
@@ -710,11 +1044,25 @@
     }
 
 
-    hrSlider.addEventListener("input", updateExplorer);
-    svSlider.addEventListener("input", updateExplorer);
+    hrSlider.addEventListener(
+      "input",
+      updateExplorer
+    );
 
-    hrSlider.addEventListener("change", announceResult);
-    svSlider.addEventListener("change", announceResult);
+    svSlider.addEventListener(
+      "input",
+      updateExplorer
+    );
+
+    hrSlider.addEventListener(
+      "change",
+      announceResult
+    );
+
+    svSlider.addEventListener(
+      "change",
+      announceResult
+    );
 
 
     updateExplorer();
