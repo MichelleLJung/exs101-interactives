@@ -36,3 +36,16 @@ Checked during initial release:
 - Multi-page PDF rendered and visually inspected; tags and text extraction inspected.
 
 Remaining verification: hands-on NVDA/JAWS/VoiceOver testing, actual Canvas embedding and downloads, mobile Safari, and device-specific non-Latin visual glyph coverage. Automated scans and accessibility-tree checks alone do not establish WCAG conformance.
+
+
+## Canvas course alignment — September 2026
+
+The current definitions use the instructor-provided EXS testing protocols Canvas export. Bench press and paced partial curl-up percentile tables are transcribed from their accessible pages, citing Haff & Triplett (2016). Rockport now selects the course college equation for ages 18–29 and adult equation for ages 30–69, with immediate finish heart rate. Rockport and Queens estimates include age-matched course VO₂max reference context for ages 20–69; estimates remain explicitly distinct from measured VO₂max.
+
+Protocol corrections: push-up targets and stop rules; partial curl-ups at 40 beats/min, age-dependent tape spacing and 75-repetition cap; plank capped at 360 seconds; squats to fatigue with a chair depth target; YMCA sit-and-reach best of two valid trials; shoulder three trials on each side; vertical jump three valid trials; broad jump two or three trials with 1–2 minutes rest. Optional body-composition participation and all category requirements remain unchanged.
+
+Reference limitations deliberately retained: push-up male ages 30–39 scores 20–21 and female ages 60–69 score 1 fall in overlapping supplied categories. The sit-and-reach age-65 bands overlap; box zero instructions conflict. Plank categories lack a source and conflict with its cap. Shoulder ranges have gaps and no clear population. Squat material has no identified normative source. Vertical anchors are approximate context, and broad-jump anchors represent elite athletes rather than introductory students. These cases do not receive invented automatic classifications. Existing verified YMCA step norms remain because no matching replacement was found in the export. Fit3D stays as available.
+
+Draft compatibility: old values and reflections are preserved, completion/protocol confirmations are reset, and a testing note requires review of the revised procedure. Automated comparisons are withheld while that note remains. Old one-minute curl-up, timed squat, and single-trial shoulder results must not be silently relabeled as the revised tests.
+
+The separate course-wide interactive is deferred as requested. Its scope will include all distinct assessment protocols in the export, including running/walking/treadmill/cycle tests, maximal and multi-repetition strength tests, agility/sprints, mobility tests, and body-composition methods. Duplicate accessible pages will be reconciled, and missing/contradictory norm sources resolved before classifications are implemented. No private screening forms or student records are published.

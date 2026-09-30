@@ -1,8 +1,10 @@
 'use strict';
 const KEY='exs101-fitness-assessment-v1';
-const blank=()=>({version:1,meta:{},tests:{},synthesis:{},detective:'',compare:{},skipBody:false,view:'start',active:null,step:0});
+const blank=()=>({courseRevision:1,version:1,meta:{},tests:{},synthesis:{},detective:'',compare:{},skipBody:false,view:'start',active:null,step:0});
 let state=blank(),storageOK=true;
-try{const saved=JSON.parse(localStorage.getItem(KEY));if(saved?.version===1&&saved.meta&&saved.tests&&saved.synthesis){state={...blank(),...saved};if(!ASSESSMENTS.some(a=>a.id===state.active))state.active=null;state.view='start';}}catch(e){storageOK=false;}
+try{const saved=JSON.parse(localStorage.getItem(KEY));if(saved?.version===1&&saved.meta&&saved.tests&&saved.synthesis){state={...blank(),...saved,courseRevision:saved.courseRevision??0};if(!ASSESSMENTS.some(a=>a.id===state.active))state.active=null;state.view='start';}}catch(e){storageOK=false;}
+function migrateCourse(){if(state.courseRevision===1)return;for(const d of Object.values(state.tests)){d.complete=false;d.confirmed=false;d.values.notes=[d.values.notes,'Saved before the Canvas protocol update. Review the current procedure with your instructor before reusing these results.'].filter(Boolean).join(' ');}state.courseRevision=1;}
+migrateCourse();
 const $=s=>document.querySelector(s),esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const number=v=>v!==''&&v!=null&&Number.isFinite(Number(v))?Number(v):null;
 const aById=id=>ASSESSMENTS.find(a=>a.id===id);
@@ -25,20 +27,23 @@ function percentileBand(score,thresholds,percentiles,lowerBetter=false){
 }
 function best(v){const ns=['trial1','trial2','trial3'].map((k,i)=>({value:number(v[k]),trial:i+1})).filter(x=>x.value!==null);if(!ns.length)return null;const top=ns.reduce((best,x)=>x.value>best.value?x:best);return {...top,count:ns.length};}
 function comparison(a,v){const sex=v.sex,age=number(v.age),b=ageBand(age??0),descriptive=reason=>({type:'descriptive',text:'Descriptive result — no normative classification assigned',reason});
+ const course=courseComparison(a,v);if(course)return course;
  if(a.id==='rockport'){
   if(!['male','female'].includes(sex))return descriptive('The selected equation requires its original male/female reference variable. Without that variable, report the measured walking performance.');
   if(['weight','minutes','seconds','hr','age'].some(k=>number(v[k])===null))return {type:'pending',text:'Enter the measured variables to calculate the estimate.'};
-  const wt=Number(v.weight)*(v.weightUnit==='kg'?2.20462262185:1),time=Number(v.minutes)+Number(v.seconds)/60;
-  const value=132.853-.0769*wt-.3877*Number(v.age)+6.315*(sex==='male'?1:0)-3.2649*time-.1565*Number(v.hr);
+  const time=Number(v.minutes)+Number(v.seconds)/60;
+  if(age<18||age>69)return descriptive('The course equation age ranges are 18–29 and 30–69. No extrapolation is made.');
+  const kg=Number(v.weight)*(v.weightUnit==='lb'?0.45359237:1);
+  const value=age<30?88.768+8.892*(sex==='male'?1:0)-.2109*kg-1.4537*time-.1194*Number(v.hr):132.853-.1692*kg-.3877*age+6.315*(sex==='male'?1:0)-3.2649*time-.1565*Number(v.hr);
   if(value<=0)return descriptive('These inputs produce a non-positive estimate. Check the units, time, and heart rate; do not interpret this as a valid VO₂max.');
-  return {type:'prediction',text:`Estimated VO₂max — not directly measured: ${value.toFixed(1)} mL/kg/min`,value,reason:'Estimated from field performance and a prediction equation, not respiratory gas analysis.',equation:`132.853 − 0.0769 × weight(lb) − 0.3877 × age + 6.315 × sex(1 male/0 female) − 3.2649 × time(decimal min) − 0.1565 × HR(beats/min). Time used: ${time.toFixed(3)} min; mass used: ${wt.toFixed(2)} lb.`};
+  return {type:'prediction',text:`Estimated VO₂max — not directly measured: ${value.toFixed(1)} mL/kg/min`,value,reason:vo2Context(value,v),equation:age<30?`88.768 + 8.892 × sex(1 male/0 female) − 0.2109 × mass(kg) − 1.4537 × time(decimal min) − 0.1194 × immediate finish HR. Mass: ${kg.toFixed(2)} kg; time: ${time.toFixed(3)} min.`:`132.853 − 0.1692 × mass(kg) − 0.3877 × age + 6.315 × sex(1 male/0 female) − 3.2649 × time(decimal min) − 0.1565 × HR(beats/min). Time used: ${time.toFixed(3)} min; mass used: ${kg.toFixed(2)} kg.`};
  }
  if(a.id==='queens'){
   if(!['male','female'].includes(sex)||v.cadence!==(sex==='male'?'24':'22'))return descriptive('No prediction is calculated because the reference variable/cadence does not match the selected equation. Record the pulse and performed protocol.');
   if(number(v.pulse)===null)return {type:'pending',text:'Enter the 15-second recovery pulse count.'};
   const hr=Number(v.pulse)*4,value=sex==='male'?111.33-.42*hr:65.81-.1847*hr;
   if(value<=0)return descriptive('These inputs produce a non-positive estimate. Check the pulse count and protocol before interpreting it.');
-  return {type:'prediction',text:`Estimated VO₂max — not directly measured: ${value.toFixed(1)} mL/kg/min`,value,reason:`Recovery pulse: ${v.pulse} beats in 15 seconds × 4 = ${hr} beats/min. This estimates VO₂max; it does not measure respiratory gases.`,equation:sex==='male'?'Male equation: 111.33 − 0.42 × recovery HR(beats/min).':'Female equation: 65.81 − 0.1847 × recovery HR(beats/min).'};
+  return {type:'prediction',text:`Estimated VO₂max — not directly measured: ${value.toFixed(1)} mL/kg/min`,value,reason:vo2Context(value,v)+` Recovery pulse: ${v.pulse} beats in 15 seconds × 4 = ${hr} beats/min. This estimates VO₂max; it does not measure respiratory gases.`,equation:sex==='male'?'Male equation: 111.33 − 0.42 × recovery HR(beats/min).':'Female equation: 65.81 − 0.1847 × recovery HR(beats/min).'};
  }
  if(a.kind!=='norm')return descriptive(a.limit);
  if(!['male','female'].includes(sex))return descriptive('No reference category selected. The actual performance remains reportable.');
@@ -56,11 +61,11 @@ function comparison(a,v){const sex=v.sex,age=number(v.age),b=ageBand(age??0),des
  }
  if(a.id==='sitreach'){
   if(v.convention!=='ace15')return descriptive('This scale/zero point does not match the ACE yardstick reference. No conversion is used to imply that different protocols are equivalent.');
-  if(b===null)return descriptive('The reference table begins at age 18. No extrapolation is made.');
-  const result=best(v);if(!result)return {type:'pending',text:'Record at least one valid trial.'};
-  if(result.count<3)return {type:'pending',text:'Record all three valid trials for the selected sit-and-reach protocol.'};
+  if(b===null||age===65)return descriptive('No course comparison below age 18 or at the overlapping age-65 boundary.');
+  const result=best({...v,trial3:''});if(!result)return {type:'pending',text:'Record at least one valid trial.'};
+  if(result.count<2)return {type:'pending',text:'Record both valid trials for the selected sit-and-reach protocol.'};
   const inch=result.value/(v.unit==='cm'?2.54:1);
-  return {type:'norm',text:percentileBand(inch,REACH_NORMS[sex][b],[10,20,30,40,50,60,70,80,90]),population:`YMCA adult ${sex} reference, age ${bandLabels[b]}; ACE yardstick, heels at 15 inches; best of three trials.`,anchors:REACH_NORMS[sex][b],percentiles:[10,20,30,40,50,60,70,80,90],unit:'inches on yardstick',reason:'Comparison uses the scale reading in inches. Body proportions affect performance; no exact percentile is interpolated.',source:'ace'};
+  return {type:'norm',text:percentileBand(inch,REACH_NORMS[sex][b],[10,20,30,40,50,60,70,80,90]),population:`YMCA adult ${sex} reference, age ${bandLabels[b]}; ACE yardstick, heels at 15 inches; best of two trials.`,anchors:REACH_NORMS[sex][b],percentiles:[10,20,30,40,50,60,70,80,90],unit:'inches on yardstick',reason:'Comparison uses the scale reading in inches. Body proportions affect performance; no exact percentile is interpolated.',source:'ace'};
  }
  if(a.id==='plank'){
   if(v.college!=='yes'||age===null||age<18||age>25)return descriptive('No comparison is assigned outside this app’s conservative college-age context (18–25). That eligibility window is an app choice, not a validated age cutoff from the study.');
@@ -73,9 +78,9 @@ function rawResult(a,v){
  if(a.id==='rockport')return `1 mile: ${v.minutes??'—'} min ${v.seconds??'—'} s; finish HR ${v.hr??'—'} beats/min`;
  if(a.id==='ymca')return `${v.hr??'—'} beats counted in 60 seconds`;
  if(a.id==='queens')return `${v.pulse??'—'} beats in 15 seconds; ${number(v.pulse)!==null?Number(v.pulse)*4:'—'} beats/min; ${v.cadence??'—'} cycles/min`;
- if(a.id==='plank')return `${v.time??'—'} seconds`;
- if(['sitreach','vertical','broad'].includes(a.id)){const r=best(v);return r?`Best: ${r.value} ${v.unit} (trial ${r.trial}); ${r.count} valid trial${r.count===1?'':'s'} (${['trial1','trial2','trial3'].filter(k=>number(v[k])!==null).map(k=>`${v[k]} ${v.unit}`).join(', ')})`:'No trials recorded';}
- if(a.id==='shoulder')return `Right hand on top: ${v.right??'—'} cm; left hand on top: ${v.left??'—'} cm (negative = gap, positive = overlap)`;
+ if(a.id==='plank')return `${v.time??'—'} seconds${Number(v.time)===360?' (course cap reached; time to failure unknown)':''}`;
+ if(['sitreach','vertical','broad'].includes(a.id)){const r=best(a.id==='sitreach'?{...v,trial3:''}:v);return r?`Best: ${r.value} ${v.unit} (trial ${r.trial}); ${r.count} valid trial${r.count===1?'':'s'} (${(a.id==='sitreach'?['trial1','trial2']:['trial1','trial2','trial3']).filter(k=>number(v[k])!==null).map(k=>`${v[k]} ${v.unit}`).join(', ')})`:'No trials recorded';}
+ if(a.id==='shoulder'){const side=k=>{const vals=[1,2,3].map(i=>number(v[k+i])).filter(x=>x!==null);return vals.length?`${Math.max(...vals)} cm; trials: ${vals.join(', ')} cm`:'not recorded';};return `Right hand on top: ${side('right')}; left hand on top: ${side('left')} (negative = gap, positive = overlap)`;}
  if(a.id==='bia')return `Estimated body fat: ${v.fat??'—'}%; device: ${v.device??'—'}`;
  if(a.id==='fit3d')return `${v.output==='fat'?'Estimated body fat':v.label||'Selected output'}: ${v.value??'—'} ${v.output==='fat'?'%':v.unit||''}; ${v.method||'method not selected'}; ${v.device||'device not recorded'}`;
  return `${v.reps??'—'} correct repetitions${a.id==='bench'?`; load: ${v.load==='other'?v.loadOther:(v.load||'—')+' lb'}`:''}${a.id==='pushup'?`; ${v.version||'version not selected'}`:''}${a.id==='squat'&&v.adaptation?`; adaptation: ${v.adaptation}`:''}`;
@@ -85,7 +90,7 @@ function assessmentErrors(a,d,writing=true){const out=[],v=d.values;
   if(f.type==='number'&&value!=null&&value!==''&&(ns===null||ns<f.min||ns>f.max||(f.step===1&&!Number.isInteger(ns))))out.push(`${f.label}: enter ${f.step===1?'a whole number':'a number'} from ${f.min} to ${f.max}.`);
  }
  if(!d.confirmed)out.push('Confirm that you followed the recorded protocol.');
- if(a.id==='sitreach'&&['trial1','trial2','trial3'].some(k=>number(v[k])===null))out.push('Record all three sit-and-reach trials.');
+ if(a.id==='vertical'&&['trial1','trial2','trial3'].some(k=>number(v[k])===null))out.push('Record all three valid vertical jump trials.');
  if(a.id==='sitreach'&&v.convention==='box'&&!v.box?.trim())out.push('Describe your box/zero-point convention.');
  if(a.id==='sitreach'&&v.convention!=='toes0'&&['trial1','trial2','trial3'].some(k=>number(v[k])!==null&&number(v[k])<0))out.push('Negative readings are available only for the toes-at-zero convention.');
  if(a.id==='rockport'&&number(v.minutes)===0&&number(v.seconds)===0)out.push('Walking time must be greater than zero.');
@@ -174,5 +179,23 @@ function action(which){
  if(which==='import'){$('#import-file').click();return;}
  save();render();
 }
-async function restore(event){const file=event.target.files[0];if(!file)return;try{if(file.size>2000000)throw Error('too large');const s=JSON.parse(await file.text());if(s.version!==1||!s.meta||!s.tests||!s.synthesis)throw Error('invalid');for(const a of ASSESSMENTS){const d=s.tests[a.id];if(d&&(!d.values||!d.writing))throw Error('invalid');}if(!confirm('Replace the current draft with this progress backup?'))return;state={...blank(),...s,view:'start',active:null};save();render();$('#save-status').textContent='Progress restored. Check your lab information and continue.';}catch(e){errors(['This file is not a valid EXS101 Fitness Assessment Lab progress backup.']);}}
+async function restore(event){const file=event.target.files[0];if(!file)return;try{if(file.size>2000000)throw Error('too large');const s=JSON.parse(await file.text());if(s.version!==1||!s.meta||!s.tests||!s.synthesis)throw Error('invalid');for(const a of ASSESSMENTS){const d=s.tests[a.id];if(d&&(!d.values||!d.writing))throw Error('invalid');}if(!confirm('Replace the current draft with this progress backup?'))return;state={...blank(),...s,courseRevision:s.courseRevision??0,view:'start',active:null};migrateCourse();save();render();$('#save-status').textContent='Progress restored. Check your lab information and continue.';}catch(e){errors(['This file is not a valid EXS101 Fitness Assessment Lab progress backup.']);}}
+function vo2Context(value,v){const age=number(v.age);if(age===null||age<20||age>69)return 'Estimated, not directly measured. The supplied VO₂max table covers ages 20–69; no age-matched comparison is available.';return 'Estimated, not directly measured. Course VO₂max reference ('+v.sex+', age '+(Math.floor(age/10)*10)+'–'+(Math.floor(age/10)*10+9)+'): '+percentileBand(value,COURSE_VO2[v.sex][Math.floor(age/10)-2],COURSE_VO2_PERCENTILES)+'. The course table cites ACSM/NSCA and a secondary summary; sample recruitment is not supplied. No exact percentile is interpolated.';}
+function courseComparison(a,v){const sex=v.sex,age=number(v.age),desc=reason=>({type:'descriptive',text:'Descriptive result — no normative classification assigned',reason});
+ if(a.id==='pushup'){
+  if(!['male','female'].includes(sex)||age===null||age<20||age>69||v.version!==(sex==='male'?'standard':'modified'))return desc('The course reference requires ages 20–69 and a matched version/reference category.');
+  const score=number(v.reps);if(score===null)return {type:'pending',text:'Record correct repetitions.'};
+  const i=Math.floor(age/10)-2;
+  if((sex==='male'&&i===1&&score>=20&&score<=21)||(sex==='female'&&i===4&&score===1))return desc('This score falls in overlapping course categories. Confirm the table with your instructor; no category is selected.');
+  const tables={male:[[17,22,29,36],[12,17,20,30],[10,13,17,25],[7,10,13,21],[5,8,11,18]],female:[[10,15,21,30],[8,13,20,27],[5,11,15,24],[2,7,11,21],[1,5,12,17]]},thresholds=tables[sex][i],categories=['Needs improvement','Fair','Good','Very good','Excellent'];let index=0;thresholds.forEach(t=>{if(score>=t)index++;});return {type:'norm',text:'Published category: '+categories[index],population:`Course ${sex} reference, ages ${20+i*10}–${29+i*10}, ${v.version} push-ups.`,reason:'Source category labels describe this assessment, not overall health. Ambiguous overlapping scores are withheld.',source:'courseNSCA',categories,thresholds};
+ }
+ if(!['bench','curlup'].includes(a.id))return null;
+ if(!['male','female'].includes(sex))return desc('No reference category selected. Performance remains reportable.');
+ if(age===null||age<(a.id==='bench'?18:20)||(a.id==='curlup'&&age>69))return desc('Age is outside the supplied table. No extrapolation is made.');
+ if(a.id==='bench'&&v.load!==(sex==='male'?'80':'35'))return desc('Performed load does not match this course reference category.');
+ const score=number(v.reps);if(score===null)return {type:'pending',text:'Record correct repetitions.'};
+ const b=a.id==='bench'?ageBand(age):Math.floor(age/10)-2,anchors=(a.id==='bench'?COURSE_BENCH_ROWS:COURSE_CURL_ROWS).map(row=>row[b*2+(sex==='female'?1:0)]);
+ return {type:'norm',text:percentileBand(score,anchors,COURSE_PERCENTILES),population:`Course ${a.name}, ${sex} reference, age ${a.id==='bench'?bandLabels[b]:20+b*10+'–'+(29+b*10)}; ${a.id==='bench'?v.load+' lb, 60 beats/min':'age-matched marker spacing, 40 beats/min, maximum 75'}.`,anchors,percentiles:COURSE_PERCENTILES,unit:'correct repetitions',source:'courseNSCA',reason:'Course-supplied percentile anchors; sample recruitment details are not provided. Shared anchors and test ceilings do not imply an exact individual rank.'};
+}
 render(false);
+
