@@ -49,3 +49,10 @@ Reference limitations deliberately retained: push-up male ages 30–39 scores 20
 Draft compatibility: old values and reflections are preserved, completion/protocol confirmations are reset, and a testing note requires review of the revised procedure. Automated comparisons are withheld while that note remains. Old one-minute curl-up, timed squat, and single-trial shoulder results must not be silently relabeled as the revised tests.
 
 The separate course-wide interactive is deferred as requested. Its scope will include all distinct assessment protocols in the export, including running/walking/treadmill/cycle tests, maximal and multi-repetition strength tests, agility/sprints, mobility tests, and body-composition methods. Duplicate accessible pages will be reconciled, and missing/contradictory norm sources resolved before classifications are implemented. No private screening forms or student records are published.
+
+
+## Visible norm charts
+
+The interpretation step now displays accessible data tables directly, separately from protocol/source references and independently of automated classification eligibility. Charts cover VO₂max (Rockport/Queens), YMCA recovery pulse, bench press, push-ups, partial curl-ups, YMCA sit-and-reach, and shoulder mobility. VO₂max tables include the supplied course category labels. Shoulder distances support inches or cm, with the exact printed course categories applied separately to the best of three trials per side; gaps remain unclassified. Existing shoulder drafts without a unit remain cm.
+
+Vertical approximate anchors and elite broad-jump references are explicitly contextual. The unsourced/conflicting plank table is displayed as unresolved course material, with no automated classification. Squats and optional body-composition outputs do not acquire invented charts. The example bench screenshot has different scores from the age-specific course table; it illustrates the desired format and does not replace the selected dataset.

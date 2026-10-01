@@ -70,3 +70,11 @@ const COURSE_BENCH_ROWS=[[10,6,9,6,6,4,2,1,1,1,1,0],[16,12,13,12,10,8,6,5,3,3,2,
 const COURSE_CURL_ROWS=[[4,5,0,0,13,0,0,0,0,0],[13,12,13,0,21,5,13,0,0,0],[20,17,19,12,26,14,19,0,6,3],[24,21,26,15,31,20,23,2,9,9],[27,27,31,21,39,25,27,9,16,13],[31,32,36,28,51,28,35,16,19,19],[41,37,46,34,67,33,45,23,26,24],[56,45,69,43,75,42,60,30,33,30],[75,70,75,55,75,55,74,48,53,50]];
 const COURSE_VO2_PERCENTILES=[5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95];
 const COURSE_VO2={male:[[29,32.1,35.4,38.1,40.1,41.9,43.5,44.9,46.5,48,49,50.2,52.1,53.7,55.2,57.1,59.3,61.8,66.3],[27.2,30.2,32.7,34.1,35.9,37.4,38.5,39.6,41.3,42.4,43.8,45.2,46.6,48,49.2,51.6,54.2,56.5,59.8],[24.2,26.8,29,30.5,31.9,33.3,34.6,35.7,36.7,37.8,38.9,40.3,42.1,43.9,45,46.7,49.3,52.1,55.6],[20.9,22.8,24.4,26.1,27.1,28.4,29.5,30.7,31.6,32.6,33.8,35.1,36.3,38.2,39.7,41.2,43.2,45.6,50.7],[17.4,19.8,21.2,22.4,23.7,24.6,25.7,26.6,27.2,28.2,29.1,30.5,31.6,32.9,34.5,36.1,38.2,40.3,43]],female:[[21.7,23.9,26.2,28.6,30.5,32,33.6,34.6,35.9,37.6,38.9,40.6,41.6,43.2,44.7,46.5,48.3,51.3,56],[19,20.9,22.5,24.1,25.3,26.4,27.4,28.2,29.3,30.2,31.2,32.2,33.5,34.6,36.1,37.5,39.3,41.4,45.8],[17,18.8,20,21.3,22.1,23.3,24.1,24.9,25.9,26.7,27.7,28.7,30,31.1,32.4,34,36,38.4,41.7],[16,17.3,18.3,19.1,19.9,20.6,21.2,21.8,22.7,23.4,24.4,25.2,26,26.8,27.6,28.6,30.2,32,35.9],[13.4,14.6,15.6,16.5,17.2,17.9,18.4,18.9,19.6,20,20.5,21.2,22,23.1,23.8,24.6,25.6,27,29.4]]};
+
+
+// Shoulder chart uses the printed course ranges; allow inches or centimetres without changing saved cm readings.
+courseTest('shoulder').fields=[choice('unit','Shoulder distance units',[['cm','cm'],['in','in']]),sex(),...courseTest('shoulder').fields.map(f=>({...f,label:f.label.replace('(cm)','(selected units)')}))];
+courseTest('shoulder').required.push('sex');
+courseTest('shoulder').kind='norm';
+courseTest('shoulder').perform='Three trials per side · select cm or inches · negative gap / positive overlap · stop for pain.';
+courseTest('shoulder').limit='The supplied course chart is visible in inches. It uses Excellent, Good, Fair, and Low. Some distances fall between its printed ranges, and the reference population is not specified; those values remain unclassified.';
