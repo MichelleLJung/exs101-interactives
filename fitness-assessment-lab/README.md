@@ -56,3 +56,8 @@ The separate course-wide interactive is deferred as requested. Its scope will in
 The interpretation step now displays accessible data tables directly, separately from protocol/source references and independently of automated classification eligibility. Charts cover VO₂max (Rockport/Queens), YMCA recovery pulse, bench press, push-ups, partial curl-ups, YMCA sit-and-reach, and shoulder mobility. VO₂max tables include the supplied course category labels. Shoulder distances support inches or cm, with the exact printed course categories applied separately to the best of three trials per side; gaps remain unclassified. Existing shoulder drafts without a unit remain cm.
 
 Vertical approximate anchors and elite broad-jump references are explicitly contextual. The unsourced/conflicting plank table is displayed as unresolved course material, with no automated classification. Squats and optional body-composition outputs do not acquire invented charts. The example bench screenshot has different scores from the age-specific course table; it illustrates the desired format and does not replace the selected dataset.
+
+
+
+### Student-facing presentation
+Internal Canvas export provenance and protocol review history remain in source definitions and this documentation; the student interface omits these maintenance references. Saved incomplete work is labeled In Progress. Scientific citations are available in collapsed Sources/About this reference sections. The unresolved course plank category table is omitted from student presentation because its unsourced, overlapping ranges conflict with the six-minute test cap; plank results remain descriptive. Norm values, calculations, completion requirements, and report structure are unchanged.
