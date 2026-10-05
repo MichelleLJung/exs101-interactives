@@ -61,3 +61,10 @@ Vertical approximate anchors and elite broad-jump references are explicitly cont
 
 ### Student-facing presentation
 Internal Canvas export provenance and protocol review history remain in source definitions and this documentation; the student interface omits these maintenance references. Saved incomplete work is labeled In Progress. Scientific citations are available in collapsed Sources/About this reference sections. The unresolved course plank category table is omitted from student presentation because its unsourced, overlapping ranges conflict with the six-minute test cap; plank results remain descriptive. Norm values, calculations, completion requirements, and report structure are unchanged.
+
+
+## Student workflow cleanup
+Numbered station directions define equipment, partner duties, valid attempts, and stopping rules; directions remain available on Record. Your Results appears immediately on Record and first on Interpret, with explicit conversions into chart units. Sit-and-reach zero points are not interchangeable.
+Observations alone do not suppress calculations. A separate procedure-change flag does; older saved notes conservatively initialize that flag and can be reviewed/unselected for ordinary observations. The report has one PDF download action and an on-page readable preview. Backup JSON is for progress, not submission. Six distinct required assessments remain unchanged.
+Full 1-minute sit-up is distinct from paced partial curl-up. Protocol and reference ranges transcribed from the course export (Schoenfeld & Snarr 2021, p232). Caps remain 49/43; capped performance does not establish an uncapped maximum. Conflicting ranges, gaps, age 65 overlap, or mismatched caps withhold automatic classification. Source values are not silently repaired.
+Self-hosted, unchanged activity illustrations: Everkinetic push-up and bench press (CC BY-SA 3.0), Pk0001 forearm plank (CC BY-SA 4.0). Source/license links appear beneath each image. Bench caption requires the spotter missing from the illustration. No generated imagery.
