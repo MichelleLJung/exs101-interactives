@@ -26,13 +26,13 @@ function makeProfilePDF(blocks,meta){
   if(/[^\x20-\x7e]/.test(display)){raster(s,x,y,size,bold);page.commands.push(`BT /F3 ${size} Tf 3 Tr ${x} ${PH-y} Td <${encoded(s)}> Tj 0 Tr ET`);}else page.commands.push(`${bold?'0.12 0.18 0.24':'0.12 0.16 0.21'} rg BT /${bold?'F2':'F1'} ${size} Tf ${x} ${PH-y} Td (${escape(display)}) Tj ET`);page.commands.push('EMC');y+=size+5;
  }
  function tableBlock(block){const widths=block.widths||[290,226],draw=(row,header=false)=>{const cells=row.map((v,i)=>wrap(v,9,header,widths[i]-14));let offset=0;const count=Math.max(...cells.map(c=>c.length));while(offset<count){if(y+30>720){newPage();if(!header)draw(block.headers,true);}const take=Math.min(count-offset,Math.max(1,Math.floor((720-y-12)/14))),height=take*14+12,top=y;let x=M;
- if(header)page.commands.push(`/Artifact BMC 0.91 0.96 0.95 rg ${M} ${PH-top-height+10} ${W} ${height} re f EMC`);
+ if(header)page.commands.push(`/Artifact BMC 0.91 0.95 0.97 rg ${M} ${PH-top-height+10} ${W} ${height} re f EMC`);
  for(let i=0;i<cells.length;i++){page.commands.push(`/Artifact BMC 0.72 0.79 0.8 RG 0.4 w ${x} ${PH-top-height+10} ${widths[i]} ${height} re S EMC`);y=top;for(const text of cells[i].slice(offset,offset+take))line(text,header?'TH':i===0?'TH':'TD',9,header,x+7);x+=widths[i];}y=top+height;offset+=take;if(offset<count){newPage();if(!header)draw(block.headers,true);}}};
  ensure(54);draw(block.headers,true);for(const row of block.rows){const h=Math.max(...row.map((v,i)=>wrap(v,9,false,widths[i]-14).length))*14+12;if(h<600&&y+h>720){newPage();draw(block.headers,true);}draw(row);}y+=9;
  }
  newPage();for(let i=0;i<blocks.length;i++){const block=blocks[i];if(block.tag==='TABLE'){tableBlock(block);continue;}
  if(block.tag==='H2')currentSection='';const bold=block.tag!=='P',size=block.tag==='H1'?12:block.tag==='H2'?9:block.tag==='H3'?9:block.small?8:10;
- if(block.tag==='H2'){ensure(120);y+=9;page.commands.push(`/Artifact BMC 0.55 0.68 0.67 RG 0.5 w ${M} ${PH-y+13} m ${M+W} ${PH-y+13} l S EMC`);}
+ if(block.tag==='H2'){ensure(120);y+=9;page.commands.push(`/Artifact BMC 0.55 0.65 0.73 RG 0.5 w ${M} ${PH-y+13} m ${M+W} ${PH-y+13} l S EMC`);}
  else if(block.tag==='H3'){const next=blocks[i+1],needed=next?.tag==='P'?Math.min(3,wrap(next.text,10,false).length)*15:20;ensure(35+needed);y+=3;}
  const display=block.tag==='H2'?block.text.toUpperCase():block.text,lines=wrap(display,size,bold);if(!bold&&lines.length<=5)ensure(lines.length*(size+5)+5);for(let j=0;j<lines.length;j++){if(j===lines.length-2)ensure((size+5)*2);line(lines[j],block.tag,size,bold);}if(block.tag==='H2')currentSection=block.text;y+=block.tag==='H3'?1:5;
  }
