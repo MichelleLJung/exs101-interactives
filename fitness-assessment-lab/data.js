@@ -117,6 +117,5 @@ fit3d:{equipment:'Fit3D scanner, as available.',roles:'Participant + instructor 
 
 const ACTIVITY_IMAGES = {
  plank:{file:'images/plank.svg',alt:'Forearm plank with elbows beneath shoulders and a straight body supported on the toes.',caption:'Forearm plank position. Keep the body aligned; stop when this position cannot be maintained.',author:'Pk0001',source:'https://commons.wikimedia.org/wiki/File:Plank_exercise.svg',license:'CC BY-SA 4.0',licenseURL:'https://creativecommons.org/licenses/by-sa/4.0/'},
- pushup:{file:'images/Push-up-2.png',alt:'Side view of the lowered standard push-up position.',caption:'Standard push-up lowering position. Use the course depth target; the modified version uses the knees.',author:'Everkinetic',source:'https://commons.wikimedia.org/wiki/File:Push-up-2.png',license:'CC BY-SA 3.0',licenseURL:'https://creativecommons.org/licenses/by-sa/3.0/'},
  bench:{file:'images/Bench-press-1.png',alt:'Bench press with feet on the floor and arms extended.',caption:'Press to full extension. A spotter and instructor supervision are required; the illustration does not show the spotter.',author:'Everkinetic',source:'https://commons.wikimedia.org/wiki/File:Bench-press-1.png',license:'CC BY-SA 3.0',licenseURL:'https://creativecommons.org/licenses/by-sa/3.0/'}
 };
