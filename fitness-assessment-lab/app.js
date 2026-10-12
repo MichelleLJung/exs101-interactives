@@ -11,7 +11,7 @@ function hasProtocolChange(d){return d.values.protocolChanged===true;}
 const $=s=>document.querySelector(s),esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const number=v=>v!==''&&v!=null&&Number.isFinite(Number(v))?Number(v):null;
 const aById=id=>ASSESSMENTS.find(a=>a.id===id);
-const data=id=>{const d=state.tests[id]??={values:{},writing:{},confirmed:false,complete:false,include:true};if(id==='fit3d')migrateFit3D(d.values);return d;};
+const data=id=>{const d=state.tests[id]??={values:{},writing:{},confirmed:false,complete:false,include:true};if(id==='fit3d')migrateFit3D(d.values);if(id==='sitreach'&&d.values.unit==null)d.values.unit='in';return d;};
 if(state.tests.fit3d)migrateFit3D(state.tests.fit3d.values);
 function save(announce=false){try{localStorage.setItem(KEY,JSON.stringify(state));storageOK=true;if(announce)$('#save-status').textContent='Progress saved on this device. It is not sent to your instructor.';}catch(e){storageOK=false;$('#save-status').textContent='Browser saving is unavailable. Keep this page open and download a progress backup before leaving.';}}
 function field(key,label,value,type='text',opts={}){const id='field-'+key.replace(/[^a-zA-Z0-9]/g,'-');return `<div class="field"><label for="${id}">${esc(label)}</label>${type==='textarea'?`<textarea id="${id}" data-key="${esc(key)}">${esc(value)}</textarea>`:type==='select'?`<select id="${id}" data-key="${esc(key)}">${opts.options.map(([v,l])=>`<option value="${esc(v)}" ${String(value??'')===v?'selected':''}>${esc(l)}</option>`).join('')}</select>`:`<input id="${id}" data-key="${esc(key)}" type="${type}" value="${esc(value)}" ${type==='number'?`min="${opts.min??0}" max="${opts.max??10000}" step="${opts.step??'any'}"`:''}>`}${opts.hint?`<p class="hint">${esc(opts.hint)}</p>`:''}</div>`;}
@@ -90,7 +90,7 @@ function rawResult(a,v){
  if(a.id==='fit3d'){const items=[];items.push(v.fatStatus==='available'&&number(v.fat)!==null?'Estimated body fat: '+v.fat+'%':'Estimated body fat: not available');items.push(v.waistStatus==='available'&&number(v.waist)!==null?'Waist circumference: '+v.waist+' '+(v.waistUnit||'units not selected'):'Waist circumference: not available');if(v.otherName&&number(v.otherValue)!==null)items.push((v.otherName==='Other'?v.otherLabel:v.otherName)+': '+v.otherValue+' '+(v.otherUnit||''));return items.join('; ');}
  return `${v.reps??'—'} correct repetitions${a.id==='bench'?`; load: ${v.load==='other'?v.loadOther:(v.load||'—')+' lb'}`:''}${a.id==='pushup'?`; ${v.version||'version not selected'}`:''}${a.id==='squat'&&v.adaptation?`; adaptation: ${v.adaptation}`:''}`;
 }
-function assessmentErrors(a,d,writing=true){const out=[],v=d.values;if(a.id==='fit3d')migrateFit3D(v);
+function assessmentErrors(a,d,writing=true){const out=[],v=d.values;if(a.id==='sitreach'&&v.unit==null)v.unit='in';if(a.id==='fit3d')migrateFit3D(v);
  for(const f of a.fields){const value=v[f.key],ns=number(value);if(a.required.includes(f.key)&&(value==null||String(value).trim()===''))out.push(`Enter ${f.label}.`);
   if(f.type==='number'&&value!=null&&value!==''&&(ns===null||ns<f.min||ns>f.max||(f.step===1&&!Number.isInteger(ns))))out.push(`${f.label}: enter ${f.step===1?'a whole number':'a number'} from ${f.min} to ${f.max}.`);
  }
