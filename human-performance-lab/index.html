@@ -83,7 +83,7 @@ function tablePDF(headers,rows,widths){widths=widths||headers.map((_,i)=>i===0?(
 function answer(label,value){ensure(42);rawText(label,M,y,9,true);y+=16;textBlock(value,10);y+=3;}
 function plot(s,x,top,w=248,h=195){const pts=s.points,xmin=Math.min(...pts.map(p=>p.x)),xmax=Math.max(...pts.map(p=>p.x)),ymax=Math.max(...pts.map(p=>p.y),s.mean||0,1)*1.1,left=x+34,right=x+w-9,bottom=top+h-35,upper=top+32,xx=v=>left+(v-xmin)/(xmax-xmin||1)*(right-left),yy=v=>bottom-v/ymax*(bottom-upper);commands.push(`0.72 0.78 0.83 RG 0.5 w ${x} ${PH-top-h} ${w} ${h} re S`);rawText(s.title,x+9,top+15,9,true);rawText(s.unit,left,top+28,8);for(let i=0;i<=4;i++){const v=ymax*i/4,t=yy(v);commands.push(`0.85 0.89 0.92 RG 0.4 w ${left} ${PH-t} m ${right} ${PH-t} l S`);rawText(String(Number(v.toFixed(1))),x+3,t+3,7)}commands.push(`0.3 0.4 0.5 RG 0.6 w ${left} ${PH-upper} m ${left} ${PH-bottom} l ${right} ${PH-bottom} l S`);commands.push('0 0.37 0.56 RG 0 0.37 0.56 rg 1.2 w');pts.forEach((p,i)=>{if(i){const q=pts[i-1];commands.push(`${xx(q.x)} ${PH-yy(q.y)} m ${xx(p.x)} ${PH-yy(p.y)} l S`)}commands.push(`${xx(p.x)-1.5} ${PH-yy(p.y)-1.5} 3 3 re f`)});commands.push('0.12 0.16 0.22 rg');const labels=pts.length<=10?pts:pts.filter((_,i)=>i===0||i===pts.length-1||i%Math.ceil(pts.length/8)===0);labels.forEach(p=>rawText(p.label,xx(p.x)-4,bottom+12,7));rawText(isVO()?'Stage (WU / TW = warm-ups)':'Time (s)',left+20,top+h-9,8);if(!isVO()&&s.mean!==null&&s.mean!==undefined){commands.push(`0.5 0.3 0 RG [3 2] 0 d ${left} ${PH-yy(s.mean)} m ${right} ${PH-yy(s.mean)} l S [] 0 d`);rawText('Mean: '+s.mean+' W',left+5,Math.max(upper+10,yy(s.mean)-5),8)}commands.push('0.12 0.16 0.22 rg');}
 // One compact identity block, followed by measurements and figures.
-y=50;rawText(isVO()?'VO2MAX | LABORATORY REPORT':'WINGATE | LABORATORY REPORT',M,y,12,true);y+=20;
+y=50;rawText(isVO()?'VO2MAX | LABORATORY REPORT':'WINGATE | LABORATORY REPORT',M,y,12,true);y+=14;commands.push('q 0.35 0.38 0.42 rg');rawText("EXS101 | Human Performance Lab",M,y,8);commands.push('Q');y+=16;
 const l=lab(),m=l.meta;textBlock(`Student: ${val(m.student)}   |   Section: ${val(m.group)}   |   Date: ${val(m.date)}`,9);
 tablePDF(['Participant','Age (years)','Gender','Mass (kg)',...(!isVO()?['Height (cm)']:[])],[[val(m.participant),val(m.age),val(m.gender),val(m.mass),...(!isVO()?[val(m.height)]:[])]],isVO()?[160,90,150,116]:[126,80,130,90,90]);textBlock(equipment()+' | '+protocol()+(isVO()?' | Testing speed: '+val(m.speed)+' mph':''),9);if(m.notes?.trim())textBlock('Testing note: '+m.notes,9);
 heading('Results');tablePDF(['Measurement','Value','Unit'],snapshotItems().map(([n,v,u])=>[n,v,u]),[310,90,116]);
@@ -109,5 +109,6 @@ function wingateReferenceChart(){const tables={male:[[5,620,8.61,449,6.41],[25,7
 render();
 </script><div class="mlj-resource-footer" role="contentinfo" aria-label="Resource information"><span>© 2026 Michelle L. Jung</span><span aria-hidden="true">·</span><a href="../licensing.html#development" data-resource-about>About this tool</a></div>
 </body></html>
+
 
 
