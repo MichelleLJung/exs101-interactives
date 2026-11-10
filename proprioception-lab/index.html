@@ -1,0 +1,174 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>EXS101 Proprioception Lab</title>
+<style>
+*{box-sizing:border-box}[hidden]{display:none!important}body{margin:0;background:#f5f5f8;color:#242538;font:16px/1.6 system-ui,sans-serif}header{background:#26213e;color:white;padding:40px 20px}header div,main{max-width:900px;margin:auto}header p,h1{margin:.25em 0}h1{font:clamp(2rem,6vw,3.4rem) Georgia,serif}main{padding:20px}.bar,nav{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:18px}button,.upload{font:inherit;border:1px solid #564575;background:#fff;color:#26213e;padding:8px 13px;border-radius:4px;cursor:pointer}button.primary,button[aria-current=step]{background:#4d3b70;color:#fff}button:disabled{opacity:.55;cursor:default}section{background:white;border:1px solid #d4cedf;border-top:5px solid #564575;padding:clamp(14px,4vw,28px);margin-bottom:20px}h2,h3{color:#26213e;margin-top:0}.note{background:#eeebf5;padding:12px 15px;border-left:4px solid #715594}a{color:#4d326e}label{display:block;margin:12px 0 4px;font-weight:650}textarea,select,input:not([type=file]){font:inherit;width:100%;border:1px solid #787087;padding:8px;color:#242538;background:white}textarea{min-height:90px}fieldset{margin:16px 0;border:1px solid #d4cedf}legend{font-weight:bold}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px}.actions{margin-top:20px}.small{font-size:.93rem}img{display:block;max-width:100%;max-height:270px;margin:12px 0}#report[hidden]{display:none} #report{overflow-wrap:anywhere} #report p{white-space:pre-wrap} #report h2{break-after:avoid} #report img{object-fit:contain} .report-controls{margin:12px 0}#status{min-height:1.5em} :focus-visible{outline:3px solid #694497;outline-offset:3px}@media print{header,#work{display:none!important}main{max-width:none;padding:0}#report,#report[hidden]{display:block!important} .report-controls{display:none!important} @page{margin:16mm}#report section{border-top-width:2px;padding:10px} #report figure{break-inside:avoid;margin:10px 0}#report img{max-height:160px}#report p{white-space:pre-wrap}}
+</style><link rel="stylesheet" href="../resource-about.css"><script defer src="../resource-about.js"></script>
+<header><div><p>EXS101 · Motor Behavior</p><h1>Proprioception Lab</h1><p>Use five weight-room activities to investigate how you sense position, movement, and load, and how that information helps you plan and adjust a movement.</p></div></header>
+<main><div id="work"><div class="bar"><button type="button" id="save">Save backup JSON</button><button type="button" id="upload">Upload saved JSON</button><input id="restore" type="file" accept=".json,application/json" hidden></div>
+<p class="small">Your work saves in this browser on this device when local storage is available. A JSON backup is optional. Use it to move your work to another device or keep a separate copy. Submit the finished PDF in Canvas.</p><p role="status" id="status"></p>
+<nav aria-label="Lab steps"><button data-step="prep" aria-current="step">Before the Lab</button><button data-step="position" disabled>1. Position matching</button><button data-step="load" disabled>2. Load discrimination</button><button data-step="touch" disabled>3. Touch sensitivity</button><button data-step="motion" disabled>4. Movement direction</button><button data-step="expect" disabled>5. Load anticipation</button><button data-step="reflect" disabled>Reflection &amp; PDF</button></nav>
+<form id="lab">
+<section id="prep"><h2>Before the Lab</h2><p>Complete this section during the first 12–15 minutes of class. Use <strong>Reference 2 · Motor Control, Sensory Input &amp; Proprioception</strong> in the Motor Behavior module of your own EXS101 Canvas course. Read <strong>Sensory Receptors</strong> first, then use <strong>Proprioception</strong> and <strong>Planning &amp; Adjusting</strong> to answer the questions below. Keep the reference open as you work.</p>
+<details class="note">
+<summary>Optional open resources</summary>
+<p>Use Reference 2 for the lab responses. These OpenStax readings offer another explanation if you get stuck.</p>
+<ul>
+<li><a href="https://openstax.org/books/psychology-2e/pages/5-5-the-other-senses" target="_blank" rel="noopener">OpenStax Psychology 2e · The Other Senses</a>. Look for the section on body position and movement for an overview of proprioception and kinesthesia.</li>
+<li><a href="https://openstax.org/books/anatomy-and-physiology-2e/pages/14-3-motor-responses" target="_blank" rel="noopener">OpenStax Anatomy and Physiology 2e · Motor Responses</a>. Use the stretch-reflex example to follow a muscle spindle signal into the spinal cord and a motor signal back to muscle.</li>
+</ul>
+</details>
+<label for="student">Name</label><input id="student" autocomplete="name" maxlength="100">
+<h3>Receptor review</h3>
+<p>Use the receptor table and worked examples in Reference 2. For each entry, explain where the receptor is found, what it detects, and how that signal could help during one of the five activities. Name the activity and explain the connection in your own words. You can preview the activity names above.</p>
+<div id="prepReceptors"></div>
+<p class="note">Review all four sources of sensory information. Pay attention to the difference between touch at the skin and skin stretch that provides information about limb position or movement.</p>
+<h3>Before you test</h3>
+<label for="distinction">How is sensing where your elbow is different from sensing it move?</label><textarea id="distinction" maxlength="3000"></textarea>
+<label for="prediction">When do you predict you’ll match an elbow position most closely?</label><select id="prediction"><option value="">Choose a prediction</option><option>With vision</option><option>Without vision</option><option>About the same</option></select>
+<label for="reason">Why? What information will still be available without vision?</label><textarea id="reason" maxlength="3000"></textarea>
+<label for="signalPrep">A dumbbell shifts in your hand. What does the sensory signal tell the CNS, and what could the motor signal tell the muscles to do?</label><textarea id="signalPrep" maxlength="3000"></textarea>
+<p class="note">Select Finish prep to save your responses in this browser and open the activity tabs. Your responses will carry into your report. Wait for your instructor to demonstrate the five activities. Then move to the lab space and complete all five with a partner. Record your own evidence and write your own reflection. If you need an adapted setup, check with your instructor and label your role and setup in your trial notes.</p>
+<button class="primary" id="finish" type="button">Finish prep</button></section>
+<section id="position" hidden><h2>Activity 1 · Position matching</h2><p><strong>Activity 1 of 5.</strong> Work seated with a partner. Use a comfortable elbow range and keep your upper arms near your sides.</p><ol>
+<li>Choose and describe a target position, such as an elbow bent about halfway. The performer holds one arm at that position.</li>
+<li>With vision, bend the other elbow to match. The observer records whether the matching elbow is more bent, less bent, or close. Return the matching arm to its starting position.</li>
+<li>Keep the target arm in place. Close your eyes or have your partner hold a screen that blocks both arms, then match with the other arm again. The observer records the result before discussing either attempt.</li>
+<li>Repeat for two other comfortable positions. Alternate which viewing condition comes first, then switch roles and record your own trials.</li></ol><p>Use the same observer for both conditions in a trial.</p><div id="positionTrials"></div><label for="positionPhoto">Position matching setup photo</label><input id="positionPhoto" type="file" accept="image/*"><img id="positionPreview" alt="Uploaded position matching setup" hidden><label for="positionCaption">What does the photo document?</label><input id="positionCaption" maxlength="250"><div class="actions"><button type="button" class="primary" data-go="load">Next · Load discrimination</button></div></section>
+<section id="load" hidden><h2>Activity 2 · Dumbbell load discrimination</h2>
+<ol><li>Choose two light dumbbell loads and agree on one reference load. Sit with your upper arm close to your side and your elbow comfortably bent.</li><li>Your partner places the reference dumbbell in your hand while you look at your grip. Secure it, then look away from the weight and notice the effort to hold it briefly. Your partner takes it back while you watch your grip.</li><li>Repeat with the comparison dumbbell in the same hand at approximately the same elbow angle. Keep the markings out of view. Across four trials, include at least one same-load comparison. Use a fresh reference hold before each comparison.</li><li>Record whether the comparison feels lighter, the same, or heavier than the reference before your partner reveals the comparison weight. Enter the revealed load using the same units. Switch roles after the trials.</li></ol>
+<div id="loadTrials"></div><div class="actions"><button type="button" class="primary" data-go="touch">Next · Touch sensitivity</button></div></section>
+<section id="touch" hidden><h2>Activity 3 · Touch sensitivity</h2>
+<ol><li>With permission, choose two places on your own or your partner’s hand and forearm, such as the fingertip and outer forearm. Use a clean cotton swab for each person.</li><li>The performer looks away. Apply one brief, light touch at each location with the same swab. Keep contact as similar as you can.</li><li>Compare which felt clearer, or whether they felt similar. Complete three trials in total, alternating which location goes first, then switch roles.</li></ol>
+<div id="touchTrials"></div><div class="actions"><button type="button" class="primary" data-go="motion">Next · Movement direction</button></div></section>
+<section id="motion" hidden><h2>Activity 4 · Movement-direction detection</h2>
+<ol><li>Sit with your elbow comfortably bent and forearm supported. Agree on a small, comfortable range and get permission before moving a partner’s arm. If you prefer to avoid partner contact, record a consenting partner’s trials and label your evidence as an observer.</li><li>Look away. Relax your arm as your partner supports your forearm and slowly moves it a small amount toward bending or straightening. Say which way it moved before you look.</li><li>Say your answer before your partner reveals the actual direction. Record both the actual direction and your answer. Return to the starting position between trials. Complete three trials in total, varying the direction, then switch roles.</li></ol>
+<div id="motionTrials"></div><div class="actions"><button type="button" class="primary" data-go="expect">Next · Load anticipation</button></div></section>
+<section id="expect" hidden><h2>Activity 5 · Anticipating a load</h2>
+<ol><li>Use two identical-looking, easy-to-lift containers with different loads. Set them on a tabletop. Keep your eyes open throughout.</li><li>Predict how heavy the first container will feel. Lift it just clear of the table and set it back down. Repeat for the second container.</li><li>After learning which is heavier, lift each again. Record any difference in your expectation, perceived effort, or adjustment. Report a similar lift if you noticed no change. Then switch roles. Reset or relabel the containers so the next performer starts without knowing which is heavier.</li></ol>
+<div id="expectTrials"></div><div class="actions"><button type="button" class="primary" data-go="reflect">Next · Reflection &amp; PDF</button></div></section>
+<section id="reflect" hidden><h2>Reflection &amp; PDF</h2>
+<p>Reopen Reference 2 in the Motor Behavior module of your EXS101 Canvas course. Refer to a specific trial or comparison from each of the five activities across your responses. Name the relevant reference tab or concept and explain how it helps you interpret your evidence. Similar results, unexpected results, and incorrect guesses are all useful evidence.</p>
+<label for="interpretPosition">Position and movement sense. Compare one matched pair from Activity 1 with one trial from Activity 4. Explain the difference between knowing where your arm was and knowing which way it was moving. Use Reference 2 to distinguish the information a muscle spindle can provide from what joint receptors may contribute. Revisit your prediction and explain what vision may have added or why your results may have been similar.</label><textarea id="interpretPosition" maxlength="3000"></textarea>
+<label for="interpretLoad">Length, tension, and touch. Use a dumbbell trial and a touch trial. What changed while elbow position stayed about the same? Contrast muscle length with muscle–tendon tension and explain how a Golgi tendon organ and skin mechanoreceptors could contribute information. Distinguish what you felt at the touch station from what you sensed about your limb position. What can your trials tell you about the task, and what remains uncertain about individual receptors?</label><textarea id="interpretLoad" maxlength="3000"></textarea>
+<label for="interpretExpect">Planning and adjusting. Compare a first lift with its repeat. Describe what your nervous system could plan before the first lift and what sensory feedback could help you adjust during or after it. Use an observation from your first and repeat lifts, even if you noticed little change.</label><textarea id="interpretExpect" maxlength="3000"></textarea>
+<label for="application">Weight-room application. Choose a movement you might teach. Trace one sensory signal from its source toward the CNS and one motor signal out to muscle. Explain one specific cue or change you would make to help the learner use sensory information on the next rep.</label><textarea id="application" maxlength="3000"></textarea>
+<h3>Photo evidence</h3>
+<p>Add one captioned setup or equipment photo for position matching on its activity tab and one for any of Activities 2–5 below. Use your caption to identify the activity and the condition shown. Keep faces out of frame.</p>
+<label for="loadPhoto">Setup photo for one of Activities 2–5</label><input id="loadPhoto" type="file" accept="image/*"><img id="loadPreview" alt="Uploaded setup for one of Activities 2–5" hidden><label for="loadCaption">Which activity and setup does the photo document?</label><input id="loadCaption" maxlength="250">
+<button id="review" type="button">Preview report</button> <button class="primary" id="print" type="button">Print / Save as PDF</button></section>
+</form></div><div id="report" hidden></div></main>
+<script>
+const $=id=>document.getElementById(id), status=$('status'), form=$('lab')
+const choices=['Close','More bent','Less bent'], guesses=['Lighter','Same','Heavier']
+const select=(id,label,opts)=>`<div><label for="${id}">${label}</label><select id="${id}"><option value="">Choose</option>${opts.map(x=>`<option>${x}</option>`).join('')}</select></div>`
+const input=(id,label)=>`<div><label for="${id}">${label}</label><input id="${id}" maxlength="500"></div>`
+$('positionTrials').innerHTML=[1,2,3].map(i=>`<fieldset><legend>Position ${i}</legend><div class="grid">${input('pTarget'+i,'Target description')}${select('pOpen'+i,'With vision',choices)}${select('pClosed'+i,'Without vision',choices)}</div></fieldset>`).join('')
+$('loadTrials').innerHTML=[1,2,3,4].map(i=>`<fieldset><legend>Trial ${i}</legend><div class="grid">${input('lRef'+i,'Reference load')}${select('lGuess'+i,'Comparison vs reference',guesses)}${input('lActual'+i,'Revealed load')}</div></fieldset>`).join('')
+const stationTrials={
+ touch:{title:'Touch sensitivity',columns:['Locations compared','Which felt clearer or similar?'],count:3},
+ motion:{title:'Movement-direction detection',columns:['Actual direction','Reported direction'],count:3},
+ expect:{title:'Anticipating a load',columns:['Container and prediction','First lift observation','Repeat lift observation'],count:2}
+}
+for(const [id,cfg] of Object.entries(stationTrials)){
+ $(id+'Trials').innerHTML=Array.from({length:cfg.count},(_,i)=>`<fieldset><legend>Trial ${i+1}</legend><div class="grid">${cfg.columns.map((col,j)=>id==='motion'?select(id+i+'_'+j,col,['Bending','Straightening','Unsure']):input(id+i+'_'+j,col)).join('')}</div></fieldset>`).join('')
+}
+const receptors=[
+ ['spindle','Muscle spindles'],['gto','Golgi tendon organs'],['joint','Joint receptors'],['skin','Skin mechanoreceptors']
+]
+$('prepReceptors').innerHTML=receptors.map(([id,title])=>`<label for="${id}">${title}</label><textarea id="${id}" maxlength="3000"></textarea>`).join('')
+for (const step of ['position','load','touch','motion','expect']) {
+ const label = document.createElement('label')
+ label.htmlFor = step + 'Notes'
+ label.textContent = 'Setup or role notes (optional)'
+ const notes = document.createElement('textarea')
+ notes.id = step + 'Notes'
+ notes.maxLength = 1000
+ notes.placeholder = 'Record an adapted setup, observer role, or anything that affected these trials.'
+ $(step).insertBefore(label, $(step).querySelector('.actions'))
+ label.after(notes)
+}
+const fields=[...form.querySelectorAll('input:not([type=file]),textarea,select')]
+const prepFields=['student',...receptors.map(([id])=>id),'distinction','prediction','reason','signalPrep']
+const photos={position:'',load:''}
+let unlocked=false,active='prep'
+const key='exs101-proprioception-preview-v1'
+function data(){return {kind:'exs101-proprioception',version:1,prepComplete:unlocked,fields:Object.fromEntries(fields.map(f=>[f.id,f.value])),photos:{...photos}}}
+function remember(){try{localStorage.setItem(key,JSON.stringify(data()))}catch{status.textContent='This browser could not save locally. Download a backup to keep your work.'}}
+function show(step,focus=true){if(step!=='prep'&&!unlocked)return;active=step;for(const b of document.querySelectorAll('[data-step]')){const current=b.dataset.step===step;b.disabled=b.dataset.step!=='prep'&&!unlocked;if(current)b.setAttribute('aria-current','step');else b.removeAttribute('aria-current');$(b.dataset.step).hidden=!current}if(focus){const h=$(step).querySelector('h2');h.tabIndex=-1;h.focus()}}
+function backup(){const url=URL.createObjectURL(new Blob([JSON.stringify(data(),null,2)],{type:'application/json'}));const link=document.createElement('a');link.href=url;link.download='EXS101-proprioception-backup.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),3000);status.textContent='Backup downloaded. Keep it if you plan to switch devices or want a separate copy.'}
+function restore(d){if(d?.kind!=='exs101-proprioception'||d.version!==1||!d.fields||!d.photos)throw Error('Choose a backup exported from this lab.')
+ for(const f of fields){const val=d.fields[f.id];f.value=typeof val==='string'?val.slice(0,f.maxLength>0?f.maxLength:3000):''}
+ for(const id of Object.keys(photos)){const p=d.photos[id];photos[id]=typeof p==='string'&&/^data:image\/(jpeg|png|webp);base64,[\w+/=]+$/.test(p)&&p.length<4000000?p:'';preview(id)}
+ unlocked=d.prepComplete===true&&prepFields.every(id=>$(id).value.trim())
+ show(unlocked?'position':'prep',false)}
+function preview(id){const el=$(id+'Preview');if(photos[id])el.src=photos[id];else el.removeAttribute('src');el.hidden=!photos[id]}
+async function photo(id,file){const bmp=await createImageBitmap(file);try{const c=document.createElement('canvas');const scale=Math.min(1,1200/Math.max(bmp.width,bmp.height));c.width=Math.max(1,Math.round(bmp.width*scale));c.height=Math.max(1,Math.round(bmp.height*scale));const ctx=c.getContext('2d');ctx.fillStyle='white';ctx.fillRect(0,0,c.width,c.height);ctx.drawImage(bmp,0,0,c.width,c.height);photos[id]=c.toDataURL('image/jpeg',.82);preview(id);remember()}finally{bmp.close()}}
+for(const id of Object.keys(photos))$(id+'Photo').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{await photo(id,f)}catch{status.textContent='Could not open that photo. Try a JPG or PNG.'}})
+for(const b of document.querySelectorAll('[data-step],[data-go]'))b.addEventListener('click',()=>show(b.dataset.step||b.dataset.go))
+form.addEventListener('submit',e=>e.preventDefault())
+form.addEventListener('input',e=>{if(e.target.type!=='file')remember()})
+$('save').onclick=backup
+$('upload').onclick=()=>$('restore').click()
+$('finish').onclick=()=>{const empty=prepFields.find(id=>!$(id).value.trim());if(empty){status.textContent='Complete the receptor review and prep questions before opening the lab.';$(empty).focus();return}unlocked=true;status.textContent='Prep complete. The lab activities are ready.';remember();show('position')}
+$('restore').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{if(f.size>10000000)throw Error('That backup is too large.');restore(JSON.parse(await f.text()));remember();status.textContent='Backup restored.'}catch(err){status.textContent=err instanceof SyntaxError?'That file is not a valid JSON backup.':err.message}e.target.value=''}
+function report(){
+ const target=$('report');target.replaceChildren()
+ function node(parent,tag,value){const el=document.createElement(tag);el.textContent=value;parent.append(el);return el}
+ function part(title){const s=node(target,'section','');node(s,'h2',title);return s}
+ function row(s,label,id){node(s,'p',label+' — '+$(id).value)}
+ function image(s,id){if(photos[id]){const figure=node(s,'figure','');const i=node(figure,'img','');i.src=photos[id];i.alt=$(id+'Caption').value||'Student setup photo';node(figure,'figcaption',$(id+'Caption').value)}}
+ function notes(s,id){if($(id+'Notes').value.trim())row(s,'Setup or role notes',id+'Notes')}
+ node(target,'h1','Proprioception Lab');const courseLabel=node(target,'p','EXS101 · Proprioception Lab');courseLabel.style.cssText='font-size:12px;color:#666';node(target,'p',$('student').value)
+ let s=part('Before the Lab');for(const [id,title] of receptors)row(s,title,id);row(s,'Position and movement sense','distinction');row(s,'Prediction','prediction');row(s,'Reasoning','reason');row(s,'Sensory and motor signals','signalPrep')
+ s=part('Position matching');for(let i=1;i<=3;i++)node(s,'p',`Position ${i}: ${$('pTarget'+i).value} | With vision: ${$('pOpen'+i).value} | Without vision: ${$('pClosed'+i).value}`);image(s,'position');notes(s,'position')
+ s=part('Dumbbell load discrimination')
+ const loadRows=[]
+ for(let i=1;i<=4;i++){const values=['lRef','lGuess','lActual'].map(id=>$(id+i).value);if(values.some(Boolean))loadRows.push(`Trial ${i}: Reference ${values[0]} | Guess: ${values[1]} | Revealed load: ${values[2]}`)}
+ for(const v of loadRows)node(s,'p',v);notes(s,'load')
+ for(const [id,cfg] of Object.entries(stationTrials)){
+   const rows=[]
+   for(let i=0;i<cfg.count;i++){const values=cfg.columns.map((_,j)=>$(id+i+'_'+j).value);if(values.some(Boolean))rows.push(`Trial ${i+1}: `+values.map((v,j)=>cfg.columns[j]+': '+v).join(' | '))}
+   s=part(cfg.title);for(const v of rows)node(s,'p',v);notes(s,id)
+ }
+ s=part('Additional setup photo');image(s,'load')
+ for (const [title,id] of [['Position and movement sense','interpretPosition'],['Length, tension, and touch','interpretLoad'],['Planning and adjusting','interpretExpect'],['Weight-room application','application']]) {
+   s=part(title);node(s,'p',$(id).value)
+ }
+}
+function prepareReport(){
+ if(!prepFields.every(id=>$(id).value.trim())){
+   show('prep',false);const missing=prepFields.find(id=>!$(id).value.trim())
+   $(missing).focus();status.textContent='Complete the highlighted prep field before exporting.';return
+ }
+ const steps={position:['pTarget','pOpen','pClosed'].flatMap(prefix=>[1,2,3].map(i=>prefix+i)),load:['lRef','lGuess','lActual'].flatMap(prefix=>[1,2,3,4].map(i=>prefix+i)),reflect:['interpretPosition','interpretLoad','interpretExpect','application']}
+ for(const [id,cfg] of Object.entries(stationTrials))steps[id]=Array.from({length:cfg.count},(_,i)=>cfg.columns.map((_,j)=>id+i+'_'+j)).flat()
+ for(const step of ['position','load','touch','motion','expect','reflect']){
+   const missing=steps[step].find(id=>!$(id).value.trim())
+   if(missing){show(step,false);$(missing).focus();status.textContent='Complete the highlighted activity or reflection field before exporting.';return}
+ }
+ for(const [id,step] of [['position','position'],['load','reflect']]){
+   const missing=!photos[id]?id+'Photo':!$(id+'Caption').value.trim()?id+'Caption':null
+   if(missing){show(step,false);$(missing).focus();status.textContent='Add both setup photos and their captions before exporting.';return}
+ }
+ status.textContent='Report ready. Choose Save as PDF in the print dialog.'
+ report();return true
+}
+$('review').onclick=()=>{
+ if(!prepareReport())return
+ $('work').hidden=true
+ $('report').hidden=false
+ const controls=document.createElement('div')
+ controls.className='report-controls'
+ const back=document.createElement('button')
+ back.type='button';back.textContent='Back to lab'
+ back.onclick=()=>{$('report').hidden=true;$('work').hidden=false;show('reflect')}
+ controls.append(back);$('report').prepend(controls)
+ $('report').scrollIntoView({block:'start'})
+}
+$('print').onclick=async()=>{
+ if(!prepareReport())return
+ await Promise.all([...$('report').querySelectorAll('img')].map(img=>img.decode().catch(()=>{})))
+ window.print()
+}
+
+try{const saved=localStorage.getItem(key);if(saved)restore(JSON.parse(saved))}catch{}
+</script><div class="mlj-resource-footer" role="contentinfo" aria-label="Resource information"><span>© 2026 Michelle L. Jung</span><span aria-hidden="true">·</span><a href="../licensing.html#development" data-resource-about>About this tool</a></div></html>
