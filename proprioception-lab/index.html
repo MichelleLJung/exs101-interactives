@@ -21,9 +21,9 @@
 #report th:first-child{width:9%}#report .receptor-table th:first-child{width:24%}#report thead{display:table-header-group}
 #report tr{break-inside:avoid}
 #report .notes{font-size:12px;color:#555}
-#report .photo-row{display:flex;gap:12px;margin:7px 0}
-#report figure{flex:1;min-width:0;margin:0;break-inside:avoid}
-#report figure img{height:115px;width:100%;object-fit:contain;margin:0 0 4px}
+#report .photo-row{display:flex;flex-wrap:wrap;gap:8px;margin:7px 0}
+#report figure{flex:0 0 calc(33.333% - 6px);min-width:0;margin:0;break-inside:avoid}
+#report figure img{height:85px;width:100%;object-fit:contain;margin:0 0 4px}
 #report figcaption{font-size:12px;line-height:1.3}
 #report .answer-label{font-weight:700;font-size:12px;margin-bottom:1px}
 @media(max-width:600px){#report{padding:8px}#report .photo-row{flex-direction:column}}
@@ -38,14 +38,15 @@
  #report table{font-size:9pt}
  #report th,#report td{padding:3px 5px}
  #report figure{margin:0}
- #report figure img{height:105px;max-height:105px}
+ #report figure img{height:75px;max-height:75px}
  #report p{orphans:2;widows:2}
 }
 </style><link rel="stylesheet" href="../resource-about.css"><script defer src="../resource-about.js"></script>
 <header><div><p>EXS101 · Motor Behavior</p><h1>Proprioception Lab</h1><p>Use five weight-room activities to investigate how you sense position, movement, and load, and how that information helps you plan and adjust a movement.</p></div></header>
-<main><div id="work"><div class="bar"><button type="button" id="save">Save backup JSON</button><button type="button" id="upload">Upload saved JSON</button><input id="restore" type="file" accept=".json,application/json" hidden></div>
+<main><div id="work"><div class="bar"><button type="button" id="save">Save backup JSON</button><button type="button" id="upload">Upload saved JSON</button><button type="button" id="startOver">Start over</button><input id="restore" type="file" accept=".json,application/json" hidden></div>
 <p class="small">Your work saves in this browser on this device when local storage is available. A JSON backup is optional. Use it to move your work to another device or keep a separate copy. Submit the finished PDF in Canvas.</p><p role="status" id="status"></p>
 <nav aria-label="Lab steps"><button data-step="prep" aria-current="step">Before the Lab</button><button data-step="position" disabled>1. Position matching</button><button data-step="load" disabled>2. Load discrimination</button><button data-step="touch" disabled>3. Touch sensitivity</button><button data-step="motion" disabled>4. Movement direction</button><button data-step="expect" disabled>5. Load anticipation</button><button data-step="reflect" disabled>Reflection &amp; PDF</button></nav>
+<dialog style="max-width:480px;border:2px solid #564575;padding:24px" id="resetDialog" aria-labelledby="resetTitle"><h2 id="resetTitle">Clear this lab?</h2><p>This clears all responses, photos, and saved work for this lab in this browser. Download a backup first if you want to keep a copy.</p><button type="button" id="cancelReset">Keep working</button> <button type="button" id="confirmReset">Clear everything</button></dialog>
 <form id="lab">
 <section id="prep"><h2>Before the Lab</h2><p>Complete this section during the first 12–15 minutes of class. Use <strong>Reference 2 · Motor Control, Sensory Input &amp; Proprioception</strong> in the Motor Behavior module of your own EXS101 Canvas course. Read <strong>Sensory Receptors</strong> first, then use <strong>Proprioception</strong> and <strong>Planning &amp; Adjusting</strong> to answer the questions below. Keep the reference open as you work.</p>
 <details class="note">
@@ -72,7 +73,7 @@
 <li>Choose and describe a target position, such as an elbow bent about halfway. The performer holds one arm at that position.</li>
 <li>With vision, bend the other elbow to match. The observer records whether the matching elbow is more bent, less bent, or close. Return the matching arm to its starting position.</li>
 <li>Keep the target arm in place. Close your eyes or have your partner hold a screen that blocks both arms, then match with the other arm again. The observer records the result before discussing either attempt.</li>
-<li>Repeat for two other comfortable positions. Alternate which viewing condition comes first, then switch roles and record your own trials.</li></ol><p>Use the same observer for both conditions in a trial.</p><div id="positionTrials"></div><label for="positionPhoto">Position matching setup photo</label><input id="positionPhoto" type="file" accept="image/*"><img id="positionPreview" alt="Uploaded position matching setup" hidden><label for="positionCaption">What does the photo document?</label><input id="positionCaption" maxlength="250"><div class="actions"><button type="button" class="primary" data-go="load">Next · Load discrimination</button></div></section>
+<li>Repeat for two other comfortable positions. Alternate which viewing condition comes first, then switch roles and record your own trials.</li></ol><p>Use the same observer for both conditions in a trial.</p><div id="positionTrials"></div><div class="actions"><button type="button" class="primary" data-go="load">Next · Load discrimination</button></div></section>
 <section id="load" hidden><h2>Activity 2 · Dumbbell load discrimination</h2>
 <ol><li>Choose two light dumbbell loads and agree on one reference load. Sit with your upper arm close to your side and your elbow comfortably bent.</li><li>Your partner places the reference dumbbell in your hand while you look at your grip. Secure it, then look away from the weight and notice the effort to hold it briefly. Your partner takes it back while you watch your grip.</li><li>Repeat with the comparison dumbbell in the same hand at approximately the same elbow angle. Keep the markings out of view. Across four trials, include at least one same-load comparison. Use a fresh reference hold before each comparison.</li><li>Record whether the comparison feels lighter, the same, or heavier than the reference before your partner reveals the comparison weight. Enter the revealed load using the same units. Switch roles after the trials.</li></ol>
 <div id="loadTrials"></div><div class="actions"><button type="button" class="primary" data-go="touch">Next · Touch sensitivity</button></div></section>
@@ -89,9 +90,7 @@
 <p>Reopen Reference 2 in the Motor Behavior module of your EXS101 Canvas course. Refer to a specific trial or comparison from each of the five activities across your responses. Name the relevant reference tab or concept and explain how it helps you interpret your evidence. Similar results, unexpected results, and incorrect guesses are all useful evidence.</p>
 <p class="small">Use brief, complete explanations. Each response should connect your own evidence to the relevant concept from Reference 2.</p>
 <div id="reflectionFields"></div>
-<h3>Photo evidence</h3>
-<p>Add one captioned setup or equipment photo for position matching on its activity tab and one for any of Activities 2–5 below. Use your caption to identify the activity and the condition shown. Keep faces out of frame.</p>
-<label for="loadPhoto">Setup photo for one of Activities 2–5</label><input id="loadPhoto" type="file" accept="image/*"><img id="loadPreview" alt="Uploaded setup for one of Activities 2–5" hidden><label for="loadCaption">Which activity and setup does the photo document?</label><input id="loadCaption" maxlength="250">
+<p class="small">Before exporting, add one captioned photo on each of the five activity tabs. Setup or equipment photos are acceptable; keep faces out of frame.</p>
 <button id="review" type="button">Preview report</button> <button class="primary" id="print" type="button">Print / Save as PDF</button></section>
 </form></div><div id="report" hidden></div></main>
 <script>
@@ -176,9 +175,35 @@ function showLegacyGroups() {
   }
  }
 }
+const activityPhotos = [
+ ['position','Activity 1 · Position matching'],
+ ['load','Activity 2 · Load discrimination'],
+ ['touch','Activity 3 · Touch sensitivity'],
+ ['motion','Activity 4 · Movement direction'],
+ ['expect','Activity 5 · Load anticipation']
+]
+for (const [id,title] of activityPhotos) {
+ const block = document.createElement('div')
+ const label = document.createElement('label')
+ label.htmlFor=id+'Photo'
+ label.textContent=title+' — photo evidence'
+ const hint = document.createElement('p')
+ hint.className='small'
+ hint.textContent='Add one setup or equipment photo. Keep faces out of frame. In the caption, identify the setup or condition shown.'
+ const upload = document.createElement('input')
+ upload.type='file';upload.accept='image/*';upload.id=id+'Photo'
+ const previewImage = document.createElement('img')
+ previewImage.id=id+'Preview';previewImage.alt=title+' setup photo';previewImage.hidden=true
+ const captionLabel = document.createElement('label')
+ captionLabel.htmlFor=id+'Caption';captionLabel.textContent='What does this photo document?'
+ const caption = document.createElement('input')
+ caption.id=id+'Caption';caption.maxLength=250
+ block.append(label,hint,upload,previewImage,captionLabel,caption)
+ $(id).insertBefore(block,$(id).querySelector('.actions'))
+}
 const fields=[...form.querySelectorAll('input:not([type=file]),textarea,select')]
 const prepFields=['student',...receptors.map(([id])=>id),'distinction','prediction','reason','signalPrep']
-const photos={position:'',load:''}
+const photos={position:'',load:'',touch:'',motion:'',expect:''}
 let unlocked=false,active='prep'
 const key='exs101-proprioception-preview-v1'
 function data(){return {kind:'exs101-proprioception',version:2,legacyGroups:[...legacyGroups],prepComplete:unlocked,fields:Object.fromEntries(fields.map(f=>[f.id,f.value])),photos:{...photos}}}
@@ -193,15 +218,27 @@ function restore(d){if(d?.kind!=='exs101-proprioception'||![1,2].includes(d.vers
  unlocked=d.prepComplete===true&&prepFields.every(id=>$(id).value.trim())
  show(unlocked?'position':'prep',false)}
 function preview(id){const el=$(id+'Preview');if(photos[id])el.src=photos[id];else el.removeAttribute('src');el.hidden=!photos[id]}
-async function photo(id,file){const bmp=await createImageBitmap(file);try{const c=document.createElement('canvas');const scale=Math.min(1,1200/Math.max(bmp.width,bmp.height));c.width=Math.max(1,Math.round(bmp.width*scale));c.height=Math.max(1,Math.round(bmp.height*scale));const ctx=c.getContext('2d');ctx.fillStyle='white';ctx.fillRect(0,0,c.width,c.height);ctx.drawImage(bmp,0,0,c.width,c.height);photos[id]=c.toDataURL('image/jpeg',.82);preview(id);remember()}finally{bmp.close()}}
+async function photo(id,file){const bmp=await createImageBitmap(file);try{const c=document.createElement('canvas');const scale=Math.min(1,1000/Math.max(bmp.width,bmp.height));c.width=Math.max(1,Math.round(bmp.width*scale));c.height=Math.max(1,Math.round(bmp.height*scale));const ctx=c.getContext('2d');ctx.fillStyle='white';ctx.fillRect(0,0,c.width,c.height);ctx.drawImage(bmp,0,0,c.width,c.height);photos[id]=c.toDataURL('image/jpeg',.75);preview(id);remember()}finally{bmp.close()}}
 for(const id of Object.keys(photos))$(id+'Photo').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{await photo(id,f)}catch{status.textContent='Could not open that photo. Try a JPG or PNG.'}})
 for(const b of document.querySelectorAll('[data-step],[data-go]'))b.addEventListener('click',()=>show(b.dataset.step||b.dataset.go))
 form.addEventListener('submit',e=>e.preventDefault())
 form.addEventListener('input',e=>{if(e.target.type!=='file')remember()})
+$('startOver').onclick=()=>$('resetDialog').showModal()
+$('cancelReset').onclick=()=>$('resetDialog').close()
+$('confirmReset').onclick=()=>{
+ form.reset()
+ for(const id of Object.keys(photos)){photos[id]='';preview(id)}
+ legacyGroups.clear();showLegacyGroups();unlocked=false
+ $('report').replaceChildren();$('report').hidden=true;$('work').hidden=false
+ let storageCleared=true
+ try{localStorage.removeItem(key)}catch{storageCleared=false}
+ $('resetDialog').close();show('prep')
+ status.textContent=storageCleared?'Lab cleared. You can start again.':'The form is cleared, but this browser could not clear its saved copy. Check browser storage before reloading.'
+}
 $('save').onclick=backup
 $('upload').onclick=()=>$('restore').click()
 $('finish').onclick=()=>{const empty=prepFields.find(id=>!$(id).value.trim());if(empty){status.textContent='Complete the receptor review and prep questions before opening the lab.';$(empty).focus();return}unlocked=true;status.textContent='Prep complete. The lab activities are ready.';remember();show('position')}
-$('restore').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{if(f.size>10000000)throw Error('That backup is too large.');restore(JSON.parse(await f.text()));remember();status.textContent='Backup restored.'}catch(err){status.textContent=err instanceof SyntaxError?'That file is not a valid JSON backup.':err.message}e.target.value=''}
+$('restore').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{if(f.size>10000000)throw Error('That backup is too large.');restore(JSON.parse(await f.text()));remember();status.textContent='Backup restored. Check that each photo matches its activity tab; add any missing photos before exporting.'}catch(err){status.textContent=err instanceof SyntaxError?'That file is not a valid JSON backup.':err.message}e.target.value=''}
 function report(){
  const target = $('report')
  target.replaceChildren()
@@ -257,13 +294,13 @@ function report(){
  }
  const photoRow = node(section,'div')
  photoRow.className='photo-row'
- for (const id of ['position','load']) {
+ for (const [id,title] of activityPhotos) {
   if (!photos[id]) continue
   const figure = node(photoRow,'figure')
   const img = node(figure,'img')
   img.src=photos[id]
   img.alt=$(id+'Caption').value
-  node(figure,'figcaption',$(id+'Caption').value)
+  node(figure,'figcaption',title+' — '+$(id+'Caption').value)
  }
  section = part('3 · Interpretation and application')
  for (const group of reflectionGroups) {
@@ -283,9 +320,9 @@ function prepareReport(){
    const missing=steps[step].find(id=>!$(id).value.trim())
    if(missing){show(step,false);$(missing).focus();status.textContent='Complete the highlighted activity or reflection field before exporting.';return}
  }
- for(const [id,step] of [['position','position'],['load','reflect']]){
+ for(const [id] of activityPhotos){
    const missing=!photos[id]?id+'Photo':!$(id+'Caption').value.trim()?id+'Caption':null
-   if(missing){show(step,false);$(missing).focus();status.textContent='Add both setup photos and their captions before exporting.';return}
+   if(missing){show(id,false);$(missing).focus();status.textContent='Add one photo and caption for each of the five activities before exporting.';return}
  }
  status.textContent='Report ready. Choose Save as PDF in the print dialog.'
  report();return true
