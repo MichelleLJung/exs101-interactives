@@ -1,0 +1,45 @@
+
+*{box-sizing:border-box}[hidden]{display:none!important}body{margin:0;background:#f5f5f8;color:#242538;font:16px/1.6 system-ui,sans-serif}header{background:#26213e;color:white;padding:40px 20px}header div,main{max-width:900px;margin:auto}header p,h1{margin:.25em 0}h1{font:clamp(2rem,6vw,3.4rem) Georgia,serif}main{padding:20px}.bar,nav{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:18px}button,.upload{font:inherit;border:1px solid #564575;background:#fff;color:#26213e;padding:8px 13px;border-radius:4px;cursor:pointer}button.primary,button[aria-current=step]{background:#4d3b70;color:#fff}button:disabled{opacity:.55;cursor:default}section{background:white;border:1px solid #d4cedf;border-top:5px solid #564575;padding:clamp(14px,4vw,28px);margin-bottom:20px}h2,h3{color:#26213e;margin-top:0}.note{background:#eeebf5;padding:12px 15px;border-left:4px solid #715594}a{color:#4d326e}label{display:block;margin:12px 0 4px;font-weight:650}textarea,select,input:not([type=file]){font:inherit;width:100%;border:1px solid #787087;padding:8px;color:#242538;background:white}textarea{min-height:90px}fieldset{margin:16px 0;border:1px solid #d4cedf}legend{font-weight:bold}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px}.actions{margin-top:20px}.small{font-size:.93rem}img{display:block;max-width:100%;max-height:270px;margin:12px 0}#report[hidden]{display:none} #report{overflow-wrap:anywhere} #report p{white-space:pre-wrap} #report h2{break-after:avoid} #report img{object-fit:contain} .report-controls{margin:12px 0}#status{min-height:1.5em} :focus-visible{outline:3px solid #694497;outline-offset:3px}@media print{header,#work{display:none!important}main{max-width:none;padding:0}#report,#report[hidden]{display:block!important} .report-controls{display:none!important} @page{margin:16mm}#report section{border-top-width:2px;padding:10px} #report figure{break-inside:avoid;margin:10px 0}#report img{max-height:160px}#report p{white-space:pre-wrap}}
+
+#prep label,#reflect label{font-weight:400;margin-top:8px}
+.reflection-group{margin:18px 0;padding:0 0 15px;border:0;border-bottom:1px solid #d4cedf}
+.reflection-group h3{margin-bottom:6px;font-size:1.1rem}
+.reflection-group textarea{min-height:68px}
+.legacy-note{font-size:.9rem;margin:6px 0;color:#5b5269}
+#report{font:14px/1.35 Arial,sans-serif;color:#222;background:white;padding:16px}
+#report h1{font:700 25px/1.2 Arial,sans-serif;margin:0 0 3px}
+#report .course-label{font-size:11px;color:#666;margin:0 0 3px}
+#report .student-label{margin:0 0 12px}
+#report section{border:0;border-top:2px solid #564575;padding:7px 0 0;margin:10px 0 0;background:white}
+#report h2{font:700 17px/1.25 Arial,sans-serif;margin:0 0 6px}
+#report h3{font:700 14px/1.3 Arial,sans-serif;margin:8px 0 3px;break-after:avoid}
+#report p{margin:3px 0 6px;white-space:pre-wrap}
+#report table{border-collapse:collapse;width:100%;table-layout:fixed;margin:4px 0 7px;font-size:13px}
+#report th,#report td{border:1px solid #ccc;padding:4px 6px;text-align:left;vertical-align:top;overflow-wrap:anywhere;white-space:pre-wrap}
+#report th{background:#f1eef5;font-weight:700}
+#report th:first-child{width:9%}#report .receptor-table th:first-child{width:24%}#report thead{display:table-header-group}
+#report tr{break-inside:avoid}
+#report .notes{font-size:12px;color:#555}
+#report .photo-row{display:flex;flex-wrap:wrap;gap:8px;margin:7px 0}
+#report figure{flex:0 0 calc(50% - 4px);min-width:0;margin:0;break-inside:avoid}
+#report figure img{height:85px;width:100%;object-fit:contain;margin:0 0 4px}
+#report figcaption{font-size:12px;line-height:1.3}
+#report .answer-label{font-weight:700;font-size:12px;margin-bottom:1px}
+@media(max-width:600px){#report{padding:8px}#report .photo-row{flex-direction:column}}
+@media print{
+ @page{margin:13mm}
+ body{background:white;color:#222}
+ #report{font-size:10pt;line-height:1.3;padding:0}
+ #report h1{font-size:20pt}
+ #report h2{font-size:13pt}
+ #report h3{font-size:11pt}
+ #report section{padding:5px 0 0;margin:8px 0 0}
+ #report table{font-size:9pt}
+ #report th,#report td{padding:3px 5px}
+ #report figure{margin:0}
+ #report figure img{height:75px;max-height:75px}
+ #report p{orphans:2;widows:2}
+}
+.setup-figure{margin:12px 0 16px;padding:8px 12px;background:#f7f5fa;border:1px solid #d4cedf}.setup-figure img{display:block;width:100%;max-height:230px;font-family:Arial,sans-serif}.setup-figure figcaption{font-size:.92rem;line-height:1.45;margin-top:4px}@media print{.setup-figure{display:none}}
+
+.setup-figure img{height:auto;max-width:100%;object-fit:contain;margin:0 auto}
