@@ -2,11 +2,12 @@
 .directory-header{background:var(--l);border-top:3px solid var(--b);padding:16px 20px}
 .directory-header h1{margin:0;color:var(--n);font-size:clamp(1.75rem,4vw,2.25rem)}
 .directory-header p{margin:4px 0 0}
-.jump-links{display:flex;flex-wrap:wrap;gap:4px 18px;margin-top:14px}
-.jump-links a{color:var(--d);font-weight:700;padding:5px 0}
-.category{margin-top:28px}
-.category h2{margin:0;color:var(--n);scroll-margin-top:16px}
-.category>p{margin:4px 0 14px}
+.category{margin-top:12px;border:1px solid var(--bd);border-radius:6px;scroll-margin-top:16px}
+.category summary{padding:14px 16px;background:var(--l);color:var(--d);cursor:pointer;border-radius:5px}
+.category[open] summary{border-bottom:1px solid var(--bd);border-radius:5px 5px 0 0}
+.category summary h2{display:inline;margin:0;font-size:1.2rem}
+.category-content{padding:14px 16px 16px}
+.category-content>p{margin:0 0 14px}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
 .card{display:flex;flex-direction:column;align-items:flex-start;border:2px solid var(--bd);padding:18px}
 .card h3{margin:0;color:var(--d);font-size:1.2rem;line-height:1.35}
@@ -14,50 +15,57 @@
 .card a{display:inline-block;margin-top:auto;background:var(--b);color:white;padding:8px 12px;text-decoration:none;font-weight:700}
 .card a[download]{margin-top:8px}
 @media(max-width:650px){.grid{grid-template-columns:1fr}}
-button{font:inherit;font-weight:700;border:1px solid var(--b);background:white;color:var(--d);padding:9px 12px;cursor:pointer}.share-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.share-status{font-size:.9rem;min-height:1.5em;margin:8px 0 0}.copy-fallback{margin-top:12px}.copy-fallback label{display:block;font-weight:700;margin-bottom:6px}.copy-fallback textarea{width:100%;font:inherit;padding:10px;border:1px solid var(--bd);resize:vertical;min-height:115px}a:focus-visible,button:focus-visible,textarea:focus-visible{outline:3px solid #a65300;outline-offset:3px}[hidden]{display:none!important}</style><link rel="stylesheet" href="resource-about.css">
+button{font:inherit;font-weight:700;border:1px solid var(--b);background:white;color:var(--d);padding:9px 12px;cursor:pointer}.share-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.share-status{font-size:.9rem;min-height:1.5em;margin:8px 0 0}.copy-fallback{margin-top:12px}.copy-fallback label{display:block;font-weight:700;margin-bottom:6px}.copy-fallback textarea{width:100%;font:inherit;padding:10px;border:1px solid var(--bd);resize:vertical;min-height:115px}a:focus-visible,button:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid #a65300;outline-offset:3px}[hidden]{display:none!important}</style><link rel="stylesheet" href="resource-about.css">
 <script defer src="resource-about.js"></script>
 </head><body><main>
 <header class="directory-header">
   <h1>EXS101 Interactives</h1>
-  <p>Open an activity, copy its direct link, or copy the embed code for Canvas.</p>
+  <p>Open a folder to find activities and share them in Canvas.</p>
 </header>
-<nav class="jump-links" aria-label="Activity categories">
-  <a href="#exercise-physiology">Exercise Physiology</a>
-  <a href="#biomechanics">Biomechanics</a>
-  <a href="#motor-behavior">Motor Behavior</a>
-</nav>
-<section class="category" aria-labelledby="exercise-physiology">
-  <h2 id="exercise-physiology">Exercise Physiology</h2>
-  <p>Explore how the body responds to exercise and interpret data from performance and fitness assessments.</p>
-  <div class="grid">
-    <article class="card"><h3>Cardiac Output Explorer</h3><p>Manipulate heart rate and stroke volume to see how each changes cardiac output.</p><a href="/cardiac-output/">Open Cardiac Output</a></article>
-    <article class="card"><h3>Energy Systems: Working Together</h3><p>Predict, compare, and build exercise demands to see how phosphagen, glycolytic, and oxidative contributions change.</p><a href="/energy-systems/">Open Energy Systems</a></article>
-    <article class="card"><h3>MET &amp; Energy Expenditure Explorer</h3><p>Change activity, body mass, and duration. Compare estimated energy expenditure across two scenarios.</p><a href="/mets/">Open MET Explorer</a></article>
-    <article class="card"><h3>Fuel &amp; Food Energy Explorer</h3><p>Compare macronutrient grams with energy contributions and follow fuel connections to ATP regeneration.</p><a href="/nutrition/">Open Fuel Explorer</a></article>
-    <article class="card"><h3>Human Performance Lab</h3><p>Organize actual VO₂ and Wingate results, graph observations, explain the evidence, and download your lab report.</p><a href="/human-performance-lab/">Open Human Performance Lab</a></article>
-    <article class="card"><h3>Fitness Assessment Lab</h3><p>Record actual field-assessment results, compare protocol-matched references, and assemble your Assessment Profile.</p><a href="/fitness-assessment-lab/" style="background:#006b68">Open Fitness Assessment Lab</a></article>
-    <article class="card"><h3>Energy Systems Demo</h3><p>Compare how the three energy systems contribute as exercise demands change.</p><a href="/energy-systems-demo/">Open Energy Systems Demo</a></article>
+<details class="category" id="exercise-physiology">
+  <summary><h2>Exercise Physiology</h2></summary>
+  <div class="category-content">
+    <p>Explore how the body responds to exercise and interpret data from performance and fitness assessments.</p>
+    <div class="grid">
+      <article class="card"><h3>Cardiac Output Explorer</h3><p>Manipulate heart rate and stroke volume to see how each changes cardiac output.</p><a href="/cardiac-output/">Open Cardiac Output</a></article>
+      <article class="card"><h3>Energy Systems: Working Together</h3><p>Predict, compare, and build exercise demands to see how phosphagen, glycolytic, and oxidative contributions change.</p><a href="/energy-systems/">Open Energy Systems</a></article>
+      <article class="card"><h3>MET &amp; Energy Expenditure Explorer</h3><p>Change activity, body mass, and duration. Compare estimated energy expenditure across two scenarios.</p><a href="/mets/">Open MET Explorer</a></article>
+      <article class="card"><h3>Fuel &amp; Food Energy Explorer</h3><p>Compare macronutrient grams with energy contributions and follow fuel connections to ATP regeneration.</p><a href="/nutrition/">Open Fuel Explorer</a></article>
+      <article class="card"><h3>Human Performance Lab</h3><p>Organize actual VO₂ and Wingate results, graph observations, explain the evidence, and download your lab report.</p><a href="/human-performance-lab/">Open Human Performance Lab</a></article>
+      <article class="card"><h3>Fitness Assessment Lab</h3><p>Record actual field-assessment results, compare protocol-matched references, and assemble your Assessment Profile.</p><a href="/fitness-assessment-lab/" style="background:#006b68">Open Fitness Assessment Lab</a></article>
+      <article class="card"><h3>Energy Systems Demo</h3><p>Compare how the three energy systems contribute as exercise demands change.</p><a href="/energy-systems-demo/">Open Energy Systems Demo</a></article>
+    </div>
   </div>
-</section>
-<section class="category" aria-labelledby="biomechanics">
-  <h2 id="biomechanics">Biomechanics</h2>
-  <p>Investigate how forces and body position affect movement, then analyze your own measurements.</p>
-  <div class="grid">
-    <article class="card"><h3>Biomechanics Investigation</h3><p>Explore torque, stability and coordination with interactive models, partner movement investigations, and an illustrated field guide PDF.</p><a href="/biomechanics-investigation/">Open Biomechanics Investigation</a></article>
-    <article class="card"><h3>Output Movement Lab</h3><p>Prepare your tasks, collect Output Sports measurements, and create a report with results and biomechanical analysis.</p><a href="/output-lab/">Open Output Movement Lab</a></article>
+</details>
+<details class="category" id="biomechanics">
+  <summary><h2>Biomechanics</h2></summary>
+  <div class="category-content">
+    <p>Investigate how forces and body position affect movement, then analyze your own measurements.</p>
+    <div class="grid">
+      <article class="card"><h3>Biomechanics Investigation</h3><p>Explore torque, stability and coordination with interactive models, partner movement investigations, and an illustrated field guide PDF.</p><a href="/biomechanics-investigation/">Open Biomechanics Investigation</a></article>
+      <article class="card"><h3>Output Movement Lab</h3><p>Prepare your tasks, collect Output Sports measurements, and create a report with results and biomechanical analysis.</p><a href="/output-lab/">Open Output Movement Lab</a></article>
+    </div>
   </div>
-</section>
-<section class="category" aria-labelledby="motor-behavior">
-  <h2 id="motor-behavior">Motor Behavior</h2>
-  <p>Test how sensory information, feedback, attention, and task demands affect movement.</p>
-  <div class="grid">
-    <article class="card"><h3>Proprioception Lab</h3><p>Review sensory receptors, complete four partner activities, and explain how sensory information guides movement. Save your observations, photos, and reflection in a lab report.</p><a href="/proprioception-lab/">Open Proprioception Lab</a> <a href="/proprioception-lab/instructor-guide.pdf" download="EXS101_Proprioception_Instructor_Guide.pdf" style="background:white;color:#004c73;border:1px solid #005f8f;">Download Instructor Guide (PDF)</a></article>
-    <article class="card"><h3>The Feedback Challenge</h3><p>Prepare in a team of three, compare qualitative KR, quantitative KR, and combined KR + KP, then interpret your throwing data and save your individual PDF.</p><a href="/feedback-challenge/">Open Feedback Challenge</a></article>
-    <article class="card"><h3>Motor Behavior Lab: Hick's Law, Stroop Effect &amp; Fitts's Law</h3><p>Measure reaction and movement times, compare accuracy, and interpret the results in a lab report.</p><a href="/motor-behavior-lab/">Open Motor Behavior Lab</a></article>
+</details>
+<details class="category" id="motor-behavior">
+  <summary><h2>Motor Behavior</h2></summary>
+  <div class="category-content">
+    <p>Test how sensory information, feedback, attention, and task demands affect movement.</p>
+    <div class="grid">
+      <article class="card"><h3>Proprioception Lab</h3><p>Review sensory receptors, complete four partner activities, and explain how sensory information guides movement. Save your observations, photos, and reflection in a lab report.</p><a href="/proprioception-lab/">Open Proprioception Lab</a> <a href="/proprioception-lab/instructor-guide.pdf" download="EXS101_Proprioception_Instructor_Guide.pdf" style="background:white;color:#004c73;border:1px solid #005f8f;">Download Instructor Guide (PDF)</a></article>
+      <article class="card"><h3>The Feedback Challenge</h3><p>Prepare in a team of three, compare qualitative KR, quantitative KR, and combined KR + KP, then interpret your throwing data and save your individual PDF.</p><a href="/feedback-challenge/">Open Feedback Challenge</a></article>
+      <article class="card"><h3>Motor Behavior Lab: Hick's Law, Stroop Effect &amp; Fitts's Law</h3><p>Measure reaction and movement times, compare accuracy, and interpret the results in a lab report.</p><a href="/motor-behavior-lab/">Open Motor Behavior Lab</a></article>
+    </div>
   </div>
-</section>
+</details>
 </main><script>
 'use strict';
+function openLinkedFolder(){
+ const folder=document.getElementById(location.hash.slice(1));
+ if(folder?.matches('details.category'))folder.open=true;
+}
+openLinkedFolder();
+window.addEventListener('hashchange',openLinkedFolder);
 const siteURL='https://exs101-interactives.netlify.app';
 document.querySelectorAll('.card').forEach((card,index)=>{
  const link=card.querySelector('a'),title=card.querySelector('h3').textContent,url=siteURL+link.getAttribute('href');
