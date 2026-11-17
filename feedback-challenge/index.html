@@ -35,36 +35,30 @@
 <label for="sensoryResponse">With your eyes closed during a throw, what is one source of intrinsic feedback you still have? What augmented feedback could a coach add? Explain what closing your eyes changes. (2–3 sentences)</label><textarea id="sensoryResponse"></textarea>
 <button type="button" class="secondary review-button" data-review="sensory">Check my reasoning</button>
 <div id="sensoryGuide" class="reasoning-guide" hidden>
-<p><strong>Compare with your response:</strong> Closing your eyes removes visual information about the target and landing, but you can still feel your arm move and may hear the ball land. Those sensations are intrinsic feedback. A coach’s report of where the ball landed adds augmented feedback.</p>
-<p>Check that you identified a sensory source and information added by a person. Revise your response if needed.</p>
-<label class="acknowledgment"><input type="checkbox" id="sensoryReviewed">I compared my response with the explanation and revised it if needed.</label>
+<p><strong>Check your response:</strong></p><ul><li>Did you identify information available through the learner’s own senses?</li><li>Did you distinguish that from information added by the coach?</li><li>Did you explain which information becomes unavailable when the learner closes their eyes?</li></ul><p>Use the reference page to resolve any uncertainty, then revise your response if needed. These questions do not verify whether your answer is correct.</p>
+<label class="acknowledgment"><input type="checkbox" id="sensoryReviewed">I used these questions and the reference page to review my response and revise it if needed.</label>
 </div></section>
 <section class="learning-task" aria-labelledby="learn-title-2">
 <h3 id="learn-title-2">2. What does feedback communicate? <span class="small">About 6 minutes</span></h3>
 <p><strong>Read:</strong> In <strong>Feedback</strong>, review KR versus KP, qualitative versus quantitative feedback, and the distinction between instruction and feedback.</p>
-<p class="card"><strong>Observed throw:</strong> The ball landed approximately two feet short and one foot right of the target. The learner’s arm crossed their body at release.</p>
-<p>Use only those observations. Write what the coach would say in each condition.</p>
+<p class="card" id="feedbackScenario"><strong>Observed wall-target throw:</strong> The ball struck the wall approximately 30 centimeters above and 15 centimeters left of the marked target. The learner’s elbow moved outward during release.</p>
+<p>Apply the reference page to this new situation. Use only the observations above to write what the coach would say in each condition.</p>
 <label for="qualitativeExample">Qualitative KR: Describe the outcome without a numerical measurement.</label><input id="qualitativeExample" autocomplete="off">
 <label for="quantitativeExample">Quantitative KR: Describe the outcome with approximate distances.</label><input id="quantitativeExample" autocomplete="off">
 <label for="combinedExample">KR + KP: Describe the outcome and one observed movement detail.</label><textarea id="combinedExample"></textarea>
 <button type="button" class="secondary review-button" data-review="feedback">Check my reasoning</button>
 <div id="feedbackGuide" class="reasoning-guide" hidden>
-<p><strong>Compare with your statements:</strong></p><ul>
-<li>Qualitative KR: “The ball landed short and right.”</li>
-<li>Quantitative KR: “The ball landed approximately two feet short and one foot right.”</li>
-<li>KR + KP: “The ball landed short and right. Your arm crossed your body at release.”</li></ul>
-<p>KR describes the outcome; KP describes the movement. Qualitative and quantitative describe how the information is expressed. “Keep your arm straight” is an instruction, not a description of what happened. Your wording can differ from these examples.</p>
-<label class="acknowledgment"><input type="checkbox" id="feedbackReviewed">I checked all three statements and revised them if needed.</label>
+<p><strong>Check your statements:</strong></p><ul><li>Does your qualitative KR describe the outcome without a numerical measurement?</li><li>Does your quantitative KR include an approximate measured outcome?</li><li>Does your combined statement include both an outcome and an observed movement detail?</li><li>Does the KP portion describe what happened rather than tell the learner what to do?</li><li>Did you stay within the supplied observations instead of inventing a cause?</li></ul><p><strong>Brief partner check:</strong> Explain one statement to a partner. Ask them to identify its feedback type and explain why. Discuss any disagreement using the reference page, then revise if needed.</p>
+<label class="acknowledgment"><input type="checkbox" id="feedbackReviewed">I reviewed all three statements, completed the brief partner check, and revised them if needed.</label>
 </div></section>
 <section class="learning-task" aria-labelledby="learn-title-3">
 <h3 id="learn-title-3">3. What would count as learning? <span class="small">About 5 minutes</span></h3>
 <p><strong>Read:</strong> In <strong>Learning &amp; Performance</strong>, review the definitions and the acquisition, retention, and transfer example.</p>
-<label for="learningResponse">Your hits increase from 1/5 to 4/5 during practice with feedback. What does that show, and why does it not establish lasting motor learning? Describe a later retention check that would give stronger evidence. (2–3 sentences)</label><textarea id="learningResponse"></textarea>
+<label for="learningResponse">A beginner’s successful tennis serves increase from 2/8 to 6/8 during one practice session with feedback. What can you conclude about performance and learning? Describe a follow-up check for retention. (2–3 sentences)</label><textarea id="learningResponse"></textarea>
 <button type="button" class="secondary review-button" data-review="learning">Check my reasoning</button>
 <div id="learningGuide" class="reasoning-guide" hidden>
-<p><strong>Compare with your reasoning:</strong> The scores show improved performance during practice. Feedback and additional attempts may contribute, and five throws give limited evidence of typical performance. A retention check would repeat the same task after a delay, under comparable conditions, without the coach’s feedback. A changed task would be a transfer check.</p>
-<p>Check that you distinguished current performance from lasting learning and included a delay in your retention check.</p>
-<label class="acknowledgment"><input type="checkbox" id="learningReviewed">I compared my explanation and retention check, then revised them if needed.</label>
+<p><strong>Check your reasoning:</strong></p><ul><li>Did you distinguish performance during this session from a lasting change in skill?</li><li>Did you consider what else changed besides the feedback?</li><li>Does your proposed retention check include a delay and the same task?</li><li>Did you specify whether the coach’s feedback would be available during that check, and why?</li></ul><p>Use the definitions and example in the reference page to examine your conclusion, then revise if needed.</p>
+<label class="acknowledgment"><input type="checkbox" id="learningReviewed">I used these questions and the reference page to review my conclusion and retention check, then revised them if needed.</label>
 </div>
 <label for="prediction">Before you throw: Which feedback condition do you predict will help you choose an adjustment, and what information would you use? (1 sentence)</label><textarea id="prediction"></textarea>
 </section>
@@ -131,7 +125,7 @@ function preparePrint(){
  const identity=add(report,'div',undefined,'identity');
  add(identity,'span','Student: '+value('student'));add(identity,'span','Teammates: '+value('partner'));add(identity,'span','Throwing hand: '+value('role'));
  add(report,'h2','Learn & Prepare');
- ['sensoryResponse','qualitativeExample','quantitativeExample','combinedExample','learningResponse','prediction'].forEach(id=>response(report,$(id).labels[0].textContent,id));
+ ['sensoryResponse','qualitativeExample','quantitativeExample','combinedExample','learningResponse','prediction'].forEach(id=>{if(id==='qualitativeExample')add(report,'p',$('feedbackScenario').textContent,'prompt');response(report,$(id).labels[0].textContent,id)});
  add(report,'p','Self-review: '+reviews.map(r=>r.title+': '+($(r.checkbox).checked?'reviewed':'not reviewed')).join('; '),'report-id');
  const names=['Qualitative KR','Quantitative KR','KR + KP'];const results=[];
  names.forEach((title,c)=>{const round=add(report,'section',undefined,'report-round');add(round,'h2',title);const table=add(round,'table');const head=add(table,'thead');const hr=add(head,'tr');['Throw','Outcome',c===2?'KR + KP heard':'Feedback heard'].forEach((t,i)=>add(hr,'th',t,i===0?'trial-col':i===1?'outcome-col':''));const body=add(table,'tbody');let hits=0,count=0;for(let i=1;i<=5;i++){const row=add(body,'tr');const outcome=$(`out${c}_${i}`).value;if(outcome)count++;if(outcome==='hit')hits++;add(row,'td',String(i));add(row,'td',outcome==='hit'?'Hit':outcome==='miss'?'Miss':'Not entered');add(row,'td',value(`feed${c}_${i}`))}results.push([title,String(hits)+' / '+String(count)]);response(round,$('obs'+c).labels[0].textContent,'obs'+c)});
@@ -144,7 +138,7 @@ document.querySelectorAll('.step').forEach(b=>b.addEventListener('click',()=>sho
 $('prev').addEventListener('click',()=>show(step-1));$('next').addEventListener('click',()=>show(step+1));
 reviews.forEach(r=>{
  const button=document.querySelector(`[data-review="${r.key}"]`);
- button.addEventListener('click',()=>{const empty=r.fields.find(id=>!filled(id));if(empty){$('saveStatus').textContent='Try each response in this task before opening the explanation.';$(empty).focus();return}$(r.key+'Guide').hidden=false;button.setAttribute('aria-expanded','true');$('saveStatus').textContent='Compare your response with the explanation. Revise it if needed, then mark your self-review.';});
+ button.addEventListener('click',()=>{const empty=r.fields.find(id=>!filled(id));if(empty){$('saveStatus').textContent='Try each response in this task before opening the checking questions.';$(empty).focus();return}$(r.key+'Guide').hidden=false;button.setAttribute('aria-expanded','true');$('saveStatus').textContent='Use the checking questions and reference page to review your work. Revise if needed, then mark your self-review.';});
  button.setAttribute('aria-controls',r.key+'Guide');button.setAttribute('aria-expanded','false');
  r.fields.forEach(id=>$(id).addEventListener('input',()=>{$(r.checkbox).checked=false;gate()}));
 });
