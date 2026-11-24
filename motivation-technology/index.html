@@ -60,7 +60,7 @@
     <button type="button" class="secondary" id="resume">Resume from draft file</button>
     <input id="draft-file" type="file" accept=".json,application/json" aria-label="Choose a saved draft file" hidden>
   </div>
-  <p id="status" role="status">Save a draft file before you close this page. Your entries and evidence are processed in this browser.</p>
+  <p id="status" role="status">Save a draft file to finish later. Save a PDF from the report preview to submit to Canvas. Your entries and evidence are processed in this browser.</p>
   <nav id="report-nav" class="report-nav" aria-label="Report sections">
     <button type="button" class="secondary">Starting point</button>
     <button type="button" class="secondary">Seven-day record</button>
@@ -83,7 +83,9 @@
     </section>
     <section aria-labelledby="record-title">
       <h2 id="record-title">Seven-day record</h2>
-      <p>Use the calendar to select the date for each of your seven entries. The dates may be nonconsecutive. Record what you noticed about the feature and how you responded, even if you didn’t follow through on the behavior.</p>
+      <p>Use the calendar to select the date for each of your seven entries. The dates may be nonconsecutive. Record what you noticed about the feature and how you responded. A day counts if you used the app, even if you skipped the activity.</p>
+      <p class="notice"><strong>Example.</strong> <strong>Feature:</strong> The app reminded me to walk during class. <strong>Response:</strong> I dismissed the reminder and skipped the walk.</p>
+      <p id="record-progress" role="status"></p>
       <nav id="day-nav" class="day-nav" aria-label="Observation days"></nav>
       <div id="days" class="days"></div>
     </section>
@@ -98,6 +100,7 @@
       <div id="image-fields">
         <label for="proof">Screenshot image (PNG, JPEG, or WebP)</label>
         <input id="proof" type="file" accept="image/png,image/jpeg,image/webp">
+        <p id="proof-status" role="status"></p>
         <div id="evidence-preview"></div>
       </div>
       <div id="excerpt-fields" hidden>
@@ -131,7 +134,7 @@
         <div><label for="subsection">Section heading from the reference page</label><input id="subsection" required maxlength="180"></div>
       </div>
       <label for="theory">Theory or concept from that section</label><input id="theory" required maxlength="180">
-      <label for="explanation">In your own words, what does this theory or concept mean? Use a detail from each selected date to explain why you responded the way you did.</label>
+      <label for="explanation">Use one concept to explain both dates. First explain the concept in your own words. Then use one detail from each date to explain your response.</label>
       <textarea id="explanation" required maxlength="2200"></textarea>
       <label for="comparison">Did the feature work the way you predicted? Briefly explain what matched or differed.</label>
       <textarea id="comparison" required maxlength="900"></textarea>
@@ -246,6 +249,7 @@ function updateEvidence() {
   el('excerpt').required = !imageMode();
   const target = el('evidence-preview');
   target.replaceChildren();
+  el('proof-status').textContent = screenshot ? 'Screenshot attached.' : 'Choose a screenshot to attach it to your report.';
   if (screenshot) {
     const img = add(target, 'img');
     img.src = screenshot;
@@ -262,6 +266,8 @@ function syncChoices() {
   const target = el('observation-options');
   const days = Array.from({length: count}, (_, i) => String(i + 1));
   const available = days.filter(day => row(day).every(Boolean));
+  const progress = available.length + " of 7 entries complete.";
+  if (el("record-progress").textContent !== progress) el("record-progress").textContent = progress;
   const slots = [el('first'), el('second')];
   let selected = [...new Set(slots.map(slot => slot.value).filter(day => available.includes(day)))];
   const boxes = [];
@@ -314,6 +320,7 @@ el('proof').onchange = async () => {
   const file = el('proof').files[0];
   if (!file) return;
   readingImage = true;
+  el('proof-status').textContent = 'Loading screenshot…';
   try {
     if (!imageType.test(file.type) || file.size > 12 * 1024 * 1024) {
       throw Error('Choose a PNG, JPEG, or WebP screenshot under 12 MB.');
@@ -330,10 +337,10 @@ el('proof').onchange = async () => {
       ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
       screenshot = canvas.toDataURL('image/jpeg', 0.9);
       updateEvidence();
-      say('Screenshot added.');
     } finally { bitmap.close(); }
   } catch (error) {
-    say((error.message || 'The screenshot could not be opened.') + ' Check the image and try again.');
+    el('proof-status').textContent = (error.message || 'The screenshot could not be opened.') +
+      (screenshot ? ' Your previous screenshot is still attached.' : ' Check the image and try again.');
   } finally {
     readingImage = false;
     el('proof').value = '';
@@ -462,7 +469,14 @@ form.onsubmit = event => {
   event.preventDefault();
   el('review-error').textContent = '';
   for (const field of fields) {
-    if (field.required && !field.value.trim()) return fail('Complete the required field.', field);
+    if (field.required && !field.value.trim()) {
+      const day = dayPanels.indexOf(field.closest('fieldset'));
+      const missing = { date: 'a date', notice: 'a feature observation', response: 'your response' };
+      const label = field.labels?.[0]?.textContent?.trim();
+      const message = day >= 0 ? 'Day ' + (day + 1) + ' needs ' + missing[field.id.split('-')[0]] + '.' :
+        'Complete this field: ' + label;
+      return fail(message, field);
+    }
   }
   const days = new Set();
   for (let day = 1; day <= count; day++) {
