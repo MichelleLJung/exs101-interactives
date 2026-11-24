@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
+import { cases } from '../exercise-psychology-client/cases.mjs';
 import { handler } from '../netlify/functions/exercise-client.mjs';
 
 const secret = 'local-test-password-with-entropy';
@@ -52,24 +53,25 @@ function fixture() {
   return { admin, open, post, activate, ask, review, store, get calls() { return calls; }, state: () => structuredClone(data) };
 }
 
-test('instructor authentication, single-use activation and assignment for all five clients', async () => {
+test('instructor authentication, single-use activation and assignment for all eight clients', async () => {
   const f = fixture();
   assert.equal((await f.post('instructor:guide')).status, 403);
-  assert.deepEqual(Object.keys((await f.admin('guide')).body.clients), names);
+  assert.deepEqual(Object.keys((await f.admin('guide')).body.clients).sort(), Object.keys(cases).sort());
   assert.equal((await f.activate('0'.repeat(16))).status, 410);
-  const result = await f.open();
+  const result = await f.admin('open', { minutes: 75, groups: 8, allowance: 3 });
   assert.equal(result.status, 200);
   assert.equal((await f.open()).status, 409);
   const { groups } = result.body;
-  assert.equal(new Set(groups.map(group => group.code)).size, 5);
+  assert.equal(new Set(groups.map(group => group.code)).size, 8);
+  assert.deepEqual(groups.map(group => group.client).sort(), Object.keys(cases).sort());
   for (const group of groups) {
     const attempts = await Promise.all([f.activate(group.code), f.activate(group.code)]);
     assert.deepEqual(attempts.map(item => item.status).sort(), [200, 403]);
     const accepted = attempts.find(item => item.status === 200).body;
-    assert.equal(accepted.client, names[group.number - 1]);
+    assert.equal(accepted.client, group.client);
     assert.equal((await f.ask(accepted.token)).status, 200);
     const responseRequest = f.calls.at(-1).body;
-    assert.ok(responseRequest.instructions.includes(group.client + ' private test profile'));
+    assert.ok(responseRequest.instructions.includes(names.includes(group.client) ? group.client + ' private test profile' : cases[group.client][3][0]));
     assert.equal(responseRequest.store, false);
   }
   assert.equal((await f.activate('0'.repeat(16))).status, 403);
@@ -142,4 +144,23 @@ test('timer advances across inactive stages using absolute deadlines', async () 
   assert.equal(time.advance(paused, 80 * 60000).time, 120000);
   assert.equal(time.setTime(paused, 90000).deadline, null);
   assert.equal(time.jump(atDebrief, 5, 4000).deadline, 364000);
+});
+
+test('shared join code allocates each slot once and keeps a rotated slot for recovery', async () => {
+  const f = fixture();
+  const { joinCode, groups } = (await f.open()).body;
+  assert.match(joinCode, /^[a-f0-9]{10}$/);
+  const results = await Promise.all(Array.from({ length: 7 }, () => f.activate(joinCode)));
+  const joined = results.filter(item => item.status === 200);
+  assert.equal(joined.length, groups.length);
+  assert.equal(new Set(joined.map(item => item.body.client)).size, groups.length);
+  assert.equal(results.filter(item => item.status === 409).length, 2);
+  const recovered = await f.admin('recover', { number: 1 });
+  assert.equal((await f.activate(joinCode)).status, 409);
+  const replacement = await f.activate(recovered.body.groups[0].code);
+  assert.equal(replacement.status, 200);
+  assert.equal(replacement.body.client, groups[0].client);
+  assert.equal(replacement.body.remaining, 3);
+  await f.admin('close');
+  assert.equal((await f.activate(joinCode)).status, 410);
 });
