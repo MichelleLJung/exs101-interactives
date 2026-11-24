@@ -30,7 +30,7 @@
       </div>
       <div>
         <form id="activate">
-          <label for="code">Temporary group code</label>
+          <label for="code">Classroom join code or recovery code</label>
           <input id="code" name="code" maxlength="24" autocomplete="off" spellcheck="false" required>
           <button>Activate live interview</button>
         </form>
@@ -100,6 +100,11 @@
   <section id="debrief" aria-labelledby="debrief-title" hidden>
     <h2 id="debrief-title" tabindex="-1">Debrief</h2>
     <p>Prepare to share one major influence on your client’s behavior, the evidence behind your interpretation, your strategy, and how and why it changed. You can share verbally or refer to your notes.</p>
+    <div class="notice">
+      <p>After finishing your recommendation, compare it with the complete case and an example analysis. Several recommendations can fit the evidence.</p>
+      <button id="reveal-case" type="button" class="secondary">Reveal client profile and example</button>
+      <div id="case-reveal" tabindex="-1" hidden></div>
+    </div>
     <details><summary>Check your consultation notes</summary><div id="debrief-notes"></div></details>
     <p class="notice"><strong>Investigation Complete</strong><br>No assignment submission required.</p>
   </section>
