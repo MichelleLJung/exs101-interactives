@@ -4,6 +4,22 @@ import { advance, format, initial, jump, questions, readTimer, remaining, setTim
 let secret = '';
 let timer = readTimer() ?? initial();
 let guide = {};
+const joinKey = 'exs101-projected-join-v1';
+let projectedCode = '';
+
+function projectCode(code) {
+  projectedCode = code;
+  try {
+    if (code) localStorage.setItem(joinKey, JSON.stringify({ code, expires: session.expires }));
+    else localStorage.removeItem(joinKey);
+    el('show-join').textContent = code ? 'Hide code on projection' : 'Show code on projection';
+  } catch {
+    projectedCode = '';
+    el('session-status').textContent = 'This browser blocked projection sharing. Read the code from this portal.';
+  }
+}
+
+el('show-join').onclick = () => projectCode(projectedCode ? '' : session.joinCode);
 let session = { open: false };
 let requestInFlight = false;
 let audio;
@@ -21,12 +37,15 @@ function renderSession() {
   el('close').disabled = !session.open || requestInFlight;
   el('session-form').hidden = session.open;
   el('usage').replaceChildren();
+  el('join-controls').hidden = !session.joinCode || !session.open;
+  el('join-code').textContent = session.joinCode || '';
+  if (!session.open || (projectedCode && projectedCode !== session.joinCode)) projectCode('');
   if (!session.open) {
     el('session-status').textContent = 'AI access is closed.';
     return;
   }
   el('session-status').textContent = 'Open until ' + new Date(session.expires).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) +
-    '. Share each temporary code privately with its group.';
+    (session.joinCode ? '. Give the class one join code. Use one device per group.' : '. Share each temporary code privately with its group.');
   const table = add(el('usage'), 'table');
   const head = add(add(table, 'thead'), 'tr');
   ['Group / client', 'Temporary code', 'Messages', 'Review', 'Recovery'].forEach(value => {
@@ -36,7 +55,7 @@ function renderSession() {
   session.groups.forEach(group => {
     const row = add(body, 'tr');
     add(row, 'th', `${group.number} · ${group.client}`).scope = 'row';
-    add(row, 'td', group.active ? 'Activated' : group.code);
+    add(row, 'td', group.active ? 'Activated' : session.joinCode && !group.recoveryOnly ? 'Available to join' : group.code);
     add(row, 'td', `${group.interviews} / ${session.allowance}`);
     add(row, 'td', `${group.reviews} / 1`);
     const rotate = add(add(row, 'td'), 'button', 'Replace code');
@@ -174,7 +193,7 @@ el('login').onsubmit = async event => {
     button.disabled = false;
   }
 };
-el('logout').onclick = () => location.reload();
+el('logout').onclick = () => { projectCode(''); location.reload(); };
 el('session-form').onsubmit = event => {
   event.preventDefault();
   manage('open', Object.fromEntries(['minutes', 'groups', 'allowance'].map(id => [id, el(id).valueAsNumber])));

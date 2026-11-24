@@ -7,6 +7,12 @@ let previousQuestion;
 
 function render() {
   const now = Date.now();
+  let join;
+  try { join = JSON.parse(localStorage.getItem('exs101-projected-join-v1')); }
+  catch { /* Projection timing remains available if sharing is blocked. */ }
+  const showCode = join && join.expires > now && /^[a-f0-9]{10}$/.test(join.code);
+  el('class-join').hidden = !showCode;
+  el('class-join-code').textContent = showCode ? join.code : '';
   state = state ? advance(state, now) : null;
   const index = state?.index;
   const done = index === stages.length;

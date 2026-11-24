@@ -1,9 +1,14 @@
-import { createHash, randomBytes, timingSafeEqual } from 'node:crypto';
+import { createHash, randomBytes, randomInt, timingSafeEqual } from 'node:crypto';
 import { getStore } from '@netlify/blobs';
 
-const clients = ['Marisol', 'Darius', 'Priya', 'Graham', 'Simone'];
+import { cases, addedCases, examples } from '../../exercise-psychology-client/cases.mjs';
+
+const clients = Object.keys(cases);
 const stateKey = 'classroom';
-const privateClients = () => JSON.parse(process.env.EXERCISE_PRIVATE_GUIDE || '{}');
+const privateClients = () => ({
+  ...Object.fromEntries(Object.entries(addedCases).map(([name, profile]) => [name, { profile: profile[3].join(' '), primary: examples[name][0], strategies: examples[name][2] }])),
+  ...JSON.parse(process.env.EXERCISE_PRIVATE_GUIDE || '{}')
+});
 const privateGuide = () => ({
   ...JSON.parse(process.env.EXERCISE_FACILITATION_GUIDE || '{}'),
   clients: privateClients()
@@ -46,9 +51,9 @@ async function update(store, change) {
 function status(state) {
   if (!live(state)) return { open: false };
   return {
-    open: true, expires: state.expires, allowance: state.allowance,
-    groups: state.groups.map(({ code, client, token, interviews, reviews }, index) =>
-      ({ number: index + 1, code, client, active: Boolean(token), interviews, reviews }))
+    open: true, expires: state.expires, allowance: state.allowance, joinCode: state.joinCode,
+    groups: state.groups.map(({ code, client, token, interviews, reviews, recoveryOnly }, index) =>
+      ({ number: index + 1, code, client, active: Boolean(token), interviews, reviews, recoveryOnly }))
   };
 }
 
@@ -106,10 +111,11 @@ export function handler({ storage = () => getStore({ name: 'exercise-psychology-
             fail(503, 'Live access requires the OpenAI key and private client guide.');
           return json(await update(store, previous => {
             if (live(previous)) fail(409, 'Close the current classroom session first.');
+            const firstClient = randomInt(clients.length);
             const next = {
-              expires: Date.now() + minutes * 60000, allowance, total: 0,
+              expires: Date.now() + minutes * 60000, allowance, total: 0, joinCode: opaque(5),
               groups: Array.from({ length: groups }, (_, index) => ({
-                client: clients[index % clients.length], code: opaque(8), interviews: 0, reviews: 0, requests: []
+                client: clients[(firstClient + index) % clients.length], code: opaque(8), interviews: 0, reviews: 0, requests: []
               }))
             };
             return [next, status(next)];
@@ -123,6 +129,7 @@ export function handler({ storage = () => getStore({ name: 'exercise-psychology-
           if (!live(state) || !integer(body.number, 1, state.groups.length)) fail(400, 'Group unavailable.');
           const group = state.groups[body.number - 1];
           group.code = opaque(8);
+          group.recoveryOnly = true;
           delete group.token;
           return [state, status(state)];
         }));
@@ -130,10 +137,13 @@ export function handler({ storage = () => getStore({ name: 'exercise-psychology-
       }
 
       if (action === 'activate') {
-        if (typeof body.code !== 'string' || !/^[a-f0-9]{16}$/.test(body.code)) fail(403, 'Check the temporary group code.');
+        if (typeof body.code !== 'string' || !/^(?:[a-f0-9]{10}|[a-f0-9]{16})$/.test(body.code)) fail(403, 'Check the temporary group code.');
         return json(await update(store, state => {
           if (!live(state)) fail(410, 'No live classroom session is open.');
-          const group = state.groups.find(item => item.code === body.code);
+          const shared = state.joinCode && matches(body.code, state.joinCode);
+          const group = shared ? state.groups.find(item => !item.token && !item.recoveryOnly) :
+            state.groups.find(item => item.code === body.code);
+          if (shared && !group) fail(409, 'All classroom group slots are taken. Check with your instructor.');
           if (!group || group.token) fail(403, 'This code is invalid or already used. Check with your instructor.');
           const token = opaque();
           group.token = hash(token);
