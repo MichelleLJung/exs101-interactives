@@ -40,6 +40,78 @@ let reviewAvailable = false;
 let busy = false;
 let stage = 'start';
 let expiryTimer;
+const recoveryKey = 'exs101-client-recovery-v1';
+const recoveryWindow = 24 * 60 * 60 * 1000;
+
+function recoveryStatus(message) {
+  const status = el('recovery-status');
+  if (status) status.textContent = message;
+}
+
+function saveWork() {
+  if (!mode) return;
+  try {
+    localStorage.setItem(recoveryKey, JSON.stringify({
+      savedAt: Date.now(), client, mode, stage, expires, remaining, reviewAvailable,
+      token: Date.now() < expires ? token : '',
+      history, notes: noteFields.map(field => field.value),
+      draft: el('message').value, roleplay: el('roleplay-evidence').value,
+      nextStep: el('next-step').value, feedback: el('feedback').textContent
+    }));
+  } catch {
+    recoveryStatus('This browser could not save your work. Keep this tab open.');
+  }
+}
+
+function scheduleExpiry() {
+  clearTimeout(expiryTimer);
+  expiryTimer = setTimeout(() => expire('Live access expired. Your work is still here.'), Math.max(0, expires - Date.now()));
+}
+
+function restoreWork() {
+  let saved;
+  try {
+    saved = JSON.parse(localStorage.getItem(recoveryKey));
+    if (!saved) return;
+    if (!Number.isFinite(saved.savedAt) || Date.now() - saved.savedAt >= recoveryWindow) {
+      localStorage.removeItem(recoveryKey);
+      return;
+    }
+  } catch {
+    recoveryStatus('Recovery is unavailable in this browser. Keep this tab open.');
+    return;
+  }
+  if (!clientNames.includes(saved.client) || !['live', 'roleplay'].includes(saved.mode) ||
+    !Array.isArray(saved.notes) || !Array.isArray(saved.history)) return;
+  ({ client, mode, expires, remaining, reviewAvailable } = saved);
+  token = typeof saved.token === 'string' && Date.now() < expires ? saved.token : '';
+  history.push(...saved.history);
+  noteFields.forEach((field, index) => { field.value = saved.notes[index] ?? ''; });
+  el('message').value = saved.draft ?? '';
+  el('roleplay-evidence').value = saved.roleplay ?? '';
+  el('next-step').value = saved.nextStep ?? '';
+  el('feedback').textContent = saved.feedback ?? '';
+  el('feedback').hidden = !saved.feedback;
+  el('client').value = client;
+  el('activate').hidden = mode === 'live' || Boolean(token);
+  recoveryStatus('Group work restored from this browser.');
+  if (mode === 'live' && token) {
+    el('start-status').textContent = 'Live session restored. Access depends on the classroom session.';
+    el('chat-status').textContent = remaining + ' group messages remaining.';
+    el('review-status').textContent = saved.feedback ? 'Review restored.' :
+      reviewAvailable ? 'One consultation review is available.' : 'Your group already used its consultation review.';
+    scheduleExpiry();
+  } else if (mode === 'live') {
+    el('chat-status').textContent = 'Live access has ended. Your work is still here.';
+    el('start-status').textContent = el('chat-status').textContent;
+    el('review-status').textContent = el('chat-status').textContent + ' You can use the self-review.';
+  } else {
+    el('chat-status').textContent = 'Teammate roleplay restored.';
+    el('review-status').textContent = 'Use the self-review above.';
+  }
+  renderProfile();
+  select(stages.includes(saved.stage) ? saved.stage : 'start', false);
+}
 
 function addText(parent, tag, text) {
   const node = document.createElement(tag);
@@ -94,10 +166,11 @@ function syncControls() {
   el('interview').hidden = mode === 'roleplay';
   el('case-card').hidden = mode !== 'roleplay';
   el('roleplay').disabled = busy;
-  el('client').disabled = Boolean(token) || mode === 'roleplay';
+  el('client').disabled = Boolean(mode);
+  if (el('clear-work')) el('clear-work').disabled = busy || !mode;
 }
 
-function select(stageName) {
+function select(stageName, save = true) {
   stage = stageName;
   document.querySelectorAll('#stages button').forEach(button => {
     if (button.dataset.stage === stage) button.setAttribute('aria-current', 'step');
@@ -121,14 +194,17 @@ function select(stageName) {
     if (!el('debrief-notes').children.length) addText(el('debrief-notes'), 'p', 'Use your conversation and group discussion to prepare.');
   }
   el(stage + '-title').focus();
+  if (save) saveWork();
 }
 
 function expire(message) {
   el('chat-status').textContent = message;
   el('review-status').textContent = message + ' Use the self-review above.';
   el('start-status').textContent = message;
-  if (message.includes('this device') || Date.now() >= expires) expires = 0;
+  expires = 0;
+  token = '';
   syncControls();
+  saveWork();
 }
 
 stages.forEach((name, index) => {
@@ -175,8 +251,7 @@ el('activate').onsubmit = async event => {
     el('start-status').textContent = `Live access active for ${client}. ${remaining} messages and one separate review are available.`;
     el('chat-status').textContent = `${remaining} group messages remaining.`;
     el('review-status').textContent = reviewAvailable ? 'One consultation review is available.' : 'Your group already used its consultation review.';
-    clearTimeout(expiryTimer);
-    expiryTimer = setTimeout(() => expire('Live access expired. Your work is still here.'), Math.max(0, expires - Date.now()));
+    scheduleExpiry();
     renderProfile();
     select('investigate');
   } catch (error) {
@@ -219,6 +294,7 @@ async function consult(action, data, statusId, onAnswer) {
   } finally {
     busy = false;
     syncControls();
+    saveWork();
   }
 }
 el('interview').onsubmit = event => {
@@ -250,3 +326,18 @@ el('request-review').onclick = () => {
 renderProfile();
 el('chat-status').textContent = 'Activate your group or choose teammate roleplay on Start Here.';
 syncControls();
+
+restoreWork();
+syncControls();
+for (const field of [...noteFields, el('message'), el('roleplay-evidence'), el('next-step')]) {
+  field.addEventListener('input', saveWork);
+}
+el('clear-work')?.addEventListener('click', () => {
+  if (!confirm('Clear this group’s saved transcript and notes from this browser?')) return;
+  try { localStorage.removeItem(recoveryKey); }
+  catch {
+    recoveryStatus('This browser could not clear the saved work.');
+    return;
+  }
+  location.reload();
+});
