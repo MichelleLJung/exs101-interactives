@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EXS101 Motivation &amp; Technology · Report Builder</title>
+<link rel="stylesheet" href="../exercise-psychology-client/classroom.css">
+<link rel="stylesheet" href="../resource-about.css">
+<script src="../resource-about.js" defer></script>
+<style>
+  .days {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .days fieldset {margin:0}
+  #status {min-height:1.5em}
+  #report {background:white;color:#202627;padding:24px;border:1px solid #b8cbbf;border-radius:6px}
+  #report p {white-space:pre-wrap;overflow-wrap:anywhere}
+  #report h2 {color:#285c57;border-bottom:1px solid #b8cbbf;padding-bottom:4px}
+  #report dl {margin:0}
+  #report dt {font-weight:bold}
+  #report dd {margin:0 0 8px;white-space:pre-wrap;overflow-wrap:anywhere}
+  #report table {table-layout:fixed;overflow-wrap:anywhere;font-size:.93em}
+  #report th:first-child {width:19%}
+  #report figure {margin:10px 0 0;break-inside:avoid}
+  #report img, #evidence-preview img {display:block;max-width:100%;max-height:290px;object-fit:contain;object-position:left}
+  #report figcaption {margin-top:5px}
+  .identifier {font-size:.84em;color:#505957}
+  #report h1 {margin-bottom:0}
+  #report .evidence-list li {overflow-wrap:anywhere}
+  @media(max-width:620px){.days{grid-template-columns:1fr} #report{padding:12px}}
+  @page {size:letter;margin:.55in}
+  @media print {
+    :root,body {background:white}
+    main {max-width:none;padding:0}
+    #workspace, #review-tools {display:none!important}
+    #report {border:0;padding:0;font:10.5pt/1.34 Arial,Helvetica,sans-serif}
+    #report h1 {font-size:18pt}
+    #report h2 {font-size:13pt;break-after:avoid;margin:12px 0 6px}
+    #report h3, #report dt {break-after:avoid}
+    #report section {margin:0;padding:0;border:0}
+    #report tr {break-inside:avoid}
+    #report thead {display:table-header-group}
+  }
+</style>
+</head>
+<body>
+<main>
+<div id="workspace">
+  <header><p>EXS101 · Exercise Psychology</p><h1>Motivation &amp; Technology</h1></header>
+  <p>Use your notes from seven days of app use to explain how one feature affected your behavior. Complete the report, preview it, and save a PDF for Canvas.</p>
+  <div class="actions">
+    <button type="button" class="secondary" id="save">Save draft file</button>
+    <button type="button" class="secondary" id="resume">Resume from draft file</button>
+    <input id="draft-file" type="file" accept=".json,application/json" aria-label="Choose a saved draft file" hidden>
+  </div>
+  <p id="status" role="status">Save a draft file before you close this page. Your entries and evidence are processed in this browser.</p>
+  <form id="builder">
+    <section aria-labelledby="starting-title">
+      <h2 id="starting-title">Starting point</h2>
+      <div class="grid">
+        <div><label for="student">Your name</label><input id="student" required maxlength="100" autocomplete="name"></div>
+        <div><label for="app">App name</label><input id="app" required maxlength="100"></div>
+        <div><label for="behavior">Target behavior</label><input id="behavior" required maxlength="180"></div>
+        <div><label for="feature">App feature you investigated</label><input id="feature" required maxlength="180"></div>
+      </div>
+      <label for="prediction">What did you originally predict this feature would encourage you to do?</label>
+      <textarea id="prediction" required maxlength="600"></textarea>
+    </section>
+    <section aria-labelledby="record-title">
+      <h2 id="record-title">Seven-day record</h2>
+      <p>Enter seven different days of app use. They may be nonconsecutive. Record what you noticed about the feature and how you responded, even if you didn’t follow through on the behavior.</p>
+      <div id="days" class="days"></div>
+    </section>
+    <section aria-labelledby="evidence-title">
+      <h2 id="evidence-title">Proof of use</h2>
+      <p>Upload one screenshot from your observation period showing use, such as a dated entry, progress history, or a recorded interaction with the feature. Crop or cover private details before uploading.</p>
+      <label for="proof-kind">Evidence format</label>
+      <select id="proof-kind">
+        <option value="image">Screenshot</option>
+        <option value="excerpt">Redacted excerpt from an app activity export</option>
+      </select>
+      <div id="image-fields">
+        <label for="proof">Screenshot image (PNG, JPEG, or WebP)</label>
+        <input id="proof" type="file" accept="image/png,image/jpeg,image/webp">
+        <div id="evidence-preview"></div>
+      </div>
+      <div id="excerpt-fields" hidden>
+        <p>Use this option if your app blocks screenshots or an image cannot be shared safely. Paste the relevant part of an export showing actual use during your observation period.</p>
+        <label for="excerpt">Redacted activity export excerpt</label>
+        <textarea id="excerpt" maxlength="1600"></textarea>
+      </div>
+      <label for="caption">Caption explaining what this evidence shows</label>
+      <textarea id="caption" required maxlength="500"></textarea>
+    </section>
+    <section aria-labelledby="interpret-title">
+      <h2 id="interpret-title">Interpretation</h2>
+      <p>Choose two different entries from your record. Both will appear beside your theory explanation in the PDF.</p>
+      <div class="grid">
+        <div><label for="first">First observation</label><select id="first" required></select></div>
+        <div><label for="second">Second observation</label><select id="second" required></select></div>
+      </div>
+      <div class="grid">
+        <div><label for="reference">Course reference page</label>
+          <select id="reference" required>
+            <option value="">Choose a reference page</option>
+            <option>Motivation &amp; Self-Efficacy</option>
+            <option>Exercise Adherence &amp; Behavior Change</option>
+          </select>
+        </div>
+        <div><label for="subsection">Section heading from the reference page</label><input id="subsection" required maxlength="180"></div>
+      </div>
+      <label for="theory">Theory or concept from that section</label><input id="theory" required maxlength="180">
+      <label for="explanation">Explain the theory or concept in your own words. How does it help explain your response in both observations?</label>
+      <textarea id="explanation" required maxlength="2200"></textarea>
+      <label for="comparison">How did your response compare with your original prediction?</label>
+      <textarea id="comparison" required maxlength="900"></textarea>
+      <label for="context">What factor outside the app helped or got in the way? Explain how it mattered.</label>
+      <textarea id="context" required maxlength="900"></textarea>
+    </section>
+    <section aria-labelledby="recommend-title">
+      <h2 id="recommend-title">Recommendation</h2>
+      <label for="change">What is one realistic change you would make to the feature, how you use it, or the support around the behavior?</label>
+      <textarea id="change" required maxlength="900"></textarea>
+      <label for="rationale">Why does your evidence and theory explanation support this change?</label>
+      <textarea id="rationale" required maxlength="1500"></textarea>
+    </section>
+    <button>Preview report</button>
+    <p id="review-error" role="alert"></p>
+  </form>
+</div>
+<div id="review-tools" class="actions" hidden>
+  <button type="button" id="print">Print / Save as PDF</button>
+  <button type="button" class="secondary" id="edit">Back to editing</button>
+  <p>Choose <strong>Save as PDF</strong> in the print dialog. Open the saved file to check it, then upload it to Canvas.</p>
+</div>
+<article id="report" aria-label="Report preview" hidden></article>
+<footer class="mlj-resource-footer">© 2026 Michelle L. Jung · <a href="/licensing.html" data-resource-about>About this tool</a></footer>
+</main>
+<script>
+'use strict';
+const el = id => document.getElementById(id);
+const form = el('builder');
+const count = 7;
+const dayFields = [['date', 'Date or day number', 50], ['notice', 'What you noticed about the feature', 360], ['response', 'How you responded', 360]];
+const imageType = /^image\/(png|jpeg|webp)$/;
+const draftImage = /^data:image\/(png|jpeg|webp);base64,[a-zA-Z0-9+/=]+$/;
+let screenshot = '';
+let readingImage = false;
+
+function add(parent, tag, text) {
+  const node = document.createElement(tag);
+  node.textContent = text ?? '';
+  parent.append(node);
+  return node;
+}
+
+for (let day = 1; day <= count; day++) {
+  const box = add(el('days'), 'fieldset');
+  add(box, 'legend', 'Observation ' + day);
+  for (const [key, label, max] of dayFields) {
+    const id = key + '-' + day;
+    add(box, 'label', label).htmlFor = id;
+    const field = add(box, key === 'date' ? 'input' : 'textarea');
+    field.id = id;
+    field.required = true;
+    field.maxLength = max;
+    if (key !== 'date') field.rows = 2;
+  }
+}
+
+const fields = [...form.querySelectorAll('input:not([type=file]),textarea,select')];
+const value = id => el(id).value.trim();
+const say = message => { el('status').textContent = message; };
+const imageMode = () => value('proof-kind') === 'image';
+
+function updateEvidence() {
+  el('image-fields').hidden = !imageMode();
+  el('excerpt-fields').hidden = imageMode();
+  el('excerpt').required = !imageMode();
+  const target = el('evidence-preview');
+  target.replaceChildren();
+  if (screenshot) {
+    const img = add(target, 'img');
+    img.src = screenshot;
+    img.alt = 'Uploaded evidence preview';
+  }
+}
+
+function syncChoices() {
+  for (const id of ['first', 'second']) {
+    const select = el(id);
+    const previous = select.value;
+    select.replaceChildren(new Option('Choose an observation', ''));
+    for (let day = 1; day <= count; day++) {
+      const date = value('date-' + day);
+      select.add(new Option('Observation ' + day + (date ? ' · ' + date : ''), String(day)));
+    }
+    select.value = previous;
+  }
+}
+
+el('days').addEventListener('input', event => {
+  if (event.target.id.startsWith('date-')) syncChoices();
+});
+el('proof-kind').onchange = updateEvidence;
+el('proof').onchange = async () => {
+  const file = el('proof').files[0];
+  if (!file) return;
+  readingImage = true;
+  try {
+    if (!imageType.test(file.type) || file.size > 12 * 1024 * 1024) {
+      throw Error('Choose a PNG, JPEG, or WebP screenshot under 12 MB.');
+    }
+    const bitmap = await createImageBitmap(file);
+    try {
+      const scale = Math.min(1, 1700 / Math.max(bitmap.width, bitmap.height));
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.max(1, Math.round(bitmap.width * scale));
+      canvas.height = Math.max(1, Math.round(bitmap.height * scale));
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+      screenshot = canvas.toDataURL('image/jpeg', 0.9);
+      updateEvidence();
+      say('Screenshot added.');
+    } finally { bitmap.close(); }
+  } catch (error) {
+    say((error.message || 'The screenshot could not be opened.') + ' Check the image and try again.');
+  } finally {
+    readingImage = false;
+    el('proof').value = '';
+  }
+};
+
+el('save').onclick = () => {
+  if (readingImage) return say('Wait for the screenshot to finish loading.');
+  const values = Object.fromEntries(fields.map(field => [field.id, field.value]));
+  const url = URL.createObjectURL(new Blob([JSON.stringify({ version: 1, values, screenshot })], { type: 'application/json' }));
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'EXS101-Motivation-Technology-Draft.json';
+  link.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  say('Draft file downloaded. It includes your entries and screenshot. Keep it somewhere private.');
+};
+
+el('resume').onclick = () => el('draft-file').click();
+el('draft-file').onchange = async () => {
+  const file = el('draft-file').files[0];
+  if (!file) return;
+  try {
+    if (readingImage || file.size > 8 * 1024 * 1024) throw Error();
+    const draft = JSON.parse(await file.text());
+    if (draft.version !== 1 || !draft.values || typeof draft.screenshot !== 'string' ||
+      (draft.screenshot && !draftImage.test(draft.screenshot))) throw Error();
+    if ((screenshot || fields.some(field => field.value && field.id !== 'proof-kind')) &&
+      !confirm('Replace the entries on this page with the saved draft?')) return;
+    for (const field of fields) {
+      const saved = draft.values[field.id];
+      field.value = typeof saved === 'string' ? saved.slice(0, field.maxLength > 0 ? field.maxLength : 600) : '';
+      if (field.tagName === 'SELECT' && field.selectedIndex < 0) field.selectedIndex = 0;
+    }
+    screenshot = draft.screenshot;
+    syncChoices();
+    updateEvidence();
+    say('Draft loaded.');
+  } catch {
+    say('Could not open this draft. Choose a draft file saved by this report builder.');
+  } finally {
+    el('draft-file').value = '';
+  }
+};
+
+function reportSection(report, heading) {
+  const section = add(report, 'section');
+  add(section, 'h2', heading);
+  return section;
+}
+
+function showFields(section, entries) {
+  const list = add(section, 'dl');
+  for (const [label, content] of entries) {
+    add(list, 'dt', label);
+    add(list, 'dd', content);
+  }
+}
+
+function row(day) {
+  return dayFields.map(([key]) => value(key + '-' + day));
+}
+
+function renderReport() {
+  const report = el('report');
+  report.replaceChildren();
+  add(report, 'h1', 'Motivation & Technology');
+  add(report, 'p', 'EXS101 · Motivation & Technology').className = 'identifier';
+  add(report, 'p', value('student'));
+  showFields(reportSection(report, 'Starting point'), [
+    ['App', value('app')], ['Target behavior', value('behavior')], ['Feature', value('feature')], ['Original prediction', value('prediction')]
+  ]);
+  const table = add(reportSection(report, 'Seven-day record'), 'table');
+  const head = add(add(table, 'thead'), 'tr');
+  for (const label of ['Date or day', 'Feature observation', 'Response']) add(head, 'th', label).scope = 'col';
+  const body = add(table, 'tbody');
+  for (let day = 1; day <= count; day++) {
+    const tr = add(body, 'tr');
+    row(day).forEach(text => add(tr, 'td', text));
+  }
+  const proof = reportSection(report, 'Proof of use');
+  if (imageMode()) {
+    const figure = add(proof, 'figure');
+    const img = add(figure, 'img');
+    img.src = screenshot;
+    img.alt = 'App-use screenshot. See accompanying caption.';
+    add(figure, 'figcaption', value('caption'));
+  } else {
+    showFields(proof, [['Redacted activity export excerpt', value('excerpt')], ['Caption', value('caption')]]);
+  }
+  const interpretation = reportSection(report, 'Interpretation');
+  add(interpretation, 'h3', 'Selected observations');
+  const observations = add(interpretation, 'ul');
+  observations.className = 'evidence-list';
+  for (const id of ['first','second']) {
+    const [day, notice, response] = row(value(id));
+    const item = add(observations, 'li');
+    add(item, 'strong', day + ' · ');
+    item.append(notice + ' / Response: ' + response);
+  }
+  showFields(interpretation, [
+    ['Theory or concept', value('theory')],
+    ['Reference page and section', value('reference') + ' · ' + value('subsection')],
+    ['Theory application', value('explanation')],
+    ['Comparison with original prediction', value('comparison')],
+    ['Influence outside the app', value('context')]
+  ]);
+  showFields(reportSection(report, 'Recommendation'), [
+    ['Proposed change', value('change')], ['Why this change fits the evidence', value('rationale')]
+  ]);
+}
+
+function fail(message, field) {
+  el('review-error').textContent = message;
+  field.focus();
+}
+
+form.onsubmit = event => {
+  event.preventDefault();
+  el('review-error').textContent = '';
+  for (const field of fields) {
+    if (field.required && !field.value.trim()) return fail('Complete the required field.', field);
+  }
+  const days = new Set();
+  for (let day = 1; day <= count; day++) {
+    const entered = value('date-' + day).toLowerCase().replace(/\s+/g, ' ');
+    if (days.has(entered)) return fail('Use a different date or day number for each observation.', el('date-' + day));
+    days.add(entered);
+  }
+  if (readingImage || (imageMode() && !screenshot))
+    return fail('Add your screenshot and wait for it to finish loading before previewing.', el('proof'));
+  if (value('first') === value('second')) return fail('Select two different observations.', el('second'));
+  renderReport();
+  el('workspace').hidden = true;
+  el('review-tools').hidden = false;
+  el('report').hidden = false;
+  el('print').focus();
+  window.scrollTo(0, 0);
+};
+
+el('edit').onclick = () => {
+  el('report').hidden = true;
+  el('review-tools').hidden = true;
+  el('workspace').hidden = false;
+  form.querySelector('button').focus();
+};
+el('print').onclick = () => window.print();
+syncChoices();
+updateEvidence();
+</script>
+</body>
+</html>
