@@ -9,7 +9,40 @@
 <body><main>
   <header><p>EXS101 · Exercise Psychology</p><h1>Instructor Portal</h1></header>
   <section>
-    <h2>Instructor sign-in</h2>
+    <h2>Facilitation timer</h2>
+    <h3 id="timer-stage" aria-live="polite"></h3>
+    <p><strong class="clock" id="countdown"></strong> stage remaining</p>
+    <p><strong id="overall"></strong> overall remaining</p>
+    <p id="timer-alert" class="notice" role="status" hidden></p>
+    <div class="actions">
+      <button id="toggle-clock">Start</button>
+      <button id="back-stage" class="secondary">Previous stage</button>
+      <button id="next-stage" class="secondary">Next stage</button>
+      <button id="reset-clock" class="secondary">Reset timer</button>
+    </div>
+    <div class="actions">
+      <button id="plus-one" class="secondary">Add 1 minute</button>
+      <button id="plus-three" class="secondary">Add 3 minutes</button>
+    </div>
+    <form id="adjust-clock">
+      <label for="seconds">Set stage time remaining (seconds)</label>
+      <input id="seconds" type="number" min="0" max="5400" required>
+      <button class="secondary">Set remaining time</button>
+    </form>
+    <label><input id="sound" type="checkbox"> Play transition sound</label>
+    <p><a href="../projection/" target="exs101-classroom-projection" id="project">Open classroom projection</a></p>
+    <p>Open the projection in the same browser and profile on this computer. Move that window to the classroom screen. A separate device will not sync.</p>
+  </section>
+  <section id="discussion" hidden>
+    <h2>Class discussion</h2>
+    <h3 id="private-question"></h3>
+    <p id="private-followup"></p>
+    <p id="private-discussion-notes"></p>
+    <button id="previous-question" class="secondary">Previous question</button>
+    <button id="next-question">Next question</button>
+  </section>
+  <section>
+    <h2>Sign in for live AI and private notes</h2>
     <form id="login">
       <label for="secret">Instructor password</label>
       <input id="secret" type="password" autocomplete="current-password" maxlength="256" required>
@@ -19,59 +52,24 @@
     <p id="account-status" role="status"></p>
   </section>
   <div id="portal" hidden>
-    <div class="grid">
-      <section>
-        <h2>Classroom AI access</h2>
-        <p>The access window runs independently of the instructional timer.</p>
-        <form id="session-form">
-          <div class="grid triple">
-            <div><label for="minutes">Access minutes</label><input id="minutes" type="number" min="10" max="120" value="75" required></div>
-            <div><label for="groups">Groups</label><input id="groups" type="number" min="1" max="24" value="5" required></div>
-            <div><label for="allowance">Messages per group</label><input id="allowance" type="number" min="3" max="30" value="20" required></div>
-          </div>
-          <p>Each group has one separate formative review.</p>
-          <button>Open classroom session</button>
-        </form>
-        <div class="actions">
-          <button id="refresh" class="secondary">Refresh usage</button>
-          <button id="close" disabled>Close AI access</button>
+    <section>
+      <h2>Classroom AI access</h2>
+      <p>The access window runs independently of the instructional timer.</p>
+      <form id="session-form">
+        <div class="grid triple">
+          <div><label for="minutes">Access minutes</label><input id="minutes" type="number" min="10" max="120" value="75" required></div>
+          <div><label for="groups">Groups</label><input id="groups" type="number" min="1" max="24" value="5" required></div>
+          <div><label for="allowance">Messages per group</label><input id="allowance" type="number" min="3" max="30" value="20" required></div>
         </div>
-        <p id="session-status" role="status"></p>
-        <div id="usage" class="table"></div>
-      </section>
-      <section>
-        <h2>Facilitation timer</h2>
-        <h3 id="timer-stage" aria-live="polite"></h3>
-        <p><strong class="clock" id="countdown"></strong> stage remaining</p>
-        <p><strong id="overall"></strong> overall remaining</p>
-        <p id="timer-alert" class="notice" role="status" hidden></p>
-        <div class="actions">
-          <button id="toggle-clock">Start</button>
-          <button id="back-stage" class="secondary">Previous stage</button>
-          <button id="next-stage" class="secondary">Next stage</button>
-          <button id="reset-clock" class="secondary">Reset timer</button>
-        </div>
-        <div class="actions">
-          <button id="plus-one" class="secondary">Add 1 minute</button>
-          <button id="plus-three" class="secondary">Add 3 minutes</button>
-        </div>
-        <form id="adjust-clock">
-          <label for="seconds">Set stage time remaining (seconds)</label>
-          <input id="seconds" type="number" min="0" max="5400" required>
-          <button class="secondary">Set remaining time</button>
-        </form>
-        <label><input id="sound" type="checkbox"> Play transition sound</label>
-        <p><a href="../projection/" target="exs101-classroom-projection" id="project">Open classroom projection</a></p>
-        <p>Open the projection in the same browser and profile on this computer. Move that window to the classroom screen. A separate device will not sync.</p>
-      </section>
-    </div>
-    <section id="discussion" hidden>
-      <h2>Class discussion</h2>
-      <h3 id="private-question"></h3>
-      <p id="private-followup"></p>
-      <p id="private-discussion-notes"></p>
-      <button id="previous-question" class="secondary">Previous question</button>
-      <button id="next-question">Next question</button>
+        <p>Each group has one separate formative review.</p>
+        <button>Open classroom session</button>
+      </form>
+      <div class="actions">
+        <button id="refresh" class="secondary">Refresh usage</button>
+        <button id="close" disabled>Close AI access</button>
+      </div>
+      <p id="session-status" role="status"></p>
+      <div id="usage" class="table"></div>
     </section>
     <section>
       <h2>Facilitation guide</h2>
