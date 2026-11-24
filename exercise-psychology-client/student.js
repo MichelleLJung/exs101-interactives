@@ -225,7 +225,7 @@ el('interview').onsubmit = event => {
   event.preventDefault();
   const message = el('message').value.trim();
   if (!message || el('send').disabled) return;
-  consult('interview', { message }, answer => {
+  consult('interview', { message }, 'chat-status', answer => {
     history.push({ role: 'user', content: message }, { role: 'assistant', content: answer });
     if (el('message').value.trim() === message) el('message').value = '';
     renderTranscript(el('transcript'));
