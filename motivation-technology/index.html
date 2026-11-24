@@ -9,6 +9,10 @@
 <script src="../resource-about.js" defer></script>
 <style>
   .days {max-width:720px}
+  .observation-option {display:flex;align-items:flex-start;gap:10px;padding:8px 10px;border:1px solid #b8cbbf;border-radius:6px}
+  .observation-option input {flex:none;margin-top:5px}
+  .observation-option small {display:block;font-weight:normal;overflow-wrap:anywhere}
+  #builder input[type=date] {max-width:15rem}
   .report-nav, .day-nav {display:flex;flex-wrap:wrap;gap:8px}
   .report-nav button, .day-nav button {margin:0}
   .report-nav [aria-current], .day-nav [aria-current] {background:#285c57;color:white}
@@ -79,7 +83,7 @@
     </section>
     <section aria-labelledby="record-title">
       <h2 id="record-title">Seven-day record</h2>
-      <p>Enter seven different days of app use. They may be nonconsecutive. Record what you noticed about the feature and how you responded, even if you didn’t follow through on the behavior.</p>
+      <p>Use the calendar to select the date for each of your seven entries. The dates may be nonconsecutive. Record what you noticed about the feature and how you responded, even if you didn’t follow through on the behavior.</p>
       <nav id="day-nav" class="day-nav" aria-label="Observation days"></nav>
       <div id="days" class="days"></div>
     </section>
@@ -106,11 +110,14 @@
     </section>
     <section aria-labelledby="interpret-title">
       <h2 id="interpret-title">Interpretation</h2>
-      <p>Choose two different entries from your record. Both will appear beside your theory explanation in the PDF.</p>
-      <div class="grid">
-        <div><label for="first">First observation</label><select id="first" required></select></div>
-        <div><label for="second">Second observation</label><select id="second" required></select></div>
-      </div>
+      <fieldset id="evidence-picker" tabindex="-1">
+        <legend>Choose two dates from your seven-day record</legend>
+        <p>Pick two entries that help you explain how you responded to the app feature. They can show the same pattern or different responses.</p>
+        <div id="observation-options"></div>
+        <p id="selection-status" role="status"></p>
+      </fieldset>
+      <input id="first" type="hidden">
+      <input id="second" type="hidden">
       <div class="grid">
         <div><label for="reference">Course reference page</label>
           <select id="reference" required>
@@ -122,11 +129,11 @@
         <div><label for="subsection">Section heading from the reference page</label><input id="subsection" required maxlength="180"></div>
       </div>
       <label for="theory">Theory or concept from that section</label><input id="theory" required maxlength="180">
-      <label for="explanation">Explain the theory or concept in your own words. How does it help explain your response in both observations?</label>
+      <label for="explanation">In your own words, what does this theory or concept mean? Use a detail from each selected date to explain why you responded the way you did.</label>
       <textarea id="explanation" required maxlength="2200"></textarea>
-      <label for="comparison">How did your response compare with your original prediction?</label>
+      <label for="comparison">Did the feature work the way you predicted? Briefly explain what matched or differed.</label>
       <textarea id="comparison" required maxlength="900"></textarea>
-      <label for="context">What factor outside the app helped or got in the way? Explain how it mattered.</label>
+      <label for="context">Name one thing outside the app that affected what you did, such as your schedule, access, or support from others. How did it matter?</label>
       <textarea id="context" required maxlength="900"></textarea>
     </section>
     <section aria-labelledby="recommend-title">
@@ -161,7 +168,7 @@ const stepButtons = [...el('report-nav').querySelectorAll('button')];
 let currentStep = 0;
 const dayPanels = [];
 const dayButtons = [];
-const dayFields = [['date', 'Date or day number', 50], ['notice', 'What you noticed about the feature', 360], ['response', 'How you responded', 360]];
+const dayFields = [['date', 'Date you used the app', 50], ['notice', 'What you noticed about the feature', 360], ['response', 'How you responded', 360]];
 const imageType = /^image\/(png|jpeg|webp)$/;
 const draftImage = /^data:image\/(png|jpeg|webp);base64,[a-zA-Z0-9+/=]+$/;
 let screenshot = '';
@@ -188,6 +195,7 @@ for (let day = 1; day <= count; day++) {
     add(box, 'label', label).htmlFor = id;
     const field = add(box, key === 'date' ? 'input' : 'textarea');
     field.id = id;
+    if (key === 'date') field.type = 'date';
     field.required = true;
     field.maxLength = max;
     if (key !== 'date') field.rows = 2;
@@ -243,22 +251,52 @@ function updateEvidence() {
   }
 }
 
-function syncChoices() {
-  for (const id of ['first', 'second']) {
-    const select = el(id);
-    const previous = select.value;
-    select.replaceChildren(new Option('Choose an observation', ''));
-    for (let day = 1; day <= count; day++) {
-      const date = value('date-' + day);
-      select.add(new Option('Observation ' + day + (date ? ' · ' + date : ''), String(day)));
-    }
-    select.value = previous;
-  }
+function formatDate(date) {
+  return date ? new Intl.DateTimeFormat('en-US', { dateStyle: 'medium', timeZone: 'UTC' })
+    .format(new Date(date + 'T00:00:00Z')) : '';
 }
 
-el('days').addEventListener('input', event => {
-  if (event.target.id.startsWith('date-')) syncChoices();
-});
+function syncChoices() {
+  const target = el('observation-options');
+  const available = Array.from({length: count}, (_, i) => String(i + 1))
+    .filter(day => row(day).every(Boolean));
+  const slots = [el('first'), el('second')];
+  let selected = [...new Set(slots.map(slot => slot.value).filter(day => available.includes(day)))];
+  const boxes = [];
+  target.replaceChildren();
+  if (!available.length) add(target, 'p', 'Complete an entry in Seven-day record to see it here.');
+
+  function refreshSelection() {
+    slots.forEach((slot, index) => { slot.value = selected[index] ?? ''; });
+    boxes.forEach(box => {
+      box.checked = selected.includes(box.value);
+      box.disabled = selected.length === 2 && !box.checked;
+    });
+    el('selection-status').textContent = selected.length === 2 ?
+      'Two dates selected. Uncheck one to choose a different date.' :
+      selected.length + ' of 2 dates selected.';
+  }
+
+  for (const day of available) {
+    const [date, notice, response] = row(day);
+    const label = add(target, 'label');
+    label.className = 'observation-option';
+    const box = add(label, 'input');
+    box.type = 'checkbox';
+    box.value = day;
+    boxes.push(box);
+    const summary = add(label, 'span', formatDate(date));
+    add(summary, 'small', 'Feature: ' + notice);
+    add(summary, 'small', 'Your response: ' + response);
+    box.onchange = () => {
+      selected = box.checked ? [...selected, day] : selected.filter(entry => entry !== day);
+      refreshSelection();
+    };
+  }
+  refreshSelection();
+}
+
+el('days').addEventListener('input', syncChoices);
 el('proof-kind').onchange = updateEvidence;
 el('proof').onchange = async () => {
   const file = el('proof').files[0];
@@ -321,7 +359,9 @@ el('draft-file').onchange = async () => {
     screenshot = draft.screenshot;
     syncChoices();
     updateEvidence();
-    say('Draft loaded.');
+    const datesNeedUpdate = dayPanels.some((_, index) =>
+      draft.values['date-' + (index + 1)] && !value('date-' + (index + 1)));
+    say(datesNeedUpdate ? 'Draft loaded. Replace any old day numbers with calendar dates in Seven-day record.' : 'Draft loaded.');
   } catch {
     say('Could not open this draft. Choose a draft file saved by this report builder.');
   } finally {
@@ -358,11 +398,12 @@ function renderReport() {
   ]);
   const table = add(reportSection(report, 'Seven-day record'), 'table');
   const head = add(add(table, 'thead'), 'tr');
-  for (const label of ['Date or day', 'Feature observation', 'Response']) add(head, 'th', label).scope = 'col';
+  for (const label of ['Date', 'Feature observation', 'Response']) add(head, 'th', label).scope = 'col';
   const body = add(table, 'tbody');
   for (let day = 1; day <= count; day++) {
     const tr = add(body, 'tr');
-    row(day).forEach(text => add(tr, 'td', text));
+    const [date, notice, response] = row(day);
+    [formatDate(date), notice, response].forEach(text => add(tr, 'td', text));
   }
   const proof = reportSection(report, 'Proof of use');
   if (imageMode()) {
@@ -381,7 +422,7 @@ function renderReport() {
   for (const id of ['first','second']) {
     const [day, notice, response] = row(value(id));
     const item = add(observations, 'li');
-    add(item, 'strong', day + ' · ');
+    add(item, 'strong', formatDate(day) + ' · ');
     item.append(notice + ' / Response: ' + response);
   }
   showFields(interpretation, [
@@ -414,12 +455,12 @@ form.onsubmit = event => {
   const days = new Set();
   for (let day = 1; day <= count; day++) {
     const entered = value('date-' + day).toLowerCase().replace(/\s+/g, ' ');
-    if (days.has(entered)) return fail('Use a different date or day number for each observation.', el('date-' + day));
+    if (days.has(entered)) return fail('Choose a different date for each observation.', el('date-' + day));
     days.add(entered);
   }
   if (readingImage || (imageMode() && !screenshot))
     return fail('Add your screenshot and wait for it to finish loading before previewing.', el('proof'));
-  if (value('first') === value('second')) return fail('Select two different observations.', el('second'));
+  if (!value('first') || !value('second')) return fail('Choose two different dates for your interpretation.', el('evidence-picker'));
   renderReport();
   el('workspace').hidden = true;
   el('review-tools').hidden = false;
