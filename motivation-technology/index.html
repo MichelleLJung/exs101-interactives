@@ -8,7 +8,12 @@
 <link rel="stylesheet" href="../resource-about.css">
 <script src="../resource-about.js" defer></script>
 <style>
-  .days {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .days {max-width:720px}
+  .report-nav, .day-nav {display:flex;flex-wrap:wrap;gap:8px}
+  .report-nav button, .day-nav button {margin:0}
+  .report-nav [aria-current], .day-nav [aria-current] {background:#285c57;color:white}
+  #builder > section textarea {min-height:3.2rem}
+  #review-error:not(:empty) {padding:8px 12px;border-left:4px solid #9d5134;background:#fff3e9}
   .days fieldset {margin:0}
   #status {min-height:1.5em}
   #report {background:white;color:#202627;padding:24px;border:1px solid #b8cbbf;border-radius:6px}
@@ -52,7 +57,15 @@
     <input id="draft-file" type="file" accept=".json,application/json" aria-label="Choose a saved draft file" hidden>
   </div>
   <p id="status" role="status">Save a draft file before you close this page. Your entries and evidence are processed in this browser.</p>
-  <form id="builder">
+  <nav id="report-nav" class="report-nav" aria-label="Report sections">
+    <button type="button" class="secondary">Starting point</button>
+    <button type="button" class="secondary">Seven-day record</button>
+    <button type="button" class="secondary">Proof of use</button>
+    <button type="button" class="secondary">Interpretation</button>
+    <button type="button" class="secondary">Recommendation</button>
+  </nav>
+  <form id="builder" novalidate>
+    <p id="review-error" role="alert"></p>
     <section aria-labelledby="starting-title">
       <h2 id="starting-title">Starting point</h2>
       <div class="grid">
@@ -67,6 +80,7 @@
     <section aria-labelledby="record-title">
       <h2 id="record-title">Seven-day record</h2>
       <p>Enter seven different days of app use. They may be nonconsecutive. Record what you noticed about the feature and how you responded, even if you didn’t follow through on the behavior.</p>
+      <nav id="day-nav" class="day-nav" aria-label="Observation days"></nav>
       <div id="days" class="days"></div>
     </section>
     <section aria-labelledby="evidence-title">
@@ -122,8 +136,11 @@
       <label for="rationale">Why does your evidence and theory explanation support this change?</label>
       <textarea id="rationale" required maxlength="1500"></textarea>
     </section>
-    <button>Preview report</button>
-    <p id="review-error" role="alert"></p>
+    <div class="actions">
+      <button type="button" class="secondary" id="previous-step">Back</button>
+      <button type="button" id="next-step">Continue</button>
+      <button id="preview-report" hidden>Preview report</button>
+    </div>
   </form>
 </div>
 <div id="review-tools" class="actions" hidden>
@@ -139,6 +156,11 @@
 const el = id => document.getElementById(id);
 const form = el('builder');
 const count = 7;
+const sections = [...form.querySelectorAll(':scope > section')];
+const stepButtons = [...el('report-nav').querySelectorAll('button')];
+let currentStep = 0;
+const dayPanels = [];
+const dayButtons = [];
 const dayFields = [['date', 'Date or day number', 50], ['notice', 'What you noticed about the feature', 360], ['response', 'How you responded', 360]];
 const imageType = /^image\/(png|jpeg|webp)$/;
 const draftImage = /^data:image\/(png|jpeg|webp);base64,[a-zA-Z0-9+/=]+$/;
@@ -153,7 +175,13 @@ function add(parent, tag, text) {
 }
 
 for (let day = 1; day <= count; day++) {
+  const button = add(el('day-nav'), 'button', 'Day ' + day);
+  button.type = 'button';
+  button.className = 'secondary';
+  button.onclick = () => showDay(day - 1);
+  dayButtons.push(button);
   const box = add(el('days'), 'fieldset');
+  dayPanels.push(box);
   add(box, 'legend', 'Observation ' + day);
   for (const [key, label, max] of dayFields) {
     const id = key + '-' + day;
@@ -165,6 +193,37 @@ for (let day = 1; day <= count; day++) {
     if (key !== 'date') field.rows = 2;
   }
 }
+
+function showDay(index) {
+  dayPanels.forEach((panel, i) => {
+    panel.hidden = i !== index;
+    if (i === index) dayButtons[i].setAttribute('aria-current', 'step');
+    else dayButtons[i].removeAttribute('aria-current');
+  });
+}
+
+function showStep(index, focusHeading = true) {
+  currentStep = index;
+  sections.forEach((section, i) => {
+    section.hidden = i !== index;
+    if (i === index) stepButtons[i].setAttribute('aria-current', 'step');
+    else stepButtons[i].removeAttribute('aria-current');
+  });
+  el('previous-step').hidden = index === 0;
+  el('next-step').hidden = index === sections.length - 1;
+  el('preview-report').hidden = index !== sections.length - 1;
+  if (focusHeading) {
+    const heading = sections[index].querySelector('h2');
+    heading.tabIndex = -1;
+    heading.focus();
+  }
+}
+
+stepButtons.forEach((button, index) => {
+  button.onclick = () => { el('review-error').textContent = ''; showStep(index); };
+});
+el('previous-step').onclick = () => { el('review-error').textContent = ''; showStep(currentStep - 1); };
+el('next-step').onclick = () => { el('review-error').textContent = ''; showStep(currentStep + 1); };
 
 const fields = [...form.querySelectorAll('input:not([type=file]),textarea,select')];
 const value = id => el(id).value.trim();
@@ -338,6 +397,10 @@ function renderReport() {
 }
 
 function fail(message, field) {
+  const index = sections.indexOf(field.closest('section'));
+  if (index >= 0) showStep(index, false);
+  const day = dayPanels.indexOf(field.closest('fieldset'));
+  if (day >= 0) showDay(day);
   el('review-error').textContent = message;
   field.focus();
 }
@@ -369,9 +432,11 @@ el('edit').onclick = () => {
   el('report').hidden = true;
   el('review-tools').hidden = true;
   el('workspace').hidden = false;
-  form.querySelector('button').focus();
+  showStep(currentStep);
 };
 el('print').onclick = () => window.print();
+showDay(0);
+showStep(0, false);
 syncChoices();
 updateEvidence();
 </script>
