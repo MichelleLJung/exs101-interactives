@@ -1,32 +1,122 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Exercise Psychology | Client Investigation</title><style>
-*{box-sizing:border-box}body{margin:0;background:#f5f6f4;color:#293531;font:16px/1.55 Arial,Helvetica,sans-serif}main{max-width:1100px;margin:auto;padding:18px}header{background:#285c57;color:white;padding:24px;border-left:7px solid #b8d1c2}h1{font-size:clamp(1.5rem,4vw,2rem);margin:4px 0}h2{font-size:1.25rem;color:#285c57}h3{font-size:1rem}p{margin:8px 0}section,aside{background:white;border:1px solid #c6d7ce;border-radius:8px;padding:18px;margin:14px 0}label{display:block;font-weight:bold;margin-top:12px}input,select,textarea,button{font:inherit}input,select,textarea{width:100%;padding:10px;border:1px solid #71867b;border-radius:5px}button{background:#285c57;color:white;border:0;border-radius:20px;padding:10px 17px;font-weight:bold;cursor:pointer;margin:8px 5px 0 0}button.secondary{background:#f2e9d8;color:#594624}button:disabled{opacity:.55;cursor:wait}button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #947344;outline-offset:3px}.grid{display:grid;grid-template-columns:1.4fr 1fr;gap:16px}.chat{height:340px;overflow:auto;border:1px solid #c6d7ce;padding:12px}.bubble{background:#e4eee8;padding:12px;border-radius:8px;margin:8px 0;white-space:pre-wrap;overflow-wrap:anywhere}.student{background:#f2e9d8;margin-left:20px}.notice{background:#f2e9d8;padding:12px;border-left:4px solid #947344}.tabs{display:flex;flex-wrap:wrap;gap:4px}.tabs button{background:#e4eee8;color:#234d43}.tabs button[aria-pressed=true]{background:#285c57;color:white}footer{font-size:.85rem;text-align:center;padding:20px} [hidden]{display:none!important}@media(max-width:720px){.grid{grid-template-columns:1fr}}
-.profile{display:flex;gap:16px;align-items:center;background:#e4eee8;padding:16px;border-radius:8px;margin:12px 0}.monogram{flex:0 0 64px;height:64px;border-radius:50%;display:grid;place-items:center;background:#285c57;color:white;font-size:1.6rem;font-weight:bold}.profile h3{margin:0;font-size:1.2rem}.task{background:#e4eee8;padding:14px;border-radius:6px}.reference{background:#f2e9d8;padding:12px;border-radius:6px}.evidence{border:1px solid #c6d7ce;border-radius:6px;padding:12px;margin:12px 0}.evidence legend{font-weight:bold;color:#285c57}#remaining{font-size:.85rem;color:#465a50}#panels h3{color:#285c57;font-size:1.2rem}.tabs button{font-size:.9rem}.pathway{padding-left:24px}.pathway li{margin:5px 0}#panels ul{padding-left:22px}</style></head><body><main><header><p>EXERCISE PSYCHOLOGY</p><h1>Simulated Client Investigation</h1><p>Investigate · Interpret · Recommend · Reassess</p></header>
-<section><h2>Your challenge</h2><div class="task"><p>Act as a team of exercise science professionals. Discover why your client struggles to adopt or maintain physical activity, explain their experiences using course concepts, and test a realistic recommendation. Your goal is understanding, not simply convincing someone to exercise.</p><p><strong>By the end:</strong> Explain three concepts using client evidence, propose and revise a strategy, and connect your findings to a behavior outside exercise.</p></div><details open><summary><strong>How to complete the investigation (about 40 minutes)</strong></summary><ol class="pathway"><li><strong>Investigate (10 min):</strong> Interview your client before giving advice.</li><li><strong>Interpret (8 min):</strong> Use the reference pages to explain three relevant concepts.</li><li><strong>Recommend (5 min):</strong> Agree on a realistic strategy and why it fits.</li><li><strong>Reassess (7 min):</strong> Present it to your client, ask for feedback and revise.</li><li><strong>Debrief (10 min):</strong> Compare with another group and transfer the concepts beyond exercise.</li></ol><p>Use the stage buttons beside the conversation. Notes are optional discussion aids; nothing needs to be submitted.</p></details><h2>Work as a consultation team</h2><p>Choose an interviewer, concept investigator, evidence analyst and critical reviewer. Rotate roles as you work. Use one device per group.</p><p class="notice">This is an AI-generated fictional client, not a real person or medical consultation. Do not enter names, personal health information or other identifying details. Messages are sent to an AI service. Notes remain in this page; nothing is submitted for grading.</p><label for="client">Choose your assigned client</label><select id="client"><option>Marisol</option><option>Darius</option><option>Priya</option><option>Graham</option><option>Simone</option></select><div class="profile" id="profile" aria-live="polite"><span class="monogram" id="initial" aria-hidden="true">M</span><div><h3 id="profile-name"></h3><p id="profile-background"></p><p id="profile-opening"></p><small>Fictional client · AI simulation</small></div></div><label for="code">Classroom access code</label><input id="code" type="password" autocomplete="off" maxlength="128"><button id="start">Begin interview</button><button class="secondary" id="backup">Use backup case instead</button><p id="status" role="status"></p></section>
-<div class="grid"><section><h2 id="who">Client interview</h2><div class="chat" id="chat" role="log" aria-label="Client conversation" aria-live="polite" tabindex="0"><p>Select a client to begin.</p></div><form id="form"><label for="message">Ask a question or propose a strategy</label><textarea id="message" maxlength="600" rows="3" required disabled></textarea><button type="submit" id="send" disabled>Send message</button></form><p id="chat-status" role="status" aria-live="polite"></p><p id="remaining"></p><details><summary>How the conversation limit works</summary><p>Each interview allows up to 30 successful messages from your group. This is a maximum, not a target. Save some messages for testing your recommendation. When the limit is reached, or the 90-minute session expires, live replies stop; your conversation and notes remain on screen. Finish the discussion without sending more messages.</p></details><button class="secondary" id="reset">Start over</button></section>
-<aside><h2>Follow the investigation stages</h2><p>Discuss each stage together. Use the optional notes to organize your thinking. The conversation stays available as you switch stages.</p><div class="tabs" id="tabs"></div><div id="panels"></div><h3>Consult your course resources</h3><ul><li>Reference 1: Motivation &amp; Self-Efficacy</li><li>Reference 2: Exercise Adherence &amp; Behavior Change</li><li>Reference 3: Exercise Environments &amp; Mental Health</li></ul><p>Locate relevant concepts in your course reference pages. Use evidence from the interview rather than assumptions.</p></aside></div>
-<footer>© 2026 Michelle L. Jung · Educational simulation</footer></main><script>
-const $=id=>document.getElementById(id);
-const openings={Marisol:"I'm interested in exercising more, but I never seem to stick with the gym.",Darius:"People keep telling me I should exercise more. I'm not sure what I want to do.",Priya:"I really want to be more active, but my routine keeps falling apart.",Graham:"I start exercise programs all the time. Somehow I always end up quitting.",Simone:"I used to love going to exercise classes. Lately I just don't feel like going."};
-const backups={Marisol:"I felt lost around gym machines and compared myself with experienced members. I enjoy walking with my cousin and could manage 15 minutes twice a week. I'd like someone to demonstrate things without putting me on the spot.",Darius:"My partner keeps urging me to go to the gym. I like recreational basketball, but I don't like being told what to do. I might be willing to try something I choose myself.",Priya:"My shifts and childcare change unexpectedly. I have ten-minute windows and a nearby park, although heat and transport can interfere. My sister might help if I ask.",Graham:"I try ambitious daily programs after seeing online transformations. If I miss a day or the scale stalls, I feel like I've failed. I enjoy cycling and have three short windows a week.",Simone:"My old dance class was fun. The new instructor ranks people and offers fewer modifications. My friends left. I still enjoy music and outdoor walks and miss feeling included."};
-const profiles={Marisol:[38,"Office worker"],Darius:[29,"Warehouse worker"],Priya:[43,"Caregiver and shift worker"],Graham:[51,"Accountant"],Simone:[34,"Librarian"]};
-function showProfile(name){$('initial').textContent=name[0];$('profile-name').textContent=name;$('profile-background').textContent='Age '+profiles[name][0]+' · '+profiles[name][1];$('profile-opening').textContent='“'+openings[name]+'”'}
-showProfile($('client').value);$('client').onchange=()=>showProfile($('client').value);
-const stages=[
-["Investigate","Understand before advising",["Ask open-ended questions about values, previous experiences, confidence, barriers, preferences and social environment.","Follow up on specific responses. Avoid assuming that a lack of activity means a lack of motivation."],"References 1–3: consult as questions emerge.",["Key discoveries and client statements"]],
-["Interpret","Connect evidence to three concepts",["Locate three relevant psychological concepts in the reference pages.","For each, identify a client statement, name the concept and explain the connection. Discuss alternative explanations."],"Reference 1: motivation and self-efficacy; Reference 2: adherence and behavior change; Reference 3: environment and mental health.",[]],
-["Recommend","Agree on a feasible strategy",["Choose a strategy that addresses the influences you identified, rather than prescribing a generic exercise routine.","Explain why it fits this client and what a manageable first step would look like."],"References 1–2: supportive communication, goals, action planning and behavior change strategies; Reference 3: environment when relevant.",["Proposed strategy","Concept-based rationale"]],
-["Reassess","Test and revise your recommendation",["Send your recommendation to the client in the chat. Ask what feels realistic, what might be difficult and what they would change.","Discuss the response and revise the plan. In backup mode, have a teammate respond as the client using the case information."],"References 1–3: use the concepts that explain the client's response.",["Client reaction","Revised strategy and why"]],
-["Debrief","Compare and transfer",["Share your client's main influences, supporting evidence and revised recommendation with another group.","Compare why the same strategy might work for one client but not another.","Apply one concept to studying, saving money, learning a skill or maintaining a hobby. Personal or hypothetical examples are equally acceptable."],"References 1–3: revisit concepts used in your explanation.",["Comparison with another client","Example outside exercise"]]];
-function field(parent,id,label){const l=document.createElement('label');l.htmlFor=id;l.textContent=label;const t=document.createElement('textarea');t.id=id;t.rows=2;parent.append(l,t)}
-function stage(i){[...$('tabs').children].forEach((x,j)=>x.setAttribute('aria-pressed',String(i===j)));[...$('panels').children].forEach((x,j)=>x.hidden=i!==j)}
-stages.forEach(([name,title,tasks,refs,fields],i)=>{const b=document.createElement('button');b.textContent=(i+1)+'. '+name;b.type='button';b.setAttribute('aria-pressed',String(i===0));const p=document.createElement('div');p.hidden=i!==0;const h=document.createElement('h3');h.textContent=title;const ul=document.createElement('ul');tasks.forEach(task=>{const li=document.createElement('li');li.textContent=task;ul.append(li)});const r=document.createElement('p');r.className='reference';r.textContent=refs;p.append(h,ul,r);if(i===1){for(let j=0;j<3;j++){const group=document.createElement('fieldset');group.className='evidence';const legend=document.createElement('legend');legend.textContent='Concept '+(j+1);group.append(legend);['Client statement or evidence','Name of psychological concept','Explain why this concept applies'].forEach((label,k)=>field(group,'evidence'+j+'-'+k,label));p.append(group)}}else fields.forEach((label,j)=>field(p,'note'+i+'-'+j,label));const next=document.createElement('button');next.type='button';next.textContent=i===4?'Return to investigation':'Next: '+stages[i+1][0];next.onclick=()=>{stage(i===4?0:i+1);$('tabs').children[i===4?0:i+1].focus()};p.append(next);$('panels').append(p);$('tabs').append(b);b.onclick=()=>stage(i)});
-let token='',history=[],client='',busy=false;
-function bubble(role,text){const d=document.createElement('div');d.className='bubble'+(role==='user'?' student':'');const h=document.createElement('strong');h.textContent=role==='user'?'Your group':client;const p=document.createElement('p');p.textContent=text;d.append(h,p);$('chat').append(d);$('chat').scrollTop=$('chat').scrollHeight}
-async function api(body){const r=await fetch('/api/exercise-client',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),signal:AbortSignal.timeout(30000)});let data;try{data=await r.json()}catch{throw Error('Server returned an unexpected response (HTTP '+r.status+'). Please retry.')}if(!r.ok)throw Error(data.error||'Service unavailable (HTTP '+r.status+')');return data}
-function lock(v){busy=v;$('client').disabled=v||!!client;$('start').disabled=v;$('backup').disabled=v;$('reset').disabled=v;$('send').disabled=v||!token;$('message').disabled=v||!token}
-function init(name){showProfile(name);stage(0);document.querySelectorAll('#panels textarea').forEach(t=>t.value='');client=name;history=[];token='';$('chat').replaceChildren();$('who').textContent='Client interview: '+client;bubble('assistant',openings[client]);history.push({role:'assistant',content:openings[client]});$('remaining').textContent='';$('chat-status').textContent='';$('message').value=''}
-$('start').onclick=async()=>{if(busy)return;if(client&&!confirm('Replace the current interview?'))return;lock(true);$('status').textContent='Connecting…';try{const name=$('client').value;const d=await api({action:'start',client:name,code:$('code').value});init(name);token=d.token;$('code').value='';$('remaining').textContent='Session allowance: up to 30 messages (not a target).';$('status').textContent='Connected. Begin your interview.'}catch(e){$('status').textContent=e.message}finally{lock(false)}};
-$('backup').onclick=()=>{if(busy)return;if(client&&!confirm('Replace the current interview with a backup case?'))return;init($('client').value);bubble('assistant',backups[client]);$('status').textContent='Static backup: discuss questions you would ask and roleplay the client response with a teammate. No AI connection.';lock(false)};
-$('form').onsubmit=async e=>{e.preventDefault();if(busy||!token)return;const message=$('message').value.trim();if(!message)return;lock(true);$('chat-status').textContent='Client is responding…';$('send').textContent='Sending…';try{const d=await api({token,message,history:history.slice(-16)});bubble('user',message);bubble('assistant',d.answer);history.push({role:'user',content:message},{role:'assistant',content:d.answer});token=d.remaining?d.token:'';$('remaining').textContent=d.remaining?'Session allowance: '+d.remaining+' messages remaining.':'Interview limit reached. Continue using your conversation and notes.';$('message').value='';$('chat-status').textContent=d.remaining?'Response received.':'Live interview complete. Continue the remaining investigation stages.'}catch(e){$('chat-status').textContent='Message not sent: '+e.message+' Your question is preserved; please retry.'}finally{$('send').textContent='Send message';lock(false)}};
-$('reset').onclick=()=>{if(busy||!confirm('Clear conversation and all group notes?'))return;token='';history=[];client='';stage(0);$('chat-status').textContent='';showProfile($('client').value);$('chat').textContent='Select a client to begin.';$('who').textContent='Client interview';$('status').textContent='';$('remaining').textContent='';$('message').value='';$('code').value='';document.querySelectorAll('#panels textarea').forEach(t=>t.value='');lock(false)};
-</script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EXS101 Exercise Psychology Client Investigation</title>
+  <link rel="stylesheet" href="classroom.css">
+  <link rel="stylesheet" href="/resource-about.css">
+  <script type="module" src="student.js"></script>
+  <script defer src="/resource-about.js"></script>
+</head>
+<body>
+<main>
+  <header><p>EXS101 · Exercise Psychology</p><h1>Client Investigation</h1></header>
+  <nav aria-label="Investigation stages" id="stages"></nav>
+  <section id="start" aria-labelledby="start-title">
+    <h2 id="start-title" tabindex="-1">Start Here</h2>
+    <p>Work as an exercise science team. Find out what shapes your fictional client’s physical activity, explain their experiences using course concepts, and test and revise a recommendation that fits their circumstances.</p>
+    <div class="grid">
+      <div>
+        <h3>Prepare your group</h3>
+        <ul>
+          <li>Use one device and confirm your assigned client.</li>
+          <li>Share or rotate roles. The interviewer asks questions, the concept investigator checks the references, the evidence analyst tracks what the client says, and the critical reviewer tests the group’s reasoning. Combine roles as needed.</li>
+          <li>Open the three reference pages from your Canvas module and keep them handy.</li>
+        </ul>
+        <ul id="references"></ul>
+      </div>
+      <div>
+        <form id="activate">
+          <label for="code">Temporary group code</label>
+          <input id="code" name="code" maxlength="24" autocomplete="off" spellcheck="false" required>
+          <button>Activate live interview</button>
+        </form>
+        <p id="start-status" role="status"></p>
+        <label for="client">Client for teammate roleplay</label>
+        <select id="client"></select>
+        <button class="secondary" id="roleplay" type="button">Use teammate roleplay</button>
+        <div class="profile" data-profile></div>
+      </div>
+    </div>
+    <p class="notice">Keep all examples fictional. Do not enter names, contact information, personal experiences or health details. Live interview and review text goes to OpenAI. Standard abuse-monitoring logs can retain content for up to 30 days, with exceptions under provider policy. This activity keeps your group work on the open page and does not save it to a database. Your instructor sets an interview limit and one separate review. Teammate roleplay uses no AI and follows the same steps.</p>
+    <p><a href="/exercise-psychology-client/" target="_blank" rel="noopener">Open the investigation in a new tab</a> before starting if you need more space.</p>
+  </section>
+  <section id="investigate" aria-labelledby="investigate-title" hidden>
+    <h2 id="investigate-title" tabindex="-1">Investigate</h2>
+    <div class="profile" data-profile></div>
+    <p>Ask open-ended questions. Gather evidence about both barriers and strengths before proposing a strategy.</p>
+    <div id="chat-investigate"></div>
+    <details><summary>Open-ended question examples</summary>
+      <ul>
+        <li>What matters most to you about moving more, if anything?</li>
+        <li>What activity have you enjoyed or avoided in the past? What made it feel that way?</li>
+        <li>What would you feel confident doing this week?</li>
+        <li>What gets in the way on a typical day? How do the people and places around you affect that?</li>
+        <li>What people, places or routines could help you get started?</li>
+      </ul>
+    </details>
+    <button id="hint-button" type="button" class="secondary">Reveal a hint</button>
+    <ol id="hints" aria-live="polite"></ol>
+  </section>
+  <section id="interpret" aria-labelledby="interpret-title" hidden>
+    <h2 id="interpret-title" tabindex="-1">Interpret</h2>
+    <p>Explain three plausible concepts using specific client evidence. Consider whether the issue is willingness, confidence, opportunity or another influence. Short notes are enough.</p>
+    <details><summary>View interview transcript</summary>
+      <div id="evidence-transcript" class="transcript" tabindex="0" aria-label="Interview transcript"></div>
+    </details>
+    <div id="analyses" class="grid triple"></div>
+  </section>
+  <section id="recommend" aria-labelledby="recommend-title" hidden>
+    <h2 id="recommend-title" tabindex="-1">Recommend</h2>
+    <p>Choose a strategy that makes sense for this person. Be specific enough for the client to tell you what would and would not work.</p>
+    <div id="recommend-notes"></div>
+  </section>
+  <section id="reassess" aria-labelledby="reassess-title" hidden>
+    <h2 id="reassess-title" tabindex="-1">Reassess</h2>
+    <p>Present your recommendation and ask what would feel realistic or difficult. Treat disagreement as evidence, then revise.</p>
+    <div id="chat-reassess"></div>
+    <div id="reassess-notes"></div>
+  </section>
+  <section id="review" aria-labelledby="review-title" hidden>
+    <h2 id="review-title" tabindex="-1">Review</h2>
+    <p>Check each criterion using Demonstrated, Developing or Not Yet Evident. Agree on one meaningful next step. If you request an AI review, compare its feedback with your own evidence and the Canvas references.</p>
+    <ul>
+      <li>We investigated both strengths and barriers before offering advice.</li>
+      <li>We used the psychological concepts accurately.</li>
+      <li>We connected specific client evidence to each interpretation.</li>
+      <li>Our strategy and first step fit the client’s priorities and circumstances.</li>
+      <li>Our revision responds to something the client actually said.</li>
+    </ul>
+    <label for="next-step">Group’s next step (optional notes)</label>
+    <textarea id="next-step" maxlength="500"></textarea>
+    <button id="request-review" disabled>Request consultation review</button>
+    <p id="review-status" role="status">Activate live access to request a review, or self-review using the criteria above.</p>
+    <div id="feedback" class="bubble" hidden></div>
+  </section>
+  <section id="debrief" aria-labelledby="debrief-title" hidden>
+    <h2 id="debrief-title" tabindex="-1">Debrief</h2>
+    <p>Prepare to share one major influence on your client’s behavior, the evidence behind your interpretation, your strategy, and how and why it changed. You can share verbally or refer to your notes.</p>
+    <details><summary>Check your consultation notes</summary><div id="debrief-notes"></div></details>
+    <p class="notice"><strong>Investigation Complete</strong><br>No assignment submission required.</p>
+  </section>
+  <div id="chat" hidden>
+    <div id="transcript" class="transcript" role="log" tabindex="0" aria-label="Client conversation"></div>
+    <form id="interview">
+      <label for="message">What will you say to your client?</label>
+      <textarea id="message" maxlength="600" required></textarea>
+      <button id="send" disabled>Send message</button>
+    </form>
+    <p id="chat-status" role="status"></p>
+    <details id="case-card">
+      <summary>Case card for the teammate playing the client</summary>
+      <p>Only the teammate playing the client should read the card. Answer questions in character, one detail at a time. When offered a plan, explain what fits, raise one genuine concern and respond to the revised plan.</p>
+      <ul id="case-facts"></ul>
+      <label for="roleplay-evidence">Record key statements from your roleplay</label>
+      <textarea id="roleplay-evidence" maxlength="2500"></textarea>
+    </details>
+  </div>
+  <footer class="mlj-resource-footer">© 2026 Michelle L. Jung · <a href="/licensing.html" data-resource-about>About this tool</a></footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EXS101 Client Investigation · Classroom Projection</title>
+  <link rel="stylesheet" href="../classroom.css"><link rel="stylesheet" href="/resource-about.css">
+  <script type="module" src="projection.js"></script><script defer src="/resource-about.js"></script>
+</head>
+<body><main>
+  <div class="projection" id="projection">
+    <p>EXS101 · Client Investigation</p>
+    <h1 id="stage-title" aria-live="polite">Waiting for the classroom timer</h1>
+    <div id="clock-view" hidden>
+      <div class="clock" id="countdown" aria-label="Stage time remaining"></div>
+      <p id="clock-state"></p>
+      <div id="activity">
+        <p id="task"></p>
+        <p id="criterion"></p>
+      </div>
+      <div id="question-view" hidden aria-live="polite">
+        <p id="question-label"></p>
+        <h2 id="question"></h2>
+        <p id="followup"></p>
+      </div>
+      <progress id="progress" max="7" value="0" aria-label="Class stages completed"></progress>
+      <p id="overall"></p>
+      <nav id="sequence" aria-label="Stage progress"></nav>
+      <p id="upcoming"></p>
+    </div>
+    <p id="waiting">Open this view from the instructor portal on the same computer and browser profile.</p>
+    <div id="complete" hidden>
+      <h2>Understand the person before recommending the behavior.</h2>
+      <p>Effective exercise professionals listen, investigate, apply knowledge and adapt their recommendations to individual needs.</p>
+      <p>No assignment submission required.</p>
+    </div>
+    <div><button id="fullscreen" class="secondary">Full screen</button></div>
+  </div>
+  <footer class="mlj-resource-footer">© 2026 Michelle L. Jung · <a href="/licensing.html" data-resource-about>About this tool</a></footer>
+</main></body>
+</html>

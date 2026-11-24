@@ -1,0 +1,11 @@
+{
+  "name": "exs101-interactives",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "node --test"
+  },
+  "dependencies": {
+    "@netlify/blobs": "11.1.10"
+  }
+}
