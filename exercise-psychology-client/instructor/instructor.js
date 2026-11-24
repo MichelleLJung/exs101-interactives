@@ -167,7 +167,6 @@ el('login').onsubmit = async event => {
     el('account-status').textContent = 'Signed in. Signing out does not close AI access.';
     el('guide-status').textContent = Object.keys(guide.clients ?? {}).length ? '' : 'The private facilitation guide requires Netlify setup.';
     renderGuide();
-    saveTimer(advance(timer));
     await manage('status');
   } catch (error) {
     el('account-status').textContent = error.result ? error.message : 'Sign-in service unavailable.';
@@ -232,11 +231,12 @@ el('project').onclick = event => {
 window.addEventListener('storage', event => {
   if (event.key === timerKey) {
     timer = readTimer() ?? initial();
-    if (secret) renderTimer();
+    renderTimer();
   }
 });
+saveTimer(advance(timer));
+renderTimer();
 setInterval(() => {
-  if (!secret) return;
   renderTimer();
   if (session.open && session.expires <= Date.now()) {
     session = { open: false };
