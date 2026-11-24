@@ -113,7 +113,9 @@
       <fieldset id="evidence-picker" tabindex="-1">
         <legend>Choose two dates from your seven-day record</legend>
         <p>Pick two entries that help you explain how you responded to the app feature. They can show the same pattern or different responses.</p>
+        <p>Each day unlocks after you enter its date, what you noticed, and how you responded.</p>
         <div id="observation-options"></div>
+        <button type="button" class="secondary" id="complete-observations">Go to seven-day record</button>
         <p id="selection-status" role="status"></p>
       </fieldset>
       <input id="first" type="hidden">
@@ -258,26 +260,26 @@ function formatDate(date) {
 
 function syncChoices() {
   const target = el('observation-options');
-  const available = Array.from({length: count}, (_, i) => String(i + 1))
-    .filter(day => row(day).every(Boolean));
+  const days = Array.from({length: count}, (_, i) => String(i + 1));
+  const available = days.filter(day => row(day).every(Boolean));
   const slots = [el('first'), el('second')];
   let selected = [...new Set(slots.map(slot => slot.value).filter(day => available.includes(day)))];
   const boxes = [];
   target.replaceChildren();
-  if (!available.length) add(target, 'p', 'Complete an entry in Seven-day record to see it here.');
+
 
   function refreshSelection() {
     slots.forEach((slot, index) => { slot.value = selected[index] ?? ''; });
     boxes.forEach(box => {
       box.checked = selected.includes(box.value);
-      box.disabled = selected.length === 2 && !box.checked;
+      box.disabled = !available.includes(box.value) || (selected.length === 2 && !box.checked);
     });
     el('selection-status').textContent = selected.length === 2 ?
       'Two dates selected. Uncheck one to choose a different date.' :
       selected.length + ' of 2 dates selected.';
   }
 
-  for (const day of available) {
+  for (const day of days) {
     const [date, notice, response] = row(day);
     const label = add(target, 'label');
     label.className = 'observation-option';
@@ -285,9 +287,14 @@ function syncChoices() {
     box.type = 'checkbox';
     box.value = day;
     boxes.push(box);
-    const summary = add(label, 'span', formatDate(date));
-    add(summary, 'small', 'Feature: ' + notice);
-    add(summary, 'small', 'Your response: ' + response);
+    const summary = add(label, 'span', 'Day ' + day + (date ? ' · ' + formatDate(date) : ''));
+    if (available.includes(day)) {
+      add(summary, 'small', 'Feature: ' + notice);
+      add(summary, 'small', 'Your response: ' + response);
+    } else {
+      const missing = [!date && 'date', !notice && 'feature observation', !response && 'your response'].filter(Boolean);
+      add(summary, 'small', 'Still needed: ' + missing.join(', '));
+    }
     box.onchange = () => {
       selected = box.checked ? [...selected, day] : selected.filter(entry => entry !== day);
       refreshSelection();
@@ -296,6 +303,11 @@ function syncChoices() {
   refreshSelection();
 }
 
+el('complete-observations').onclick = () => {
+  const next = dayPanels.findIndex((_, index) => !row(index + 1).every(Boolean));
+  if (next >= 0) showDay(next);
+  showStep(1);
+};
 el('days').addEventListener('input', syncChoices);
 el('proof-kind').onchange = updateEvidence;
 el('proof').onchange = async () => {
