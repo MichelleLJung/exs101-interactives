@@ -39,14 +39,51 @@ const consultationReasons = {
   Mateo: 'He booked after coworkers invited him to another step challenge. He wants to know whether he can keep the benefits of a lunch walk without joining the competition or logging his steps publicly.'
 };
 
+const newClientGuide = {
+  Noah: {
+    secondary: 'Situation-specific self-efficacy, social support, and recovery after a missed day. He feels capable of walking on campus and doubts he can sustain a daily schedule.',
+    strengths: 'He enjoys walking with a friend, knows two short windows after morning class, and has outdoor and indoor routes available.',
+    strategies: 'Ask him to choose one class day for a ten-minute walk. Make the indoor route or a solo walk a backup. If he wants reminders, tie them to the end of class. Let him choose whether to count walks completed.',
+    avoid: 'A daily step streak, extra alerts during his commute, or a plan that only works when his friend can join.',
+    misconceptions: 'Ignoring an alert during a commute tells you about the opportunity to act. Ask separately about motivation and confidence.',
+    references: 'Exercise Adherence & Behavior Change (barriers and flexible planning). Motivation & Self-Efficacy (confidence in a specific context).'
+  },
+  Elena: {
+    secondary: 'Competence, social support, and how crowding affects willingness to ask for help.',
+    strengths: 'She has prior lifting experience, knows several dumbbell movements, enjoys tracking small improvements, and has a coworker who could join once.',
+    strategies: 'Ask which movement she wants to start with. Offer a quiet-hour orientation and, with permission, demonstrate one machine adjustment. Give her time to set it up independently and let her note what she learned.',
+    avoid: 'A full unfamiliar machine circuit during peak hours, public comparisons, or an appearance-focused goal she did not choose.',
+    misconceptions: 'Her hesitation centers on unfamiliar equipment and asking for help in a crowded room. Ask what she already feels comfortable doing before treating it as a general confidence problem.',
+    references: 'Motivation & Self-Efficacy (task-specific confidence and mastery). Exercise Environments & Mental Health (exercise climate).'
+  },
+  Mateo: {
+    secondary: 'Enjoyment, personal value, controlled motivation, and social comparison in the workplace.',
+    strengths: 'He already takes lunch walks, values how he feels afterward, knows a nearby route, and has a coworker willing to join without tracking.',
+    strategies: 'Ask what he wants to keep about his lunch break. Offer a self-paced walk with the coworker, leave tracking optional and private, and let a meeting day pass without requiring make-up steps.',
+    avoid: 'Public rankings, mandatory totals, competitive pressure, or using the coworker to monitor whether he meets a target.',
+    misconceptions: 'Declining a step challenge can coexist with wanting to walk. A companion can support him through connection without monitoring his progress.',
+    references: 'Exercise Adherence & Behavior Change (Self-Determination Theory and social support). Exercise Environments & Mental Health (social climate and affect).'
+  }
+};
+
 const stateKey = 'classroom';
 const privateClients = () => ({
-  ...Object.fromEntries(Object.entries(addedCases).map(([name, profile]) => [name, { profile: profile[3].join(' '), primary: examples[name][0], strategies: examples[name][2] }])),
+  ...Object.fromEntries(Object.entries(addedCases).map(([name, profile]) => [name, {
+    profile: [profile[0] + ', ' + profile[1] + '. “' + profile[2] + '”', ...profile[3]].join(' '),
+    primary: examples[name][0],
+    ...newClientGuide[name]
+  }])),
   ...JSON.parse(process.env.EXERCISE_PRIVATE_GUIDE || '{}')
 });
 const privateGuide = () => ({
   ...JSON.parse(process.env.EXERCISE_FACILITATION_GUIDE || '{}'),
-  clients: privateClients()
+  clients: Object.fromEntries(Object.entries(privateClients()).map(([name, guide]) => [
+    name,
+    {
+      ...guide,
+      profile: [guide.profile, consultationReasons[name], clientBackgrounds[name]].filter(Boolean).join(' ')
+    }
+  ]))
 });
 const opaque = (bytes = 32) => randomBytes(bytes).toString('hex');
 const hash = value => createHash('sha256').update(value).digest('hex');
