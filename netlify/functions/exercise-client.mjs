@@ -28,6 +28,17 @@ const clientBackgrounds = {
   Mateo: 'Client calls can run into lunch. On a good day he leaves his phone in his pocket and notices what is happening on the street. He likes his coworkers but is tired of step counts becoming lunchtime conversation. He would rather return to his normal lunch walk the next day than make up steps after a busy afternoon.'
 };
 
+const consultationReasons = {
+  Marisol: 'She booked after another confusing gym visit. She wants help finding a way to feel more energetic and independent and is wondering whether she needs a gym routine at all.',
+  Darius: 'His partner suggested talking to a trainer. He agreed to one conversation so he could hear his options for himself. He is curious whether an activity he already likes, such as basketball, counts. He has made no commitment to train.',
+  Priya: 'She asked for a consultation after a fixed walking schedule fell apart again. She wants ideas that fit her changing shifts and childcare responsibilities.',
+  Graham: 'He booked after abandoning another all-or-nothing program. He wants help making a routine that can survive a missed day.',
+  Simone: 'A friend suggested talking to someone before she gives up on classes. She wants help finding movement she can enjoy again and is wary of being sent back to the same class.',
+  Noah: 'A campus wellness event offered a short consultation. He wants to figure out how to fit movement into his week when his work shifts change and generic reminders arrive at the wrong time.',
+  Elena: 'She asked at the gym desk for guidance on returning to lifting. She wants to know whether she can learn the equipment at a quiet time without committing to a full program.',
+  Mateo: 'He booked after coworkers invited him to another step challenge. He wants to know whether he can keep the benefits of a lunch walk without joining the competition or logging his steps publicly.'
+};
+
 const stateKey = 'classroom';
 const privateClients = () => ({
   ...Object.fromEntries(Object.entries(addedCases).map(([name, profile]) => [name, { profile: profile[3].join(' '), primary: examples[name][0], strategies: examples[name][2] }])),
@@ -212,7 +223,9 @@ export function handler({ storage = () => getStore({ name: 'exercise-psychology-
           return json({ ...access, error: 'Keep your work appropriate to the fictional exercise consultation. This request used an allowance.' }, 422);
         studentGroup((await read(store))?.data, token);
         const instructions = review ? reviewInstructions :
-          `Roleplay ${access.client}, a fictional adult exercise client. Private facts: ${profiles[access.client].profile}
+          `Roleplay ${access.client}, a fictional adult exercise client. You are attending a first consultation with the students, who are practicing as your prospective personal trainers. Why you agreed to meet: ${consultationReasons[access.client]}
+When asked what brings you in, say what you hope to get out of today's conversation and how ready you feel to take a next step. Agreeing to meet means you are willing to talk. You can be undecided about change, have mixed feelings, or prefer an activity you already do. When the trainers listen or ask permission to offer an idea, respond naturally and share your own reasons, concerns, or conditions for trying it. You can decline a plan and still leave with a useful next step, such as considering an option or deciding what information you need. Stay the client throughout the consultation.
+Private facts: ${profiles[access.client].profile}
 Case details in the client’s own words: ${cases[access.client][3].join(' ')}
 Specific moments and trade-offs you can draw on: ${interviewMoments[access.client]}
 Life outside exercise and everyday frustrations: ${clientBackgrounds[access.client]}
