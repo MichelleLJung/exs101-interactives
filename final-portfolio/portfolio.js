@@ -31,7 +31,8 @@ const checkLabels = [
   "Each available evidence item is readable, tied to my original Canvas work, and free of private details. I described what each image shows.",
   "Each discipline I answered names a listed activity I participated in, explains a specific firsthand detail, and uses it to justify an action.",
   "My conclusion connects at least three disciplines, explains an evidence-informed decision, and names a next step.",
-  "I used the preview to check that my sections and evidence are readable."
+  "I used the preview to check that my sections and evidence are readable.",
+  "I explained how I used specific instructor feedback on each selected activity where I received it."
 ];
 
 const $ = id => document.getElementById(id);
@@ -307,10 +308,10 @@ function renderDiscipline(parent,s) {
   const choice = s.options.includes(entry.choice) ? course.choices[entry.choice] : null;
   node("p","Both reflection answers will use a specific result, observation, or exchange from your own work in this activity.",parent,{class:"hint",id:"reflection-activity-hint"});
   const picker = select(parent,"assignment","Choose an activity you completed to use in your reflection",[["","Select an activity"],["none","I did not complete any listed activity"],...s.options.map(key=>[key,assignmentTitle(key)])],entry.choice || (entry.noWork?"none":""),value=>{
-    if (entry.choice && entry.choice!==value && (entry.images.length || has(entry.excerpt) || has(entry.link) || entry.linkIssue)) {
-      if (!confirm("Changing activities clears the evidence and Canvas link for this section. Your explanations stay in your draft. Review them so they match the activity you select.")) { picker.value=entry.choice;return; }
+    if (entry.choice && entry.choice!==value && (entry.images.length || has(entry.excerpt) || has(entry.link) || entry.linkIssue || has(entry.feedback))) {
+      if (!confirm("Changing activities clears the evidence, Canvas link, and feedback reflection for this section. Your explanations stay in your draft. Review them so they match the activity you select.")) { picker.value=entry.choice;return; }
       if (state.entries.anatomy.reuse?.startsWith(s.id+"/")) state.entries.anatomy.reuse="";
-      entry.images=[]; entry.excerpt=""; entry.link=""; entry.linkIssue=false;
+      entry.images=[]; entry.excerpt=""; entry.link=""; entry.linkIssue=false; entry.feedback="";
     }
     entry.noWork=value==="none";
     entry.choice=value==="none"?"":value;
@@ -340,6 +341,9 @@ function renderDiscipline(parent,s) {
   references(parent,choice.refs);
   field(parent,"What happened, and what concept helps explain it?",choice.concept,entry.concept,v=>{entry.concept=v;});
   field(parent,"What would you do in this role, and why?",geometryPrompt(choice.apply)+" Connect your decision to the specific detail from this activity.",entry.apply,v=>{entry.apply=v;});
+  field(parent,"How did you use instructor feedback?",
+    "If you received a specific comment or rubric note on this activity, summarize one point in your own words. In one or two sentences, explain what it clarified or confirmed, or what you’d do differently next time. Leave this blank if you received no specific feedback.",
+    entry.feedback,v=>{entry.feedback=v;}).rows=3;
   guide(parent,"Need help connecting this to a role?",
     "Pick one person and one situation. Try: In this setting, I would ___ because ___. Name a specific action you’d take and connect it to your reasoning.");
 }
@@ -447,6 +451,7 @@ function buildDocument(target) {
       }
       answer(part,"Conceptual understanding",entry.concept);
       answer(part,"Professional application",entry.apply);
+      if (has(entry.feedback)) answer(part,"How I used instructor feedback",entry.feedback);
     } else {
       for (const [key,label] of s.fields) answer(part,label,entry[key]);
       if (s.id==="anatomy") {
@@ -478,7 +483,7 @@ function validateBackup(raw) {
         return {id:image.id,data:image.data,caption:str(image.caption),description:str(image.description)};
       });
     }
-    for (const [key] of s.fields||[["link"],["concept"],["apply"],["excerpt"]]) entry[key]=str(item[key]);
+    for (const [key] of s.fields||[["link"],["concept"],["apply"],["excerpt"],["feedback"]]) entry[key]=str(item[key]);
     if (s.options?.includes(item.choice)) entry.choice=item.choice;
     entry.noWork=item.noWork===true;
     entry.linkIssue=item.linkIssue===true;
