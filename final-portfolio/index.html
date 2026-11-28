@@ -9,7 +9,12 @@
 <div class="wrap">
 <div class="toolbar"><button id="backup" type="button">Download JSON backup</button><button id="restore" type="button">Load JSON backup</button><input id="restore-file" type="file" accept=".json,application/json" hidden><button id="reset" type="button">Start Over</button></div>
 <p id="save-status" role="status">Opening your local draft…</p>
-<details class="help"><summary>Getting started and saving your work</summary><p>Plan for 90–120 minutes. Gather one excerpt from a completed Canvas submission per discipline. Revisit your Career &amp; Pathway Baseline, then write short, specific responses in each section. The builder formats your portfolio for you.</p><p>Drafts autosave in this browser. Download a JSON backup before switching devices or clearing browser data. A backup contains your responses and evidence. Keep it private. Upload only your final PDF to Canvas.</p></details>
+<section class="help start" aria-labelledby="start-heading">
+<h2 id="start-heading">Start here</h2>
+<ol><li>Revisit your Career &amp; Pathway Baseline and pick a role or setting to think from. You can still be undecided.</li><li>Gather one piece of existing work per discipline where you have evidence.</li><li>Work through the sections in any order. Short paragraphs or clear bullets are fine.</li></ol>
+<details><summary>Saving and moving between devices</summary><p>Drafts autosave in this browser. Download a JSON backup before switching devices or clearing browser data. Use Load JSON backup to continue. Keep the backup private and submit your final PDF in Canvas.</p></details>
+</section>
+<div class="mobile-nav"><label for="mobile-section">Go to section</label><select id="mobile-section"></select></div>
 <div class="layout"><nav id="sections" aria-label="Portfolio sections"></nav><main id="editor" tabindex="-1"></main></div>
 </div></div>
 <article id="printout" aria-label="Portfolio preview" hidden></article>

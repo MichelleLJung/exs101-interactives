@@ -6,7 +6,7 @@ const course = {
   },
   "choices": {
     "vo2": {
-      "concept": "Which VO₂ trend or Wingate power result stands out? Give the measurement and units, and explain what it says about aerobic demand or short-duration power.",
+      "concept": "Choose one VO₂ trend or one Wingate power result. Name the measure and units, say what you observed, and explain what it tells you about aerobic demand or short-duration power.",
       "apply": "Which assessment result would inform one decision about testing, intensity, or monitoring, and why?",
       "refs": [
         "measuring-and-interpreting-exercise-physiology",
@@ -19,7 +19,7 @@ const course = {
       }
     },
     "fitness": {
-      "concept": "Which field test did you choose? Identify the result, what the protocol measures, and one factor that affects interpretation or comparison.",
+      "concept": "Choose one field-test result. Name the measure and units where applicable. Explain what the test measures and one factor that affects how you interpret or compare the result.",
       "apply": "How would the test result or its limitation change what you assess, monitor, or do next?",
       "refs": [
         "measuring-and-interpreting-exercise-physiology"
@@ -31,7 +31,7 @@ const course = {
       }
     },
     "torque": {
-      "concept": "Which partner task changed leverage, support, or coordination? Compare two conditions and explain the result using moment arm, base of support, center of mass, or coordination.",
+      "concept": "Choose one partner task. Name what changed between two conditions, describe what you observed, and explain the difference using one concept such as moment arm, base of support, center of mass, or coordination.",
       "apply": "What change to stance, load placement, or task setup would you make, and what mechanical effect would you expect?",
       "refs": [
         "torque-stability-and-coordination",
@@ -44,7 +44,7 @@ const course = {
       }
     },
     "output": {
-      "concept": "Choose one measured Output Sports task. Report the metric and units, compare two actual trials or conditions, and explain what the measurement captures and one thing it cannot establish.",
+      "concept": "Choose one Output Sports task. Tell us what changed between two trials or conditions and report the measure and units. Use one biomechanics concept to explain the comparison. What would you need to measure before making a stronger claim?",
       "apply": "Which setup, coaching cue, or measurement would you change based on this comparison, and why?",
       "refs": [
         "work-power-and-movement-data",
@@ -57,7 +57,7 @@ const course = {
       }
     },
     "proprioception": {
-      "concept": "Name one activity and compare specific observations across its conditions. Which sensory information changed, what remained available, and how does that explain what you observed?",
+      "concept": "Choose one proprioception activity. Compare two conditions from that activity. Which sensory information changed, what remained available, and how does that explain what you noticed?",
       "apply": "How would you adjust sensory cues or task difficulty for a specific learner, and what would you watch for?",
       "refs": [
         "motor-behavior-motor-control-sensory-input-and-proprioception"
@@ -69,7 +69,7 @@ const course = {
       }
     },
     "feedback": {
-      "concept": "Compare two of your three throwing conditions: qualitative KR, quantitative KR, or KR + KP. Use a recorded outcome or coaching detail to explain an adjustment. What would you need to observe to infer learning over time?",
+      "concept": "Choose two feedback conditions. Use one recorded outcome or coaching detail to explain an adjustment during practice. What would you need to see later to judge whether learning lasted?",
       "apply": "What exact feedback would you give a particular learner, and when would you offer it? Explain the reason for your choice.",
       "refs": [
         "motor-behavior-motor-learning-feedback-and-practice"
@@ -81,7 +81,7 @@ const course = {
       }
     },
     "reaction": {
-      "concept": "Choose Hick’s, Stroop, or Fitts’s. Name two tested conditions, compare the recorded time or accuracy, and explain the pattern with the relevant principle.",
+      "concept": "Choose one test: Hick’s, Stroop, or Fitts’s. Name two tested conditions, compare the recorded time or accuracy, and explain the pattern with the relevant principle.",
       "apply": "What would you change about the number of choices, conflicting cues, or target layout in a specific task, and why?",
       "refs": [
         "motor-behavior-reaction-time-and-information-processing"
@@ -93,7 +93,7 @@ const course = {
       }
     },
     "motivation": {
-      "concept": "Name your app feature and use a specific observation from your seven-day record. How does a course concept explain your response? What other influence matters for interpreting that observation?",
+      "concept": "Choose one app feature and one specific observation from your seven-day record. Use one course concept to explain your response and name one other influence worth considering.",
       "apply": "What change would you recommend for a specific person and what would help you judge whether it works?",
       "refs": [
         "exercise-psychology-|-motivation-and-self-efficacy",
