@@ -305,7 +305,8 @@ function evidence(parent,section) {
 function renderDiscipline(parent,s) {
   const entry = state.entries[s.id];
   const choice = s.options.includes(entry.choice) ? course.choices[entry.choice] : null;
-  const picker = select(parent,"assignment","Listed activity you completed",[["","Choose an activity"],["none","I did not complete any listed activity"],...s.options.map(key=>[key,assignmentTitle(key)])],entry.choice || (entry.noWork?"none":""),value=>{
+  node("p","Both reflection answers will use a specific result, observation, or exchange from your own work in this activity.",parent,{class:"hint",id:"reflection-activity-hint"});
+  const picker = select(parent,"assignment","Choose an activity you completed to use in your reflection",[["","Select an activity"],["none","I did not complete any listed activity"],...s.options.map(key=>[key,assignmentTitle(key)])],entry.choice || (entry.noWork?"none":""),value=>{
     if (entry.choice && entry.choice!==value && (entry.images.length || has(entry.excerpt) || has(entry.link) || entry.linkIssue)) {
       if (!confirm("Changing activities clears the evidence and Canvas link for this section. Your explanations stay in your draft. Review them so they match the activity you select.")) { picker.value=entry.choice;return; }
       if (state.entries.anatomy.reuse?.startsWith(s.id+"/")) state.entries.anatomy.reuse="";
@@ -317,6 +318,7 @@ function renderDiscipline(parent,s) {
     $("assignment").focus();
     save();
   });
+  picker.setAttribute("aria-describedby","reflection-activity-hint");
   if (!choice) {
     node("p","Choose a listed activity you actually completed to answer this section. If you did none of the listed activities, leave this section blank.",parent,{class:"notice"});
     return;
