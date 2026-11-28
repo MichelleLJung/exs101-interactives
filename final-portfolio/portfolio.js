@@ -12,10 +12,10 @@ const sections = [
     ["anatomy","Joints, actions, and muscles","Use one bullet per main joint if helpful: joint → joint action → muscle or muscle group → concentric, eccentric, or isometric action and why that term fits. Use the terms that apply to your phase."],
     ["apply","Professional application","Who would you work with and what would this analysis change about a cue, observation, or decision?"]
   ]},
-  {id:"phys",title:"Exercise Physiology",points:15,options:["vo2","fitness"],without:"Use a specific class example involving an exercise response, energy systems, or assessment. Explain the mechanism and identify the observation it helps explain."},
-  {id:"bio",title:"Biomechanics",points:15,options:["torque","output"],without:"Use a specific movement and compare two positions, setups, or trials. Explain the difference using a mechanical concept from class."},
-  {id:"motor",title:"Motor Behavior",points:15,options:["proprioception","feedback","reaction"],without:"Name a specific class example of sensory information, feedback, attention, or task demands. Explain how a change in conditions could affect movement or performance."},
-  {id:"psych",title:"Exercise Psychology",points:15,options:["motivation"],without:"Use a specific class example, such as a detail from the fictional client investigation. Explain how a course concept accounts for the motivation, confidence, or adherence issue."},
+  {id:"phys",title:"Exercise Physiology",points:15,options:["vo2","fitness"]},
+  {id:"bio",title:"Biomechanics",points:15,options:["torque","output"]},
+  {id:"motor",title:"Motor Behavior",points:15,options:["proprioception","feedback","reaction"]},
+  {id:"psych",title:"Exercise Psychology",points:15,options:["motivation","client"]},
   {id:"together",title:"Bringing It All Together",points:20,fields:[
     ["integration","Interdisciplinary integration","Stay with one person and one professional situation. Explain how at least three EXS101 disciplines inform the same decision or plan."],
     ["ebp","Evidence-based practice","Name one decision in your chosen role. Why would evidence matter, what credible information would you look for, and how would the person’s needs and preferences influence your decision? Describe what you’d look for. A literature search and citations are unnecessary."],
@@ -24,18 +24,12 @@ const sections = [
   {id:"review",title:"Review and export"}
 ];
 const anatomyRefs = ["functional-anatomy-joint-actions-reference","functional-anatomy-muscles-and-movement-reference"];
-const fallbackRefs = {
-  phys:["exercise-physiology-how-the-body-responds-to-exercise","measuring-and-interpreting-exercise-physiology"],
-  bio:["motion-forces-and-measurement","torque-stability-and-coordination","work-power-and-movement-data"],
-  motor:["motor-behavior-motor-control-sensory-input-and-proprioception","motor-behavior-motor-learning-feedback-and-practice","motor-behavior-reaction-time-and-information-processing"],
-  psych:["exercise-psychology-|-motivation-and-self-efficacy","exercise-psychology-|-exercise-adherence-and-behavior-change","exercise-psychology-|-exercise-environments-and-mental-health"]
-};
 const sectionNames = {"15373":"15373 · MW 9:00 AM","15374":"15374 · MW noon","15378":"15378 · TTh 1:30 PM"};
 const checkLabels = [
   "My career reflection describes my starting point, current direction, and one specific influence.",
   "My anatomy section identifies a movement phase, explains joint and muscle actions with the appropriate terminology, and connects the analysis to a professional decision.",
   "Each available evidence item is readable, tied to my original Canvas work, and free of private details. I described what each image shows.",
-  "Each discipline uses a specific example, explains it accurately, and justifies an action in my chosen role.",
+  "Each discipline I answered names a listed activity I participated in, explains a specific firsthand detail, and uses it to justify an action.",
   "My conclusion connects at least three disciplines, explains an evidence-informed decision, and names a next step.",
   "I used the preview to check that my sections and evidence are readable."
 ];
@@ -133,10 +127,11 @@ function reused() {
 function sectionStatus(s) {
   const entry = state.entries[s.id];
   if (s.options) {
-    if (!entry.choice || (!entry.images.length && !has(entry.excerpt))) {
+    if (!s.options.includes(entry.choice)) return entry.noWork ? "No listed activity completed" : "Choose a class activity";
+    if (!entry.images.length && !has(entry.excerpt)) {
       return has(entry.concept) && has(entry.apply) ? "Responses entered · evidence missing" : "Missing evidence";
     }
-    const usableLinkOrNote = canvasLink(entry.link) || entry.linkIssue;
+    const usableLinkOrNote = course.choices[entry.choice].inClass || canvasLink(entry.link) || entry.linkIssue;
     return usableLinkOrNote && entry.images.every(image=>has(image.caption)&&has(image.description)) && has(entry.concept) && has(entry.apply) ? "Complete" : "Incomplete";
   }
   if (!s.fields) return state.checks.filter(Boolean).length === checkLabels.length ? "Complete" : "Incomplete";
@@ -255,10 +250,10 @@ function guide(parent, label, help) {
 function evidence(parent,section) {
   const entry = state.entries[section.id];
   const box = node("fieldset",null,parent,{class:"evidence",id:"evidence-"+section.id});
-  node("legend",section.id==="anatomy" ? "Optional evidence" : "Evidence from your submission",box);
+  node("legend",section.id==="anatomy" ? "Optional evidence" : "Evidence from your activity",box);
   node("p","One item is enough. Remove other people’s names, grades, account details, and unrelated private information.",box,{class:"hint"});
   if (section.options) field(box,"Paste a short text excerpt (optional)",
-    "Use this in place of an image. Copy a few lines from your actual submission, such as two labeled values with units or a short observation. Include enough context to identify what you measured or observed.",
+    course.choices[entry.choice].inClass ? "Paste a short excerpt from your group’s actual exchange or class notes. Include enough context to identify the moment." : "Use this in place of an image. Copy a few lines from your original submission, such as two labeled values with units or a short observation.",
     entry.excerpt,v=>{entry.excerpt=v;}).maxLength=1500;
   node("p","For an image, use a cropped screenshot or photo in PNG, JPEG, or WebP. Keep the labels, units, or movement detail you discuss in view.",box,{class:"hint"});
   if (section.id === "anatomy") {
@@ -309,10 +304,10 @@ function evidence(parent,section) {
 
 function renderDiscipline(parent,s) {
   const entry = state.entries[s.id];
-  const choice = course.choices[entry.choice];
-  const picker = select(parent,"assignment","Canvas assignment you completed",[["","Choose an assignment"],["none","I did not complete an eligible assignment"],...s.options.map(key=>[key,assignmentTitle(key)])],entry.choice || (entry.noWork?"none":""),value=>{
+  const choice = s.options.includes(entry.choice) ? course.choices[entry.choice] : null;
+  const picker = select(parent,"assignment","Listed activity you completed",[["","Choose an activity"],["none","I did not complete any listed activity"],...s.options.map(key=>[key,assignmentTitle(key)])],entry.choice || (entry.noWork?"none":""),value=>{
     if (entry.choice && entry.choice!==value && (entry.images.length || has(entry.excerpt) || has(entry.link) || entry.linkIssue)) {
-      if (!confirm("Changing assignments clears the evidence and Canvas link for this section. Keep your explanations and change the assignment?")) { picker.value=entry.choice;return; }
+      if (!confirm("Changing activities clears the evidence and Canvas link for this section. Your explanations stay in your draft. Review them so they match the activity you select.")) { picker.value=entry.choice;return; }
       if (state.entries.anatomy.reuse?.startsWith(s.id+"/")) state.entries.anatomy.reuse="";
       entry.images=[]; entry.excerpt=""; entry.link=""; entry.linkIssue=false;
     }
@@ -322,7 +317,14 @@ function renderDiscipline(parent,s) {
     $("assignment").focus();
     save();
   });
-  if (choice) {
+  if (!choice) {
+    node("p","Choose a listed activity you actually completed to answer this section. If you did none of the listed activities, leave this section blank.",parent,{class:"notice"});
+    return;
+  }
+  node("p","Base both answers on a specific detail from your own work in the selected activity. If you completed it but have no eligible evidence, leave evidence blank. Your two responses can still earn up to 10 of 15 points.",parent,{class:"hint"});
+  if (choice.inClass) {
+    node("p","Use an excerpt from your group’s actual client exchange or class notes for evidence. This activity had no Canvas submission link.",parent,{class:"hint"});
+  } else {
     const details = node("details",null,parent,{class:"help"});
     node("summary","How to copy your Canvas link",details);
     node("p","In Canvas, open Grades and select this assignment. With your submitted work visible, copy the address from your browser. If Canvas only gives you an assignment page, paste that address and check the box below. Keep all work inside Canvas permissions. If you can’t copy the link, check the same box so your instructor can locate the work by name.",details);
@@ -331,16 +333,11 @@ function renderDiscipline(parent,s) {
     link.addEventListener("input",validate);
     link.addEventListener("blur",()=>{validate();if (has(link.value)) link.reportValidity();});
     checkbox(node("div",null,parent,{class:"checks"}),"Canvas only shows the assignment page or I couldn’t copy a submission link.",entry.linkIssue,v=>{entry.linkIssue=v;});
-    evidence(parent,s);
-  } else {
-    const note = s.id==="psych"
-      ? "The Motivation & Technology Final Submission supplies portfolio evidence. If you didn’t complete it, you can still use a specific class example, including the fictional client activity, to answer the two questions below."
-      : "If you did not complete an eligible assignment, choose that option. Leave evidence blank and use a class example for the two questions below. Both responses can earn points.";
-    node("p",note,parent,{class:"notice"});
   }
-  references(parent,choice?.refs || fallbackRefs[s.id]);
-  field(parent,"What happened, and what concept helps explain it?",choice?.concept || s.without,entry.concept,v=>{entry.concept=v;});
-  field(parent,"What would you do in this role, and why?",geometryPrompt(choice?.apply || "What would you do in a specific situation, and why would this concept change that decision?"),entry.apply,v=>{entry.apply=v;});
+  evidence(parent,s);
+  references(parent,choice.refs);
+  field(parent,"What happened, and what concept helps explain it?",choice.concept,entry.concept,v=>{entry.concept=v;});
+  field(parent,"What would you do in this role, and why?",geometryPrompt(choice.apply)+" Connect your decision to the specific detail from this activity.",entry.apply,v=>{entry.apply=v;});
   guide(parent,"Need help connecting this to a role?",
     "Pick one person and one situation. Try: In this setting, I would ___ because ___. Name a specific action you’d take and connect it to your reasoning.");
 }
@@ -427,14 +424,18 @@ function buildDocument(target) {
     node("h2",s.title,part);
     const entry = state.entries[s.id];
     if (s.options) {
-      if (entry.choice) {
-        node("p",assignmentTitle(entry.choice),part,{class:"source"});
+      if (!s.options.includes(entry.choice)) {
+        node("p",entry.noWork ? "No listed activity completed." : "No listed activity selected.",part,{class:"missing"});
+        continue;
+      }
+      node("p",assignmentTitle(entry.choice),part,{class:"source"});
+      if (!course.choices[entry.choice].inClass) {
         const link = canvasLink(entry.link);
         if (link) node("a",entry.linkIssue?"Canvas assignment or submission (sign-in required)":"Original Canvas submission (sign-in required)",part,{href:link});
         if (entry.linkIssue) node("p","Direct-link limitation reported. Locate the original work in Canvas using the assignment name.",part);
         else if (!link) node("p","Canvas link missing.",part);
       }
-      if (!entry.choice || (!entry.images.length && !has(entry.excerpt))) node("p","Evidence missing.",part,{class:"missing"});
+      if (!entry.images.length && !has(entry.excerpt)) node("p","Evidence missing.",part,{class:"missing"});
       else {
         if (has(entry.excerpt)) {
           node("h3","Evidence excerpt",part);

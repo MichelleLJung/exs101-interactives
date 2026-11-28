@@ -104,6 +104,20 @@ const course = {
         "15374": "Motivation & Technology Final Submission",
         "15378": "Motivation & Technology Final Submission"
       }
+    },
+    "client": {
+      "inClass": true,
+      "concept": "Identify the fictional client and your role. What did the client say in response to a question your group asked? Explain what that exchange revealed using one Exercise Psychology concept.",
+      "apply": "What would you ask or do next with that client, and why does the exchange support that choice?",
+      "refs": [
+        "exercise-psychology-|-motivation-and-self-efficacy",
+        "exercise-psychology-|-exercise-adherence-and-behavior-change"
+      ],
+      "titles": {
+        "15373": "Exercise Psychology Client Investigation (in class)",
+        "15374": "Exercise Psychology Client Investigation (in class)",
+        "15378": "Exercise Psychology Client Investigation (in class)"
+      }
     }
   },
   "refs": {
