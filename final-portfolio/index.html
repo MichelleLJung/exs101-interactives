@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="no-referrer"><title>EXS101 Final Professional Portfolio Builder</title>
+<link rel="stylesheet" href="portfolio.css"><script defer src="course.js"></script><script defer src="portfolio.js"></script></head>
+<body>
+<a class="skip" href="#editor">Skip to current section</a>
+<div id="app">
+<header class="mast"><div class="wrap"><a href="../">EXS101 Interactives</a><h1>Final Professional Portfolio</h1><p>Use work you already completed to show what you learned and how you would use it.</p></div></header>
+<div class="wrap">
+<div class="toolbar"><button id="backup" type="button">Download JSON backup</button><button id="restore" type="button">Load JSON backup</button><input id="restore-file" type="file" accept=".json,application/json" hidden><button id="reset" type="button">Start Over</button></div>
+<p id="save-status" role="status">Opening your local draft…</p>
+<details class="help"><summary>Getting started and saving your work</summary><p>Plan for 90–120 minutes. Gather one excerpt from a completed Canvas submission per discipline. Revisit your Career &amp; Pathway Baseline, then write short, specific responses in each section. The builder formats your portfolio for you.</p><p>Drafts autosave in this browser. Download a JSON backup before switching devices or clearing browser data. A backup contains your responses and evidence. Keep it private. Upload only your final PDF to Canvas.</p></details>
+<div class="layout"><nav id="sections" aria-label="Portfolio sections"></nav><main id="editor" tabindex="-1"></main></div>
+</div></div>
+<article id="printout" aria-label="Portfolio preview" hidden></article>
+<noscript><p>Turn on JavaScript in your browser to use the portfolio builder.</p></noscript>
+</body></html>
